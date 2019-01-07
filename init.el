@@ -60,9 +60,10 @@
 
 (use-package helm
   :bind
-  (("M-x" . helm-M-x)
-   ("C-x C-f" . helm-find-files)
-   ("C-x b" . helm-mini)))
+  (("M-x"	.	helm-M-x)
+   ("C-x C-f"	.	helm-find-files)
+   ("C-x b"	.	helm-mini)
+   ("C-h a"	.	helm-apropos)))
 
 (use-package telephone-line
   :config
