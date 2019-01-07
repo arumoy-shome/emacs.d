@@ -34,6 +34,19 @@
 (use-package markdown-mode
   :mode
   ("/README\\(?:\\.\\(?:markdown\\|md\\)\\)?\\'" . gfm-mode)) ;taken from doom-emacs/modules/lang/markdown
+
+(use-package smartparens
+  :config
+  (require 'smartparens-config)
+  :hook (prog-mode	.	smartparens-mode))
+
+(use-package restart-emacs
+  :commands (restart-emacs))
+
+(use-package hippie-exp
+  :bind
+  ([remap dabbrev-expand] . hippie-expand))
+
 ;; taken from jwiegley/dot-emacs
 (use-package winner
   :hook (after-init	.	winner-mode)
