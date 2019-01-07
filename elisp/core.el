@@ -20,9 +20,9 @@
       tls-checktrust t)
 
 ;; prevent emacs backups from littering my system
-(auto-save-visited-mode 1)		;auto save in the same file
-(setq auto-save-visited-interval 600	;auto save every 10 minutes
-      backup-directory-alist '(("." . "~/.emacs.d/backups/"))) ;centralized location for backups
+(setq auto-save-visited-interval 6000	;auto save every 10 minutes
+      backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
+      auto-save-file-name-transforms `((".*" ,(concat user-emacs-directory "backups"))))
 
 ;; disable disabled commands
 (setq disabled-command-function nil)
