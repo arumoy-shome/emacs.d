@@ -27,3 +27,7 @@
 (use-package doom-modeline
   :hook
   (after-init . doom-modeline-init))
+
+(use-package magit
+  :bind
+  ("C-x g"	.	magit-status))
