@@ -8,18 +8,6 @@
 (setq gc-cons-threshold 50000000)
 (setq gnutls-min-prime-bits 4096)
 
-;; disable bells and confirmation dialog boxes
-(setq ring-bell-function 'ignore
-      x-gtk-use-system-tooltips nil
-      use-dialog-box nil)
-
-;; reclaim display real estate
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(blink-cursor-mode 0)
-(show-paren-mode t)
-
 ;; quicker confirmations
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq confirm-kill-processes nil)
