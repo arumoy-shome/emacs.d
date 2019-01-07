@@ -1,3 +1,7 @@
 desktop/
 places
 auto-save-list/
+straight/
+recentf
+.*
+*.el~
