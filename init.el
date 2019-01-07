@@ -65,9 +65,9 @@
    ("C-x b"	.	helm-mini)
    ("C-h a"	.	helm-apropos)))
 
-(use-package telephone-line
-  :config
-  (telephone-line-mode 1))
+(use-package doom-modeline
+  :hook
+  (after-init . doom-modeline-init))
 
 ;; TODO move this into it's own file
 (custom-set-variables
