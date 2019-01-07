@@ -12,6 +12,6 @@
 (show-paren-mode t)
 (global-hl-line-mode nil)
 
-(setq initial-scratch-message (concat "Welcome, " (system-name)))
+(setq initial-scratch-message (concat ";; Welcome, " (system-name)))
 
 (provide 'core-ui)
