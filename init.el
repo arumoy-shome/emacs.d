@@ -56,3 +56,10 @@
 
 (use-package paren
   :hook (after-init	.	show-paren-mode))
+
+(use-package whitespace
+  :commands
+  (whitespace-buffer
+   whitespace-cleanup
+   whitespace-mode
+   whitespace-turn-off))
