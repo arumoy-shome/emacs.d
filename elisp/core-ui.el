@@ -9,7 +9,6 @@
 (scroll-bar-mode -1)
 (horizontal-scroll-bar-mode -1)
 (blink-cursor-mode 0)
-(show-paren-mode t)
 (global-hl-line-mode nil)
 
 ;; show scratch instead of splash screen

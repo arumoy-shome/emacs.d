@@ -41,3 +41,5 @@
   (("M-n"		.	winner-redo)
    ("M-p"		.	winner-undo)))
 
+(use-package paren
+  :hook (after-init	.	show-paren-mode))
