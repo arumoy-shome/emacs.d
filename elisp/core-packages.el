@@ -18,5 +18,6 @@
 ;; init use-package we have to use straight-use-package since
 ;; use-package is not loaded yet
 (straight-use-package 'use-package)
+(setq use-package-compute-statistics t)
 
 (provide 'core-packages)
