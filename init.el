@@ -11,7 +11,8 @@
   (doom-themes-enable-italic t "turn on italics is universally")
   :config
   (load-theme 'doom-nord-light t)
-  (doom-themes-visual-bell-config))
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
 
 (use-package which-key
   :config
