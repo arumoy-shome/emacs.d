@@ -9,4 +9,4 @@ Emacs.
 
 1. [purcell/emacs.d](https://github.com/purcell/emacs.d)
 2. [spacemacs](https://github.com/syl20bnr/spacemacs)
-3. [emacs-doom](https://github.com/hlissner/doom-emacs)
+3. [doom-emacs](https://github.com/hlissner/doom-emacs)
