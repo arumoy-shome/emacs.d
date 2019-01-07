@@ -57,6 +57,9 @@
 (use-package paren
   :hook (after-init	.	show-paren-mode))
 
+(use-package whole-line-or-region
+  :hook (after-init	.	whole-line-or-region-mode))
+
 (use-package whitespace
   :commands
   (whitespace-buffer
