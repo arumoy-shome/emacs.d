@@ -29,5 +29,7 @@
   (after-init . doom-modeline-init))
 
 (use-package magit
+  :commands
+  (magit-status)
   :bind
   ("C-x g"	.	magit-status))
