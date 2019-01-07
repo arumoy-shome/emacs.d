@@ -34,3 +34,10 @@
 (use-package markdown-mode
   :mode
   ("/README\\(?:\\.\\(?:markdown\\|md\\)\\)?\\'" . gfm-mode)) ;taken from doom-emacs/modules/lang/markdown
+;; taken from jwiegley/dot-emacs
+(use-package winner
+  :hook (after-init	.	winner-mode)
+  :bind
+  (("M-n"		.	winner-redo)
+   ("M-p"		.	winner-undo)))
+

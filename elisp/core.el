@@ -12,9 +12,6 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq confirm-kill-processes nil)
 
-;; remember window config
-(winner-mode 1)
-
 ;; secure network
 (setq gnutls-verify-error t
       tls-checktrust t)
