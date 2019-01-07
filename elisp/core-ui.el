@@ -14,4 +14,7 @@
 
 (setq initial-scratch-message (concat ";; Welcome, " (system-name)))
 
+;; default font
+(set-face-attribute 'default nil
+		    :font "Source Code Pro-14")
 (provide 'core-ui)
