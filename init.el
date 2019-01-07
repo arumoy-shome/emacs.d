@@ -21,7 +21,10 @@
   (("M-x"	.	helm-M-x)
    ("C-x C-f"	.	helm-find-files)
    ("C-x b"	.	helm-mini)
-   ("C-h a"	.	helm-apropos)))
+   ("C-h a"	.	helm-apropos)
+   ("C-c h m"	.	helm-man-woman)
+   ("C-c h i"	.	helm-info)
+   ("C-c h r"	.	helm-info-emacs)))
 
 (use-package doom-modeline
   :hook
