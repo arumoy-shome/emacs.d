@@ -3,8 +3,6 @@
 
 (require 'core)
 
-(use-package all-the-icons)
-
 (use-package doom-themes
   :custom
   (doom-themes-enable-bold t "turn on bold universally")
