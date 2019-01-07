@@ -12,9 +12,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq confirm-kill-processes nil)
 
-;; save session, cursor location & window arrangement
-(desktop-save-mode t)
-(save-place-mode t)
+;; remember window config
 (winner-mode 1)
 
 ;; secure network
