@@ -3,5 +3,6 @@ places
 auto-save-list/
 straight/
 recentf
-.*
-*.el~
+backups/
+.emacs.desktop
+.emacs.desktop.lock
