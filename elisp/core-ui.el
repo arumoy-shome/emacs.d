@@ -12,9 +12,16 @@
 (show-paren-mode t)
 (global-hl-line-mode nil)
 
-(setq initial-scratch-message (concat ";; Welcome, " (system-name)))
+;; show scratch instead of splash screen
+(setq inhibit-splash-screen t
+      initial-scratch-message (concat ";; Welcome, " (system-name)))
 
 ;; default font
 (set-face-attribute 'default nil
 		    :font "Source Code Pro-14")
+
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar	.	t))
+(add-to-list 'default-frame-alist '(ns-appearance		.	dark))
+(add-hook 'window-setup-hook #'toggle-frame-maximized)
+
 (provide 'core-ui)
