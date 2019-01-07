@@ -33,3 +33,7 @@
   (magit-status)
   :bind
   ("C-x g"	.	magit-status))
+
+(use-package markdown-mode
+  :mode
+  ("/README\\(?:\\.\\(?:markdown\\|md\\)\\)?\\'" . gfm-mode)) ;taken from doom-emacs/modules/lang/markdown
