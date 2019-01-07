@@ -24,10 +24,8 @@
 ;; disable disabled commands
 (setq disabled-command-function nil)
 
-;; strip trailing whitespace before saving
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 (require 'core-ui)
 (require 'core-packages)
+(require 'core-editor)
 
 (provide 'core)
