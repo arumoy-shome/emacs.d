@@ -80,3 +80,15 @@
    whitespace-cleanup
    whitespace-mode
    whitespace-turn-off))
+
+(use-package org
+  :init
+  (setq org-ellipsis " ▼ "
+	org-archive-location "::* Archive")
+  :config
+  (require 'package-org)
+  :bind
+  (("C-c l"			.	org-store-link)
+   ("C-c a"			.	org-agenda)
+   ("C-c c"			.	org-capture))
+  :hook (org-agenda-finalize	.	aru/setup-org-agenda))
