@@ -12,9 +12,6 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; straight.el config
-(setq straight-use-package-by-default t)
-
 ;; init use-package we have to use straight-use-package since
 ;; use-package is not loaded yet
 (straight-use-package 'use-package)
