@@ -94,3 +94,6 @@
    ("C-c c"		.	org-capture))
   :hook
   ((org-agenda-finalize	.	aru/setup-org-agenda)))
+
+(use-package text-mode
+  :hook (text-mode	.	auto-fill-mode))
