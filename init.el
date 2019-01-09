@@ -88,12 +88,14 @@
   :config
   (require 'package-org)
   (aru/setup-org-capture)
+  (aru/setup-org-ui)
   :bind
   (("C-c l"		.	org-store-link)
    ("C-c a"		.	org-agenda)
    ("C-c c"		.	org-capture))
   :hook
-  ((org-agenda-finalize	.	aru/setup-org-agenda)))
+  ((org-agenda-finalize	.	aru/setup-org-agenda)
+   (org-mode		.	org-indent-mode)))
 
 (use-package text-mode
   :hook (text-mode	.	auto-fill-mode))

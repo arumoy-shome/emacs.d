@@ -20,4 +20,14 @@ loaded"
 	  ("n" "Note" entry (file+headline aru/org-note-file "Inbox")
 	   "* %?\n  :PROPERTIES:\n  :CUSTOM_ID: %<%Y%m%d%H%M%S>\n  :END:\n  %i\n  %a"))))
 
+(defun aru/setup-org-ui ()
+  "Setup how org looks. This function is run after org is
+  loaded"
+  (setq org-todo-keywords
+	'((sequence "TODO(t)" "|" "DONE(d!)")
+	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)"))
+	org-todo-keyword-faces
+	'(("WAITING" :inherit default :weight bold)
+	  ("LATER" :inherit warning :weight bold))))
+
 (provide 'package-org)
