@@ -99,3 +99,5 @@
 
 (use-package text-mode
   :hook (text-mode	.	auto-fill-mode))
+
+(use-package fish-mode :straight t)
