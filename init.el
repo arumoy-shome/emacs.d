@@ -101,3 +101,13 @@
   :hook (text-mode	.	auto-fill-mode))
 
 (use-package fish-mode :straight t)
+
+(use-package eshell
+  :config
+  (setq eshell-banner-message
+	'(format "%s %s\n"
+                 (propertize (format " %s " (string-trim (buffer-name)))
+                             'face 'mode-line-highlight)
+                 (propertize (current-time-string)
+                             'face 'font-lock-keyword-face))
+	eshell-kill-processes-on-exit t))
