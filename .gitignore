@@ -6,3 +6,5 @@ recentf
 backups/
 .emacs.desktop
 .emacs.desktop.lock
+url/
+bookmarks
