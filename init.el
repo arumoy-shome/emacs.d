@@ -87,8 +87,10 @@
 	org-archive-location "::* Archive")
   :config
   (require 'package-org)
+  (aru/setup-org-capture)
   :bind
-  (("C-c l"			.	org-store-link)
-   ("C-c a"			.	org-agenda)
-   ("C-c c"			.	org-capture))
-  :hook (org-agenda-finalize	.	aru/setup-org-agenda))
+  (("C-c l"		.	org-store-link)
+   ("C-c a"		.	org-agenda)
+   ("C-c c"		.	org-capture))
+  :hook
+  ((org-agenda-finalize	.	aru/setup-org-agenda)))
