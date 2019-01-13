@@ -129,3 +129,10 @@
                  (propertize (current-time-string)
                              'face 'font-lock-keyword-face))
 	eshell-kill-processes-on-exit t))
+
+(use-package ace-window
+  :straight t
+  :init
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  :bind
+  ("C-x o" . ace-window))
