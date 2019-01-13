@@ -30,7 +30,6 @@
 
 (use-package which-key
   :straight t
-  :commands which-key-mode
   :config
   (which-key-mode))
 
