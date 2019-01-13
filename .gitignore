@@ -8,3 +8,5 @@ backups/
 .emacs.desktop.lock
 url/
 bookmarks
+eshell/
+.org-id-locations
