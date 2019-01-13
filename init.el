@@ -30,6 +30,7 @@
 
 (use-package which-key
   :straight t
+  :commands which-key-mode
   :config
   (which-key-mode))
 
@@ -115,9 +116,12 @@
 (use-package text-mode
   :hook (text-mode	.	auto-fill-mode))
 
-(use-package fish-mode :straight t)
+(use-package fish-mode
+  :straight t
+  :mode ("\\.fish\\'"	.	fish-mode))
 
 (use-package eshell
+  :commands eshell
   :config
   (setq eshell-banner-message
 	'(format "%s %s\n"
