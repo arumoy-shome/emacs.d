@@ -49,9 +49,22 @@
    ("C-c n p"	.	aru/helm-browse-project-notes)))
 
 (use-package doom-modeline
+  :disabled
   :straight t
   :hook
   (after-init	.	doom-modeline-init))
+
+(use-package spaceline
+  :straight t
+  :config
+  (require 'spaceline-config)
+  :hook
+  (after-init	.	spaceline-spacemacs-theme)
+  (after-init	.	spaceline-helm-mode)
+  :custom
+  (spaceline-minor-modes-p nil "turn off minor modes segment")
+  (spaceline-buffer-encoding-abbrev-p nil "turn off buffer encoding segment")
+  (powerline-default-separator 'slant "set default separator"))
 
 (use-package magit
   :straight t
