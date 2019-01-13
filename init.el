@@ -4,14 +4,29 @@
 (require 'core)
 
 (use-package doom-themes
+  :disabled
   :straight t
   :custom
   (doom-themes-enable-bold t "turn on bold universally")
   (doom-themes-enable-italic t "turn on italics is universally")
   :config
-  (load-theme 'doom-nord-light t)
+  ;; (load-theme 'doom-nord-light t)
   (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
+  :hook
+  (org-mode	.	doom-themes-org-config))
+
+(use-package spacemacs-theme
+  :defer t
+  :straight t
+  :custom
+  (spacemacs-theme-comment-bg nil "turn off comment background")
+  (spacemacs-theme-comment-italic t "turn on comment italics")
+  (spacemacs-theme-org-bold t "turn on bold org headers")
+  (spacemacs-theme-org-height t "turn on varying org header heights")
+  (spacemacs-theme-org-agenda-height t "turn on varing org agenda heights")
+  (spacemacs-theme-underline-parens t "underline parens when using show-paren-mode")
+  :hook
+  (after-init	.	aru/load-theme))
 
 (use-package which-key
   :straight t

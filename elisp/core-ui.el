@@ -24,4 +24,8 @@
 (add-to-list 'default-frame-alist '(ns-appearance		.	dark))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 
+(defun aru/load-theme ()
+  "Load the theme of my choice. This function is run with the after-init-hook"
+  (load-theme 'spacemacs-light t))
+
 (provide 'core-ui)
