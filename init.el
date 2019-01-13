@@ -35,6 +35,8 @@
 
 (use-package helm
   :straight t
+  :config
+  (require 'package-helm)
   :bind
   (("M-x"	.	helm-M-x)
    ("C-x C-f"	.	helm-find-files)
@@ -42,7 +44,9 @@
    ("C-h a"	.	helm-apropos)
    ("C-c h m"	.	helm-man-woman)
    ("C-c h i"	.	helm-info)
-   ("C-c h r"	.	helm-info-emacs)))
+   ("C-c h r"	.	helm-info-emacs)
+   ("C-c n n"	.	aru/helm-browse-notes)
+   ("C-c n p"	.	aru/helm-browse-project-notes)))
 
 (use-package doom-modeline
   :straight t
