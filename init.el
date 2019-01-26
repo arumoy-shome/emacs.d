@@ -129,6 +129,19 @@
   ((org-agenda-finalize	.	aru/setup-org-agenda)
    (org-mode		.	org-indent-mode)))
 
+(use-package org-ref
+  :disabled
+  :straight t
+  :after org
+  :init
+  (setq reftex-default-bibliography '("~/org/bib/ref.bib")
+	org-ref-bibliography-notes "~/org/bib/notes.org"
+	org-ref-default-bibliography '("~/org/bib/ref.bib")
+	org-ref-pdf-directory "~/org/bib/pdfs/")
+  (setq bibtex-completion-bibliography reftex-default-bibliography
+	bibtex-completion-library-path org-ref-pdf-directory
+	bibtex-completion-notes-path org-ref-bibliography-notes))
+
 (use-package text-mode
   :hook (text-mode	.	auto-fill-mode))
 
