@@ -130,7 +130,6 @@
    (org-mode		.	org-indent-mode)))
 
 (use-package org-ref
-  :disabled
   :straight t
   :after org
   :init
@@ -140,7 +139,10 @@
 	org-ref-pdf-directory "~/org/bib/pdfs/")
   (setq bibtex-completion-bibliography reftex-default-bibliography
 	bibtex-completion-library-path org-ref-pdf-directory
-	bibtex-completion-notes-path org-ref-bibliography-notes))
+	bibtex-completion-notes-path org-ref-bibliography-notes)
+  :commands
+  (doi-add-bibtex-entry
+   org-ref-helm-insert-cite-link))
 
 (use-package text-mode
   :hook (text-mode	.	auto-fill-mode))
