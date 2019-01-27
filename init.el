@@ -124,7 +124,7 @@
   :bind
   (("C-c l"		.	org-store-link)
    ("C-c a"		.	org-agenda)
-   ("C-c c"		.	org-capture))
+   ("\C-cc"		.	(lambda () (interactive) (org-capture nil "i"))))
   :hook
   ((org-agenda-finalize	.	aru/setup-org-agenda)
    (org-mode		.	org-indent-mode)))
