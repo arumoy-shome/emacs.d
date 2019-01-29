@@ -35,8 +35,6 @@
 
 (use-package helm
   :straight t
-  :config
-  (require 'package-helm)
   :bind
   (("M-x"	.	helm-M-x)
    ("C-x C-f"	.	helm-find-files)
@@ -44,9 +42,14 @@
    ("C-h a"	.	helm-apropos)
    ("C-c h m"	.	helm-man-woman)
    ("C-c h i"	.	helm-info)
-   ("C-c h r"	.	helm-info-emacs)
-   ("C-c n n"	.	aru/helm-browse-notes)
-   ("C-c n p"	.	aru/helm-browse-project-notes)))
+   ("C-c h r"	.	helm-info-emacs)))
+
+(use-package package-helm
+  :after helm
+  :bind
+  (("C-c n n"	.	aru/helm-browse-notes)
+   ("C-c n p"	.	aru/helm-browse-project-notes)
+   ("C-c n b"	.	aru/helm-browse-bib-notes)))
 
 (use-package doom-modeline
   :disabled
@@ -131,7 +134,6 @@
 
 (use-package org-ref
   :straight t
-  :after org
   :init
   (setq reftex-default-bibliography '("~/org/bib/ref.bib")
 	org-ref-bibliography-notes "~/org/bib/notes.org"
