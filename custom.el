@@ -3,9 +3,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default))))
+ '(org-agenda-files (quote ("~/org/zettel.org")))
+ '(powerline-default-separator (quote slant))
+ '(spaceline-buffer-encoding-abbrev-p nil t)
+ '(spaceline-minor-modes-p nil t)
+ '(spacemacs-theme-comment-bg nil)
+ '(spacemacs-theme-comment-italic t)
+ '(spacemacs-theme-org-agenda-height t)
+ '(spacemacs-theme-org-bold t)
+ '(spacemacs-theme-org-height t)
+ '(spacemacs-theme-underline-parens t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
