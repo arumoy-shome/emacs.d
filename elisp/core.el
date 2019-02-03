@@ -24,10 +24,6 @@
 ;; disable disabled commands
 (setq disabled-command-function nil)
 
-;; flip option and command
-(setq mac-command-modifier 'meta
-      mac-option-modifier 'super)
-
 (require 'core-ui)
 (require 'core-packages)
 (require 'core-editor)
