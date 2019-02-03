@@ -4,18 +4,16 @@
 (require 'core)
 
 (use-package doom-themes
-  :disabled
   :straight t
+  :defer 5
   :custom
   (doom-themes-enable-bold t "turn on bold universally")
   (doom-themes-enable-italic t "turn on italics is universally")
   :config
-  ;; (load-theme 'doom-nord-light t)
-  (doom-themes-visual-bell-config)
-  :hook
-  (org-mode	.	doom-themes-org-config))
+  (aru/load-theme))
 
 (use-package spacemacs-theme
+  :disabled
   :defer t
   :straight t
   :custom
@@ -52,12 +50,12 @@
    ("C-c n b"	.	aru/helm-browse-bib-notes)))
 
 (use-package doom-modeline
-  :disabled
   :straight t
   :hook
   (after-init	.	doom-modeline-init))
 
 (use-package spaceline
+  :disabled
   :straight t
   :config
   (require 'spaceline-config)

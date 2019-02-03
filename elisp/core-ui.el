@@ -26,6 +26,6 @@
 
 (defun aru/load-theme ()
   "Load the theme of my choice. This function is run with the after-init-hook"
-  (load-theme 'spacemacs-light t))
+  (load-theme 'doom-tomorrow-night t))
 
 (provide 'core-ui)
