@@ -75,7 +75,8 @@
 (use-package markdown-mode
   :straight t
   :mode
-  ("/README\\(?:\\.\\(?:markdown\\|md\\)\\)?\\'" . gfm-mode)) ;taken from doom-emacs/modules/lang/markdown
+  ;; taken from doom-emacs/modules/lang/markdown
+  ("/README\\(?:\\.\\(?:markdown\\|md\\)\\)?\\'" . gfm-mode))
 
 (use-package smartparens
   :straight t
