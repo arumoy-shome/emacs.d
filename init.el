@@ -142,7 +142,9 @@
 	bibtex-completion-notes-path org-ref-bibliography-notes)
   :commands
   (doi-add-bibtex-entry
-   org-ref-helm-insert-cite-link))
+   org-ref-helm-insert-cite-link)
+  :bind
+  ("C-c ]" . org-ref-helm-insert-cite-link))
 
 (use-package text-mode
   :hook (text-mode	.	auto-fill-mode))
