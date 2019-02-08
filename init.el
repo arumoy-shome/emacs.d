@@ -182,3 +182,7 @@
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   :bind
   ("C-x o" . ace-window))
+
+(use-package org-zettel
+  :commands
+  (org-zettel-get-inbound-links))
