@@ -51,6 +51,17 @@
 
 (use-package doom-modeline
   :straight t
+  :init
+  ;; date and time in the format: Day Mon Date 24h Time
+  (setq display-time-format "%a %b %d %R"
+	display-time-default-load-average nil
+	doom-modeline-buffer-file-name-style 'file-name)
+  :config
+  (display-time-mode)
+  (doom-modeline-def-modeline 'aru-doom-modeline
+			      '(bar matches buffer-info remote-host buffer-position selection-info)
+			      '(misc-info minor-modes input-method major-mode process vcs checker))
+  (doom-modeline-set-modeline 'aru-doom-modeline 'default)
   :hook
   (after-init	.	doom-modeline-init))
 
