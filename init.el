@@ -186,3 +186,8 @@
 (use-package org-zettel
   :commands
   (org-zettel-get-inbound-links))
+
+(use-package tramp
+  :config
+  (add-to-list 'tramp-default-user-alist
+	       '("ssh" "ssh.data.vu.nl" "ase247")))
