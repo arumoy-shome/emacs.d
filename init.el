@@ -191,3 +191,9 @@
   :config
   (add-to-list 'tramp-default-user-alist
 	       '("ssh" "ssh.data.vu.nl" "ase247")))
+
+(use-package exec-path-from-shell
+  :straight t
+  :if (memq window-system '(mac ns))
+  :config
+  (exec-path-from-shell-initialize))
