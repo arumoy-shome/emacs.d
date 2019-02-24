@@ -188,6 +188,7 @@
   (org-zettel-get-inbound-links))
 
 (use-package tramp
+	:disabled
   :config
   (add-to-list 'tramp-default-user-alist
 	       '("ssh" "ssh.data.vu.nl" "ase247")))
