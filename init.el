@@ -203,3 +203,7 @@
   :straight t
   :config
   (editorconfig-mode 1))
+
+(use-package doc-view
+	:custom
+	(doc-view-resolution 300 "Improve quality of pdfs"))
