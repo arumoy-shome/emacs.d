@@ -198,3 +198,8 @@
   :if (memq window-system '(mac ns))
   :config
   (exec-path-from-shell-initialize))
+
+(use-package editorconfig
+  :straight t
+  :config
+  (editorconfig-mode 1))
