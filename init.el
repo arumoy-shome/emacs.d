@@ -212,6 +212,8 @@
 	(doc-view-resolution 300 "Improve quality of pdfs"))
 
 (use-package mu4e
+	:commands
+	(mu4e)
 	:custom
 	(mu4e-maildir "~/mail" "Set the maildir for mu4e")
 	;; mu4e binary comes with mu which I install with brew
