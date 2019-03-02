@@ -59,8 +59,8 @@
   :config
   (display-time-mode)
   (doom-modeline-def-modeline 'aru-doom-modeline
-			      '(bar matches buffer-info remote-host buffer-position selection-info)
-			      '(misc-info minor-modes input-method major-mode process vcs checker))
+			      '(bar evil-state buffer-info remote-host buffer-position selection-info)
+			      '(misc-info input-method major-mode process vcs))
   (doom-modeline-set-modeline 'aru-doom-modeline 'default)
   :hook
   (after-init	.	doom-modeline-init))
