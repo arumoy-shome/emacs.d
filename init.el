@@ -129,7 +129,10 @@
 (use-package org
   :init
   (setq org-ellipsis " ▼ "
-	org-archive-location "::* Archive")
+		org-archive-location "::* Archive"
+		org-babel-load-languages '((emacs-lisp	. t)
+																(python			. t)
+																(shell			. t)))
   :config
   (require 'package-org)
   (aru/setup-org-capture)
