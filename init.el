@@ -222,8 +222,8 @@
 (use-package evil
 	:straight t
 	:hook
-	((text-mode		. evil-mode)
-		(prog-mode	. evil-mode)))
+	((text-mode					. evil-mode)
+		(prog-mode				. evil-mode)))
 
 (use-package evil-surround
 	:straight t
@@ -242,3 +242,16 @@
 	:after (evil)
 	:config
 	(evil-commentary-mode))
+
+(use-package projectile
+	:straight t
+	:bind-keymap
+	("C-c p" . projectile-command-map)
+	:config
+	(projectile-mode +1))
+
+(use-package helm-projectile
+	:after (projectile)
+	:straight t
+	:config
+	(helm-projectile-on))
