@@ -213,3 +213,27 @@
 	(mu4e-maildir "~/mail" "Set the maildir for mu4e")
 	;; mu4e binary comes with mu which I install with brew
 	:load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+
+(use-package evil
+	:straight t
+	:hook
+	((text-mode		. evil-mode)
+		(prog-mode	. evil-mode)))
+
+(use-package evil-surround
+	:straight t
+	:after (evil)
+	:config
+	(global-evil-surround-mode 1))
+
+(use-package evil-matchit
+	:straight t
+	:after (evil)
+	:config
+	(global-evil-matchit-mode 1))
+
+(use-package evil-commentary
+	:straight t
+	:after (evil)
+	:config
+	(evil-commentary-mode))
