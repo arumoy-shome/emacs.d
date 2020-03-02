@@ -11,3 +11,7 @@ bookmarks
 eshell/
 .org-id-locations
 tramp
+*.dat
+custom.el
+*.eld
+transient/
