@@ -24,6 +24,10 @@
 ;; disable disabled commands
 (setq disabled-command-function nil)
 
+;; cmd -> meta alt ->super
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'super)
+
 (require 'core-ui)
 (require 'core-packages)
 (require 'core-editor)

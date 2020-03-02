@@ -18,14 +18,22 @@
 
 ;; default font
 (set-face-attribute 'default nil
-		    :font "Source Code Pro-14")
+		    :font "Source Code Pro Light-13")
 
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar	.	t))
-(add-to-list 'default-frame-alist '(ns-appearance		.	dark))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 
-(defun aru/load-theme ()
-  "Load the theme of my choice. This function is run with the after-init-hook"
-  (load-theme 'doom-tomorrow-night t))
+(defun aru/colors-dark ()
+  "switch to the dark colorscheme"
+  (interactive)
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (load-theme 'doom-solarized-dark t))
+
+(defun aru/colors-light ()
+  "switch to the light colorscheme"
+  (interactive)
+  ;; FIXME titlebar text is not visible
+  (add-to-list 'default-frame-alist '(ns-appearance . light))
+  (load-theme 'doom-solarized-light t))
 
 (provide 'core-ui)
