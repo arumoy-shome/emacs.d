@@ -13,6 +13,9 @@ loaded"
 	org-capture-templates
 	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
 	   "- %U %?"
+	   :prepend t)
+	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
+	   "** TODO %?"
 	   :prepend t))))
 
 (defun aru/setup-org-ui ()

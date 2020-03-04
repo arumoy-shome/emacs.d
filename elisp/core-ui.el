@@ -18,7 +18,7 @@
 
 ;; default font
 (set-face-attribute 'default nil
-		    :font "Source Code Pro Light-13")
+		    :family "Source Code Pro" :weight 'light)
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))

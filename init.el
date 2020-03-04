@@ -3,12 +3,87 @@
 
 (require 'core)
 
+(use-package telephone-line
+  :straight t
+  :init
+  (setq telephone-line-evil-use-short-tag t
+        telephone-line-primary-left-separator 'telephone-line-flat
+        telephone-line-secondary-left-separator 'telephone-line-nil
+        telephone-line-primary-right-separator 'telephone-line-flat
+        telephone-line-secondary-right-separator 'telephone-line-nil)
+  (setq telephone-line-lhs
+        '((evil . (telephone-line-evil-tag-segment))
+          (accent . (telephone-line-vc-segment
+                     telephone-line-erc-modified-channels-segment
+                     telephone-line-process-segment))
+          (nil . (telephone-line-buffer-segment))))
+  (setq telephone-line-rhs
+        '((nil . (telephone-line-misc-info-segment))
+          (accent . (telephone-line-major-mode-segment))
+          (evil . (telephone-line-airline-position-segment))))
+  :hook
+  (after-init . telephone-line-mode))
+
+(use-package evil
+  :straight t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  :hook (after-init . evil-mode))
+
+(use-package evil-surround
+  :straight t
+  :after (evil)
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-commentary
+  :straight t
+  :after (evil)
+  :config
+  (evil-commentary-mode))
+
+(use-package helm
+  :straight t
+  :bind
+  (("C-SPC"	.	helm-M-x)        ; default: execute-extended-command
+   ("C-x C-f"	.	helm-find-files) ; default: find-file
+   ("C-x b"	.	helm-mini)       ; default: switch to buffer
+   ("C-h a"	.	helm-apropos)    ; default: apropos-command
+   ("C-c h m"	.	helm-man-woman)
+   ("C-c h i"	.	helm-info)
+   ("C-c h r"	.	helm-info-emacs)))
+
+(use-package package-helm
+  :after helm
+  :bind
+  (("C-c n n"	.	aru/helm-browse-notes)
+   ("C-c n p"	.	aru/helm-browse-project-notes)
+   ("C-c n b"	.	aru/helm-browse-bib-notes)))
+
+(use-package exec-path-from-shell
+  :straight t
+  :if (memq window-system '(mac ns))
+  :hook
+  (after-init . exec-path-from-shell-initialize))
+
+(use-package projectile
+  :straight t
+  :bind-keymap
+  ("C-c p" . projectile-command-map))
+
+(use-package helm-projectile
+  :after (projectile)
+  :straight t
+  :config
+  (helm-projectile-on))
+
 (use-package doom-themes
   :straight t
   :custom
   (doom-themes-enable-bold t "turn on bold universally")
   (doom-themes-enable-italic t "turn on italics is universally")
-  :config
   :hook (after-init . aru/colors-dark))
 
 (use-package magit
@@ -55,7 +130,7 @@
   :bind
   (("C-c l"		.	org-store-link)
    ("C-c a"		.	org-agenda)
-   ("\C-cc"		.	(lambda () (interactive) (org-capture nil "i"))))
+   ("C-c c"		.	(lambda () (interactive) (org-capture nil))))
   :hook
   ((org-agenda-finalize	.	aru/setup-org-agenda)
    (org-mode		.	org-indent-mode)))
@@ -100,10 +175,6 @@
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   :bind
   ("C-x o" . ace-window))
-
-(use-package doc-view
-  :custom
-  (doc-view-resolution 300 "Improve quality of pdfs"))
 
 (use-package mu4e
   :commands
