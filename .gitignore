@@ -15,3 +15,4 @@ tramp
 custom.el
 *.eld
 transient/
+/ido.last
