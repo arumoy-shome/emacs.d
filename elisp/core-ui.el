@@ -27,7 +27,7 @@
   "switch to the dark colorscheme"
   (interactive)
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (load-theme 'doom-solarized-dark t))
+  (load-theme 'doom-tomorrow-night t))
 
 (defun aru/colors-light ()
   "switch to the light colorscheme"
