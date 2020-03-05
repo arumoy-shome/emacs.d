@@ -16,3 +16,4 @@ custom.el
 *.eld
 transient/
 /ido.last
+/#backups#

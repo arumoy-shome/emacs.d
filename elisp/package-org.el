@@ -12,7 +12,7 @@ loaded"
   (setq org-default-notes-file aru/org-inbox-file
 	org-capture-templates
 	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
-	   "- %U %?"
+	   "Note taken on %U \\\\\n %?" ; have to escape the '\\'
 	   :prepend t)
 	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
 	   "** TODO %?"
