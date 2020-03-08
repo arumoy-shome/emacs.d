@@ -107,9 +107,9 @@
   (setq projectile-completion-system 'default) ; use selectrum instead of ido
   (setq projectile-switch-project-action 'projectile-commander) ; ask what to do when switching
   
-  ;; (def-projectile-commander-method ?/C-m
-  ;;   "Find file in project."
-  ;;   (call-interactively #'find-file))
+  (def-projectile-commander-method ?\C-m
+    "Find file in project."
+    (call-interactively #'find-file))
   
   (projectile-mode +1)
   
