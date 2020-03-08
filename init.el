@@ -1,3 +1,10 @@
+;; startup optimization: set `gc-cons-threshold' to a high value now
+;; and reset it later
+(defvar aru/orig-gc-cons-threshold gc-cons-threshold
+  "Original value of `gc-cons-threshold.'")
+(setq gc-cons-threshold most-positive-fixnum)
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold aru/orig-gc-cons-threshold)))
+
 ;; all config files under elisp dir
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
 
@@ -19,23 +26,29 @@
 
 (use-package menu-bar :config (menu-bar-mode -1))
 (use-package tool-bar :config (tool-bar-mode -1))
-(use-package tooltip :config (tooltip-mode -1))
+(use-package tooltip  :config (tooltip-mode -1))
 (use-package scroll-bar
   :config
   (scroll-bar-mode -1)
   (horizontal-scroll-bar-mode -1))
 
-(use-package delsel :config (setq delete-selection-mode t))
-(use-package frame :config (blink-cursor-mode 0))
-(use-package hl-line :config (global-hl-line-mode nil))
-(use-package novice :config (setq disabled-command-function nil))
-(use-package isearch :config (setq lazy-highlight-initial-delay 0))
+(use-package delsel    :config (setq delete-selection-mode t))
+(use-package frame     :config (blink-cursor-mode 0))
+(use-package hl-line   :config (global-hl-line-mode nil))
+(use-package novice    :config (setq disabled-command-function nil))
+(use-package isearch   :config (setq lazy-highlight-initial-delay 0))
 (use-package saveplace :config (save-place-mode +1))
-(use-package ibuffer :bind (([remap list-buffers] . #'ibuffer)))
-(use-package windmove :config (windmove-default-keybindings))
-(use-package winner :config (winner-mode +1))
-(use-package paren :config (show-paren-mode +1))
+(use-package ibuffer   :bind (([remap list-buffers] . #'ibuffer)))
+(use-package winner    :config (winner-mode +1))
+(use-package paren     :config (show-paren-mode +1))
 (use-package text-mode :hook (text-mode	. auto-fill-mode))
+
+(use-package windmove
+  :bind
+  (("<left>"  . windmove-left)
+   ("<right>" . windmove-right)
+   ("<up>"    . windmove-up)
+   ("<down>"  . windmove-down)))
 
 (use-package files
   :config
@@ -125,14 +138,14 @@
 (use-package magit
   :straight t
   :bind
-  ("C-x g"	.	magit-status))
+  ("C-x g" . magit-status))
 
 (use-package smartparens
   :straight t
   :config
   (require 'smartparens-config)
-  :hook ((prog-mode	.	smartparens-mode)
-	 (text-mode	.	smartparens-mode))
+  :hook ((prog-mode . smartparens-mode)
+	 (text-mode . smartparens-mode))
   :blackout t)
 
 (use-package whitespace
@@ -146,14 +159,13 @@
 ;; using the builtin org for now
 (use-package org
   :config
+  (setq org-directory "~/Dropbox/org")
   (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
     "File to use for capturing org items")
-  
-  (setq org-directory "~/Dropbox/org")
-  (setq org-ellipsis " ▼ ")
-  (setq org-babel-load-languages '((emacs-lisp	. t)
-				   (python			. t)
-				   (shell			. t)))
+    (setq org-ellipsis " ▼ ")
+  (setq org-babel-load-languages '((emacs-lisp . t)
+				   (python     . t)
+				   (shell      . t)))
   (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
   (setq org-default-notes-file aru/org-inbox-file)
   (setq org-capture-templates
@@ -169,12 +181,14 @@
   (setq org-todo-keyword-faces
 	'(("WAITING" :inherit default :weight bold)
 	  ("LATER" :inherit warning :weight bold)))
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
   :bind
-  (("C-c l"		.	org-store-link)
-   ("C-c a"		.	org-agenda)
-   ("C-c c"		.	(lambda () (interactive) (org-capture nil))))
+  (("C-c l" . org-store-link)
+   ("C-c a" . org-agenda)
+   ("C-c c" . (lambda () (interactive) (org-capture nil)))
+   ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file))))
   :hook
-  ((org-mode		.	org-indent-mode)))
+  ((org-mode . org-indent-mode)))
 
 (use-package org-ref
   :straight t
@@ -194,7 +208,7 @@
 
 (use-package fish-mode
   :straight t
-  :mode ("\\.fish\\'"	.	fish-mode))
+  :mode ("\\.fish\\'" .	fish-mode))
 
 (use-package eshell
   :commands eshell
@@ -206,13 +220,6 @@
 		 (propertize (current-time-string)
 			     'face 'font-lock-keyword-face))
 	eshell-kill-processes-on-exit t))
-
-(use-package ace-window
-  :straight t
-  :init
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-  :bind
-  ("C-x o" . ace-window))
 
 (use-package mu4e
   :commands
