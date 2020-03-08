@@ -17,3 +17,4 @@ custom.el
 transient/
 /ido.last
 /#backups#
+/var/

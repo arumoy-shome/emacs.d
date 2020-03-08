@@ -1,66 +1,86 @@
 ;; all config files under elisp dir
-(add-to-list 'load-path (concat user-emacs-directory "elisp/"))
+(add-to-list 'load-path (concat user-emacs-directory "aru/"))
 
-(require 'core)
+(require 'aru-packages)
 
-(use-package telephone-line
+(use-package blackout
+  :straight (:host github :repo "raxod502/blackout")
+  :demand t)
+
+(use-package gcmh
   :straight t
-  :init
-  (setq telephone-line-evil-use-short-tag t
-        telephone-line-primary-left-separator 'telephone-line-flat
-        telephone-line-secondary-left-separator 'telephone-line-nil
-        telephone-line-primary-right-separator 'telephone-line-flat
-        telephone-line-secondary-right-separator 'telephone-line-nil)
-  (setq telephone-line-lhs
-        '((evil . (telephone-line-evil-tag-segment))
-          (accent . (telephone-line-vc-segment
-                     telephone-line-erc-modified-channels-segment
-                     telephone-line-process-segment))
-          (nil . (telephone-line-buffer-segment))))
-  (setq telephone-line-rhs
-        '((nil . (telephone-line-misc-info-segment))
-          (accent . (telephone-line-major-mode-segment))
-          (evil . (telephone-line-airline-position-segment))))
-  :hook
-  (after-init . telephone-line-mode))
-
-(use-package evil
-  :straight t
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  :hook (after-init . evil-mode))
-
-(use-package evil-surround
-  :straight t
-  :after (evil)
   :config
-  (global-evil-surround-mode 1))
+  (gcmh-mode +1)
+  :blackout t)
 
-(use-package evil-commentary
-  :straight t
-  :after (evil)
+(use-package no-littering :straight t :demand t)
+
+(use-package aru-core :demand t)
+
+(use-package menu-bar :config (menu-bar-mode -1))
+(use-package tool-bar :config (tool-bar-mode -1))
+(use-package tooltip :config (tooltip-mode -1))
+(use-package scroll-bar
   :config
-  (evil-commentary-mode))
+  (scroll-bar-mode -1)
+  (horizontal-scroll-bar-mode -1))
 
-(use-package helm
+(use-package delsel :config (setq delete-selection-mode t))
+(use-package frame :config (blink-cursor-mode 0))
+(use-package hl-line :config (global-hl-line-mode nil))
+(use-package novice :config (setq disabled-command-function nil))
+(use-package isearch :config (setq lazy-highlight-initial-delay 0))
+(use-package saveplace :config (save-place-mode +1))
+(use-package ibuffer :bind (([remap list-buffers] . #'ibuffer)))
+(use-package windmove :config (windmove-default-keybindings))
+(use-package winner :config (winner-mode +1))
+(use-package paren :config (show-paren-mode +1))
+(use-package text-mode :hook (text-mode	. auto-fill-mode))
+
+(use-package files
+  :config
+  (setq confirm-kill-processes nil)
+  (setq auto-save-default nil)
+  (setq make-backup-files nil)
+  (setq find-file-visit-truename t)
+  (setq find-file-suppress-same-file-warnings t))
+
+(use-package cus-edit
+  :config
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (require 'custom)))
+
+(use-package recentf
+  :config
+  (add-to-list 'recentf-exclude no-littering-var-directory)
+  (add-to-list 'recentf-exclude no-littering-etc-directory))
+
+(use-package simple                     ; case bindings for active region
+  :bind
+  (("M-c" . capitalize-dwim)
+   ("M-l" . downcase-dwim)
+   ("M-u" . upcase-dwim))
+  :config
+  (setq kill-do-not-save-duplicates t)
+  (blackout 'auto-fill-mode))
+
+(use-package selectrum
+  :straight (selectrum :host github :repo "raxod502/selectrum")
+  :config
+  (selectrum-mode +1))
+
+(use-package prescient
   :straight t
-  :bind
-  (("C-SPC"	.	helm-M-x)        ; default: execute-extended-command
-   ("C-x C-f"	.	helm-find-files) ; default: find-file
-   ("C-x b"	.	helm-mini)       ; default: switch to buffer
-   ("C-h a"	.	helm-apropos)    ; default: apropos-command
-   ("C-c h m"	.	helm-man-woman)
-   ("C-c h i"	.	helm-info)
-   ("C-c h r"	.	helm-info-emacs)))
+  :config
+  (prescient-persist-mode +1))
 
-(use-package package-helm
-  :after helm
-  :bind
-  (("C-c n n"	.	aru/helm-browse-notes)
-   ("C-c n p"	.	aru/helm-browse-project-notes)
-   ("C-c n b"	.	aru/helm-browse-bib-notes)))
+(use-package selectrum-prescient
+  :straight (selectrum-prescient :host github :repo "raxod502/prescient.el"
+                                 :files ("selectrum-prescient.el"))
+  :after selectrum
+  :config
+  (selectrum-prescient-mode +1))
 
 (use-package exec-path-from-shell
   :straight t
@@ -70,21 +90,37 @@
 
 (use-package projectile
   :straight t
-  :bind-keymap
-  ("C-c p" . projectile-command-map))
-
-(use-package helm-projectile
-  :after (projectile)
-  :straight t
   :config
-  (helm-projectile-on))
+  (setq projectile-completion-system 'default) ; use selectrum instead of ido
+  (setq projectile-switch-project-action 'projectile-commander) ; ask what to do when switching
+  
+  ;; (def-projectile-commander-method ?/C-m
+  ;;   "Find file in project."
+  ;;   (call-interactively #'find-file))
+  
+  (projectile-mode +1)
+  
+  (defun aru/projectile-indexing-method-p (method)
+    "Non-nil if METHOD is a safe value for `projectile-indexing-method'."
+    (memq method '(native alien)))
+
+  (put 'projectile-indexing-method 'safe-local-variable
+       #'aru/projectile-indexing-method-p)
+  
+  (dolist (key '("C-r" "R"))
+    (bind-key key #'projectile-replace-regexp projectile-command-map))
+  :bind-keymap*
+  (("C-c p" . projectile-command-map))
+  :blackout t)
 
 (use-package doom-themes
   :straight t
-  :custom
-  (doom-themes-enable-bold t "turn on bold universally")
-  (doom-themes-enable-italic t "turn on italics is universally")
-  :hook (after-init . aru/colors-dark))
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-org-config)              ; correct and improve org-mode native fontification
+  :hook
+  (after-init . aru/colors-dark))
 
 (use-package magit
   :straight t
@@ -96,44 +132,49 @@
   :config
   (require 'smartparens-config)
   :hook ((prog-mode	.	smartparens-mode)
-	 (text-mode	.	smartparens-mode)))
-
-;; taken from jwiegley/dot-emacs
-(use-package winner
-  :hook (after-init	.	winner-mode)
-  :bind
-  (("M-n"		.	winner-redo)
-   ("M-p"		.	winner-undo)))
-
-(use-package paren
-  :hook (after-init	.	show-paren-mode))
+	 (text-mode	.	smartparens-mode))
+  :blackout t)
 
 (use-package whitespace
   :commands
   (whitespace-buffer
    whitespace-cleanup
    whitespace-mode
-   whitespace-turn-off))
+   whitespace-turn-off)
+  :blackout t)
 
 ;; using the builtin org for now
 (use-package org
-  :init
-  (setq org-ellipsis " ▼ "
-	org-archive-location "::* Archive"
-	org-babel-load-languages '((emacs-lisp	. t)
+  :config
+  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
+    "File to use for capturing org items")
+  
+  (setq org-directory "~/Dropbox/org")
+  (setq org-ellipsis " ▼ ")
+  (setq org-babel-load-languages '((emacs-lisp	. t)
 				   (python			. t)
 				   (shell			. t)))
-  :config
-  (require 'package-org)
-  (aru/setup-org-capture)
-  (aru/setup-org-ui)
+  (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
+  (setq org-default-notes-file aru/org-inbox-file)
+  (setq org-capture-templates
+	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
+	   "Note taken on %U \\\\\n%?" ; have to escape the '\\'
+	   :prepend t)
+	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
+	   "** TODO %?"
+	   :prepend t)))
+  (setq org-todo-keywords
+	'((sequence "TODO(t)" "|" "DONE(d!)")
+	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")))
+  (setq org-todo-keyword-faces
+	'(("WAITING" :inherit default :weight bold)
+	  ("LATER" :inherit warning :weight bold)))
   :bind
   (("C-c l"		.	org-store-link)
    ("C-c a"		.	org-agenda)
    ("C-c c"		.	(lambda () (interactive) (org-capture nil))))
   :hook
-  ((org-agenda-finalize	.	aru/setup-org-agenda)
-   (org-mode		.	org-indent-mode)))
+  ((org-mode		.	org-indent-mode)))
 
 (use-package org-ref
   :straight t
@@ -146,13 +187,10 @@
 	bibtex-completion-library-path org-ref-pdf-directory
 	bibtex-completion-notes-path org-ref-bibliography-notes)
   :commands
-  (doi-add-bibtex-entry
-   org-ref-helm-insert-cite-link)
+  (doi-add-bibtex-entry)
   :bind
-  ("C-c ]" . org-ref-helm-insert-cite-link))
-
-(use-package text-mode
-  :hook (text-mode	.	auto-fill-mode))
+  ;; ("C-c ]" . org-ref-helm-insert-cite-link)
+  )
 
 (use-package fish-mode
   :straight t
@@ -179,12 +217,7 @@
 (use-package mu4e
   :commands
   (mu4e)
-  :custom
-  (mu4e-maildir "~/mail" "Set the maildir for mu4e")
-  ;; mu4e binary comes with mu which I install with brew
+  :config
+  (mu4e-maildir "~/mail")
+  ;; mu4e binary comes with mu which I install with brewn
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
-
-(use-package auto-complete
-  :straight t
-  :hook
-  (after-init . ac-config-default))
