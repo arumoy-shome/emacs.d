@@ -12,6 +12,27 @@
 (setq ring-bell-function 'ignore) ;; disable bells and confirmation dialog boxes
 (setq x-gtk-use-system-tooltips nil)
 (setq use-dialog-box nil)
+(setq echo-keystrokes 0.02)
+(setq mode-line-percent-position nil)
+(setq mode-line-defining-kbd-macro
+      (propertize " Macro" 'face 'mode-line-emphasis))
+(setq-default mode-line-format
+                '("%e"
+                  mode-line-front-space
+                  mode-line-mule-info
+                  mode-line-client
+                  mode-line-modified
+                  mode-line-remote
+                  mode-line-frame-identification
+                  mode-line-buffer-identification
+                  " "
+                  mode-line-position
+                  " "
+                  mode-line-modes
+                  " "
+                  mode-line-misc-info
+                  mode-line-end-spaces))
+(setq custom-safe-themes t)
 
 ;; default font
 (set-face-attribute 'default nil

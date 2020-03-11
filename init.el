@@ -40,8 +40,15 @@
 (use-package saveplace :config (save-place-mode +1))
 (use-package ibuffer   :bind (([remap list-buffers] . #'ibuffer)))
 (use-package winner    :config (winner-mode +1))
-(use-package paren     :config (show-paren-mode +1))
 (use-package text-mode :hook (text-mode	. auto-fill-mode))
+(use-package vc-hooks  :config (setq vc-follow-symlinks t))
+
+(use-package paren
+  :config
+  (setq show-paren-delay 0.1)
+  (setq show-paren-when-point-inside-paren t)
+  (setq show-paren-when-point-in-periphery t)
+  (show-paren-mode +1))
 
 (use-package windmove
   :bind
@@ -126,14 +133,30 @@
   (("C-c p" . projectile-command-map))
   :blackout t)
 
-(use-package doom-themes
+(use-package modus-operandi-theme
   :straight t
   :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (doom-themes-org-config)              ; correct and improve org-mode native fontification
-  :hook
-  (after-init . aru/colors-dark))
+  (setq modus-operandi-theme-slanted-constructs t
+          modus-operandi-theme-bold-constructs t
+          modus-operandi-theme-proportional-fonts nil
+          modus-operandi-theme-scale-headings t
+          modus-operandi-theme-scale-1 1.05
+          modus-operandi-theme-scale-2 1.1
+          modus-operandi-theme-scale-3 1.15
+          modus-operandi-theme-scale-4 1.2))
+
+(use-package modus-vivendi-theme
+  :straight t
+  :config
+  (setq modus-operandi-theme-slanted-constructs t
+          modus-operandi-theme-bold-constructs t
+          modus-operandi-theme-proportional-fonts nil
+          modus-operandi-theme-scale-headings t
+          modus-operandi-theme-scale-1 1.05
+          modus-operandi-theme-scale-2 1.1
+          modus-operandi-theme-scale-3 1.15
+          modus-operandi-theme-scale-4 1.2)
+  :hook (after-init . (lambda () (load-theme 'modus-vivendi t))))
 
 (use-package magit
   :straight t
@@ -159,6 +182,11 @@
 ;; using the builtin org for now
 (use-package org
   :config
+  (setq org-special-ctrl-a/e t)
+  (setq org-special-ctrl-k t)
+  (setq org-goto-auto-isearch nil)
+  (setq org-hide-block-startup t)
+  (setq org-return-follows-link t)
   (setq org-directory "~/Dropbox/org")
   (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
     "File to use for capturing org items")
@@ -169,12 +197,10 @@
   (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
   (setq org-default-notes-file aru/org-inbox-file)
   (setq org-capture-templates
-	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
-	   "Note taken on %U \\\\\n%?" ; have to escape the '\\'
-	   :prepend t)
+	'(("i" "Item" entry (file+headline aru/org-inbox-file "Inbox")
+	   "- %U %?")
 	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
-	   "** TODO %?"
-	   :prepend t)))
+	   "** TODO %?")))
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
 	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")))
@@ -190,21 +216,8 @@
   :hook
   ((org-mode . org-indent-mode)))
 
-(use-package org-ref
-  :straight t
-  :init
-  (setq reftex-default-bibliography '("~/org/bib/ref.bib")
-	org-ref-bibliography-notes "~/org/bib/notes.org"
-	org-ref-default-bibliography '("~/org/bib/ref.bib")
-	org-ref-pdf-directory "~/org/bib/pdfs/")
-  (setq bibtex-completion-bibliography reftex-default-bibliography
-	bibtex-completion-library-path org-ref-pdf-directory
-	bibtex-completion-notes-path org-ref-bibliography-notes)
-  :commands
-  (doi-add-bibtex-entry)
-  :bind
-  ;; ("C-c ]" . org-ref-helm-insert-cite-link)
-  )
+(use-package org-tempo :after org)
+
 
 (use-package fish-mode
   :straight t
@@ -228,3 +241,13 @@
   (mu4e-maildir "~/mail")
   ;; mu4e binary comes with mu which I install with brewn
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+
+(use-package time
+  :config
+  (setq display-time-24hr-format t)
+  (setq display-time-day-and-date nil)
+  (setq display-time-format nil)
+  (setq display-time-interval 60)
+  (setq display-time-mail-directory nil)
+  (setq display-time-default-load-average nil)
+  :hook (after-init . display-time-mode))

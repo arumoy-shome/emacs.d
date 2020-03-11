@@ -1,0 +1,30 @@
+#    -*- mode: emacs-lisp -*-
+
+;; I am using the modus themes
+(use-package doom-themes
+  :disabled t
+  :straight t
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-org-config)              ; correct and improve org-mode native fontification
+  :hook
+  (after-init . aru/colors-dark))
+
+;; I am using a 'homegrown citation manager, relying on org and a set of convensions.
+(use-package org-ref
+  :disabled t
+  :after org
+  :straight t
+  :init
+  (setq reftex-default-bibliography '("~/org/bib/ref.bib")
+	org-ref-bibliography-notes "~/org/bib/notes.org"
+	org-ref-default-bibliography '("~/org/bib/ref.bib")
+	org-ref-pdf-directory "~/org/bib/pdfs/")
+  (setq bibtex-completion-bibliography reftex-default-bibliography
+	bibtex-completion-library-path org-ref-pdf-directory
+	bibtex-completion-notes-path org-ref-bibliography-notes)
+  :commands
+  (doi-add-bibtex-entry)
+  :bind
+  ("C-c ]" . org-ref-helm-insert-cite-link))
