@@ -41,19 +41,6 @@
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 
-(defun aru/colors-dark ()
-  "switch to the dark colorscheme"
-  (interactive)
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (load-theme 'doom-tomorrow-night t))
-
-(defun aru/colors-light ()
-  "switch to the light colorscheme"
-  (interactive)
-  ;; FIXME titlebar text is not visible
-  (add-to-list 'default-frame-alist '(ns-appearance . light))
-  (load-theme 'doom-solarized-light t))
-
 ;;; editor
 (setq sentence-end-double-space nil)
 (setq tab-width 2)			; length of tab

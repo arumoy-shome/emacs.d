@@ -43,6 +43,10 @@
 (use-package text-mode :hook (text-mode	. auto-fill-mode))
 (use-package vc-hooks  :config (setq vc-follow-symlinks t))
 
+(use-package autorevert
+  :config
+  (global-auto-revert-mode +1))
+
 (use-package paren
   :config
   (setq show-paren-delay 0.1)
@@ -136,19 +140,9 @@
 (use-package modus-operandi-theme
   :straight t
   :config
-  (setq modus-operandi-theme-slanted-constructs t
-          modus-operandi-theme-bold-constructs t
-          modus-operandi-theme-proportional-fonts nil
-          modus-operandi-theme-scale-headings t
-          modus-operandi-theme-scale-1 1.05
-          modus-operandi-theme-scale-2 1.1
-          modus-operandi-theme-scale-3 1.15
-          modus-operandi-theme-scale-4 1.2))
-
-(use-package modus-vivendi-theme
-  :straight t
-  :config
-  (setq modus-operandi-theme-slanted-constructs t
+  (defun aru/colors-light ()
+    (interactive)
+    (setq modus-operandi-theme-slanted-constructs t
           modus-operandi-theme-bold-constructs t
           modus-operandi-theme-proportional-fonts nil
           modus-operandi-theme-scale-headings t
@@ -156,7 +150,26 @@
           modus-operandi-theme-scale-2 1.1
           modus-operandi-theme-scale-3 1.15
           modus-operandi-theme-scale-4 1.2)
-  :hook (after-init . (lambda () (load-theme 'modus-vivendi t))))
+    (disable-theme 'modus-vivendi)
+    (load-theme 'modus-operandi t)))
+
+(use-package modus-vivendi-theme
+  :straight t
+  :config
+  (defun aru/colors-dark ()
+    (interactive)
+    (setq modus-vivendi-theme-slanted-constructs t
+          modus-vivendi-theme-bold-constructs t
+          modus-vivendi-theme-proportional-fonts nil
+          modus-vivendi-theme-scale-headings t
+          modus-vivendi-theme-scale-1 1.05
+          modus-vivendi-theme-scale-2 1.1
+          modus-vivendi-theme-scale-3 1.15
+          modus-vivendi-theme-scale-4 1.2)
+    (disable-theme 'modus-operandi)
+    (load-theme 'modus-vivendi t)))
+
+(use-package emacs :hook (after-init . aru/colors-light))
 
 (use-package magit
   :straight t
