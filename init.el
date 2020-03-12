@@ -195,32 +195,39 @@
 ;; using the builtin org for now
 (use-package org
   :config
+  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
+    "File to use for capturing org items")
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
   (setq org-goto-auto-isearch nil)
   (setq org-hide-block-startup t)
   (setq org-return-follows-link t)
   (setq org-directory "~/Dropbox/org")
-  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
-    "File to use for capturing org items")
-    (setq org-ellipsis " ▼ ")
+  (setq org-log-into-drawer t)
+  (setq org-ellipsis " ▼ ")
+  (setq org-default-notes-file aru/org-inbox-file)
+  (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
+  (setq org-agenda-restore-windows-after-quit t)
   (setq org-babel-load-languages '((emacs-lisp . t)
 				   (python     . t)
 				   (shell      . t)))
-  (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
-  (setq org-default-notes-file aru/org-inbox-file)
   (setq org-capture-templates
-	'(("i" "Item" entry (file+headline aru/org-inbox-file "Inbox")
+	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
 	   "- %U %?")
 	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
-	   "** TODO %?")))
+	   "* TODO %?")))
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
 	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")))
   (setq org-todo-keyword-faces
 	'(("WAITING" :inherit default :weight bold)
 	  ("LATER" :inherit warning :weight bold)))
-  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
+  (setq org-agenda-custom-commands
+        '(("o" "List of all Open TODO entries"
+           ((todo ""
+                  ((org-agenda-overriding-header "\nUnscheduled TODO")
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))))))
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
@@ -230,7 +237,6 @@
   ((org-mode . org-indent-mode)))
 
 (use-package org-tempo :after org)
-
 
 (use-package fish-mode
   :straight t
