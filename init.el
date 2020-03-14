@@ -32,20 +32,18 @@
   (scroll-bar-mode -1)
   (horizontal-scroll-bar-mode -1))
 
-(use-package delsel    :config (setq delete-selection-mode t))
-(use-package frame     :config (blink-cursor-mode 0))
-(use-package hl-line   :config (global-hl-line-mode nil))
-(use-package novice    :config (setq disabled-command-function nil))
-(use-package isearch   :config (setq lazy-highlight-initial-delay 0))
-(use-package saveplace :config (save-place-mode +1))
-(use-package ibuffer   :bind (([remap list-buffers] . #'ibuffer)))
-(use-package winner    :config (winner-mode +1))
-(use-package text-mode :hook (text-mode	. auto-fill-mode))
-(use-package vc-hooks  :config (setq vc-follow-symlinks t))
-
-(use-package autorevert
-  :config
-  (global-auto-revert-mode +1))
+(use-package delsel     :config (setq delete-selection-mode t))
+(use-package frame      :config (blink-cursor-mode 0))
+(use-package hl-line    :config (global-hl-line-mode nil))
+(use-package novice     :config (setq disabled-command-function nil))
+(use-package isearch    :config (setq lazy-highlight-initial-delay 0))
+(use-package saveplace  :config (save-place-mode +1))
+(use-package ibuffer    :bind (([remap list-buffers] . #'ibuffer)))
+(use-package winner     :config (winner-mode +1))
+(use-package text-mode  :hook (text-mode	. auto-fill-mode))
+(use-package vc-hooks   :config (setq vc-follow-symlinks t))
+(use-package autorevert :config (global-auto-revert-mode +1))
+(use-package uniquify   :config (setq uniquify-buffer-name-style 'forward))
 
 (use-package paren
   :config
@@ -67,7 +65,8 @@
   (setq auto-save-default nil)
   (setq make-backup-files nil)
   (setq find-file-visit-truename t)
-  (setq find-file-suppress-same-file-warnings t))
+  (setq find-file-suppress-same-file-warnings t)
+  (setq require-final-newline t))
 
 (use-package cus-edit
   :config
@@ -195,14 +194,14 @@
 ;; using the builtin org for now
 (use-package org
   :config
-  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
-    "File to use for capturing org items")
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
   (setq org-goto-auto-isearch nil)
   (setq org-hide-block-startup t)
   (setq org-return-follows-link t)
-  (setq org-directory "~/Dropbox/org")
+  (setq org-directory "~/org")
+  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
+    "File to use for capturing org items")
   (setq org-log-into-drawer t)
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
@@ -216,7 +215,9 @@
 	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
 	   "- %U %?")
 	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
-	   "* TODO %?")))
+	   "* TODO %?")
+          ("p" "Paper" entry (file "~/org/reading-list.org")
+           "* %?%^{Author}p%^{Title}p%^{Type}p%^{Genre}p")))
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
 	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")))
@@ -245,6 +246,8 @@
 (use-package eshell
   :commands eshell
   :config
+  (setq eshell-prefer-lisp-functions t)
+  (setq eshell-expand-input-functions '(eshell-expand-history-references))
   (setq eshell-banner-message
 	'(format "%s %s\n"
 		 (propertize (format " %s " (string-trim (buffer-name)))
