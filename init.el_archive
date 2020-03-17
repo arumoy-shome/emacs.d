@@ -18,13 +18,48 @@
   :straight t
   :init
   (setq reftex-default-bibliography '("~/org/bib/ref.bib")
-	org-ref-bibliography-notes "~/org/bib/notes.org"
-	org-ref-default-bibliography '("~/org/bib/ref.bib")
-	org-ref-pdf-directory "~/org/bib/pdfs/")
+        org-ref-bibliography-notes "~/org/bib/notes.org"
+        org-ref-default-bibliography '("~/org/bib/ref.bib")
+        org-ref-pdf-directory "~/org/bib/pdfs/")
   (setq bibtex-completion-bibliography reftex-default-bibliography
-	bibtex-completion-library-path org-ref-pdf-directory
-	bibtex-completion-notes-path org-ref-bibliography-notes)
+        bibtex-completion-library-path org-ref-pdf-directory
+        bibtex-completion-notes-path org-ref-bibliography-notes)
   :commands
   (doi-add-bibtex-entry)
   :bind
   ("C-c ]" . org-ref-helm-insert-cite-link))
+
+(use-package ido
+  :disabled t
+  :config
+  (ido-mode +1)
+  (ido-everywhere +1)
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-filename-at-point 'guess)
+  (setq ido-enable-dot-prefix t))
+
+(use-package projectile
+  :disabled t
+  :straight t
+  :config
+  (setq projectile-completion-system 'default) ; use selectrum instead of ido
+  (setq projectile-switch-project-action 'projectile-commander) ; ask what to do when switching
+
+  (def-projectile-commander-method ?\C-m
+    "Find file in project."
+    (call-interactively #'find-file))
+
+  (projectile-mode +1)
+
+  (defun aru/projectile-indexing-method-p (method)
+    "Non-nil if METHOD is a safe value for `projectile-indexing-method'."
+    (memq method '(native alien)))
+
+  (put 'projectile-indexing-method 'safe-local-variable
+       #'aru/projectile-indexing-method-p)
+
+  (dolist (key '("C-r" "R"))
+    (bind-key key #'projectile-replace-regexp projectile-command-map))
+  :bind-keymap*
+  (("C-c p" . projectile-command-map))
+  :blackout t)

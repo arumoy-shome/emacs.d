@@ -24,6 +24,8 @@
 
 (use-package aru-core :demand t)
 
+(use-package org :straight t)
+
 (use-package menu-bar :config (menu-bar-mode -1))
 (use-package tool-bar :config (tool-bar-mode -1))
 (use-package tooltip  :config (tooltip-mode -1))
@@ -44,6 +46,7 @@
 (use-package vc-hooks   :config (setq vc-follow-symlinks t))
 (use-package autorevert :config (global-auto-revert-mode +1))
 (use-package uniquify   :config (setq uniquify-buffer-name-style 'forward))
+(use-package window     :bind (("s-o" . other-window)))
 
 (use-package paren
   :config
@@ -111,31 +114,6 @@
   :hook
   (after-init . exec-path-from-shell-initialize))
 
-(use-package projectile
-  :straight t
-  :config
-  (setq projectile-completion-system 'default) ; use selectrum instead of ido
-  (setq projectile-switch-project-action 'projectile-commander) ; ask what to do when switching
-  
-  (def-projectile-commander-method ?\C-m
-    "Find file in project."
-    (call-interactively #'find-file))
-  
-  (projectile-mode +1)
-  
-  (defun aru/projectile-indexing-method-p (method)
-    "Non-nil if METHOD is a safe value for `projectile-indexing-method'."
-    (memq method '(native alien)))
-
-  (put 'projectile-indexing-method 'safe-local-variable
-       #'aru/projectile-indexing-method-p)
-  
-  (dolist (key '("C-r" "R"))
-    (bind-key key #'projectile-replace-regexp projectile-command-map))
-  :bind-keymap*
-  (("C-c p" . projectile-command-map))
-  :blackout t)
-
 (use-package modus-operandi-theme
   :straight t
   :config
@@ -191,7 +169,6 @@
    whitespace-turn-off)
   :blackout t)
 
-;; using the builtin org for now
 (use-package org
   :config
   (setq org-special-ctrl-a/e t)
@@ -217,7 +194,8 @@
 	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
 	   "* TODO %?")
           ("p" "Paper" entry (file "~/org/reading-list.org")
-           "* %?%^{Author}p%^{Title}p%^{Type}p%^{Genre}p")))
+           "* %?%^{Author}p%^{Title}p%^{Type}p%^{Genre}p")
+          ("j" "Journal" entry (file "~/org/journal.org"))))
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
 	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")))
@@ -238,6 +216,7 @@
   ((org-mode . org-indent-mode)))
 
 (use-package org-tempo :after org)
+(use-package org-habit :after org)
 
 (use-package fish-mode
   :straight t
