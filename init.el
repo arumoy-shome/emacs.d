@@ -5,21 +5,12 @@
 (setq gc-cons-threshold most-positive-fixnum)
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold aru/orig-gc-cons-threshold)))
 
-;; all config files under elisp dir
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
 
 (require 'aru-packages)
 
-(use-package blackout
-  :straight (:host github :repo "raxod502/blackout")
-  :demand t)
-
-(use-package gcmh
-  :straight t
-  :config
-  (gcmh-mode +1)
-  :blackout t)
-
+(use-package blackout :straight (:host github :repo "raxod502/blackout") :demand t)
+(use-package gcmh :straight t :config (gcmh-mode +1) :blackout t)
 (use-package no-littering :straight t :demand t)
 
 (use-package aru-core :demand t)
@@ -49,12 +40,8 @@
 (use-package uniquify   :config (setq uniquify-buffer-name-style 'forward))
 (use-package elec-pair  :config (electric-pair-mode +1))
 (use-package man        :config (setq Man-switches "-a"))
-
-(use-package hideshow
-  :config
-  (defun aru/hideshow ()
-    (hs-minor-mode +1))
-  :hook (prog-mode . aru/hideshow))
+(use-package hideshow   :hook (prog-mode . (lambda () (hs-minor-mode +1))))
+(use-package ffap       :config (ffap-bindings))
 
 (use-package dired-aux
   :config
@@ -62,12 +49,8 @@
   (setq dired-create-destination-dirs 'ask))
 
 (use-package window
-  :init
-  (defun aru/other-window-reverse ()
-    (interactive)
-    (other-window -1))
   :bind (("s-]" . other-window)
-         ("s-[" . aru/other-window-reverse)))
+         ("s-[" . (lambda () (interactive) (other-window -1)))))
 
 (use-package paren
   :config
@@ -158,10 +141,7 @@
 
 (use-package emacs :hook (after-init . aru/colors-light))
 
-(use-package magit
-  :straight t
-  :bind
-  ("C-x g" . magit-status))
+(use-package magit :straight t :bind ("C-x g" . magit-status))
 
 (use-package whitespace
   :commands
