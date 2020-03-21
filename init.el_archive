@@ -63,3 +63,32 @@
   :bind-keymap*
   (("C-c p" . projectile-command-map))
   :blackout t)
+
+(use-package windmove
+  :disabled t
+  :bind
+  (("<left>"  . windmove-left)
+   ("<right>" . windmove-right)
+   ("<up>"    . windmove-up)
+   ("<down>"  . windmove-down)))
+
+(use-package fish-mode
+  :disabled t
+  :straight t
+  :mode ("\\.fish\\'" .	fish-mode))
+
+(use-package exec-path-from-shell
+  :disabled t
+  :straight t
+  :if (memq window-system '(mac ns))
+  :hook
+  (after-init . exec-path-from-shell-initialize))
+
+(use-package smartparens
+  :disabled t
+  :straight t
+  :config
+  (require 'smartparens-config)
+  :hook ((prog-mode . smartparens-mode)
+	 (text-mode . smartparens-mode))
+  :blackout t)

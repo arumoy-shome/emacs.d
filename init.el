@@ -23,6 +23,7 @@
 (use-package no-littering :straight t :demand t)
 
 (use-package aru-core :demand t)
+(use-package aru-path :demand t)
 
 (use-package org :straight t)
 
@@ -46,7 +47,27 @@
 (use-package vc-hooks   :config (setq vc-follow-symlinks t))
 (use-package autorevert :config (global-auto-revert-mode +1))
 (use-package uniquify   :config (setq uniquify-buffer-name-style 'forward))
-(use-package window     :bind (("s-o" . other-window)))
+(use-package elec-pair  :config (electric-pair-mode +1))
+(use-package man        :config (setq Man-switches "-a"))
+
+(use-package hideshow
+  :config
+  (defun aru/hideshow ()
+    (hs-minor-mode +1))
+  :hook (prog-mode . aru/hideshow))
+
+(use-package dired-aux
+  :config
+  (setq dired-isearch-filenames t)
+  (setq dired-create-destination-dirs 'ask))
+
+(use-package window
+  :init
+  (defun aru/other-window-reverse ()
+    (interactive)
+    (other-window -1))
+  :bind (("s-]" . other-window)
+         ("s-[" . aru/other-window-reverse)))
 
 (use-package paren
   :config
@@ -54,13 +75,6 @@
   (setq show-paren-when-point-inside-paren t)
   (setq show-paren-when-point-in-periphery t)
   (show-paren-mode +1))
-
-(use-package windmove
-  :bind
-  (("<left>"  . windmove-left)
-   ("<right>" . windmove-right)
-   ("<up>"    . windmove-up)
-   ("<down>"  . windmove-down)))
 
 (use-package files
   :config
@@ -89,6 +103,8 @@
    ("M-u" . upcase-dwim))
   :config
   (setq kill-do-not-save-duplicates t)
+  (setq async-shell-command-display-buffer nil)
+  (setq shell-command-prompt-show-cwd t)
   (blackout 'auto-fill-mode))
 
 (use-package selectrum
@@ -107,12 +123,6 @@
   :after selectrum
   :config
   (selectrum-prescient-mode +1))
-
-(use-package exec-path-from-shell
-  :straight t
-  :if (memq window-system '(mac ns))
-  :hook
-  (after-init . exec-path-from-shell-initialize))
 
 (use-package modus-operandi-theme
   :straight t
@@ -153,14 +163,6 @@
   :bind
   ("C-x g" . magit-status))
 
-(use-package smartparens
-  :straight t
-  :config
-  (require 'smartparens-config)
-  :hook ((prog-mode . smartparens-mode)
-	 (text-mode . smartparens-mode))
-  :blackout t)
-
 (use-package whitespace
   :commands
   (whitespace-buffer
@@ -182,9 +184,13 @@
   (setq org-log-into-drawer t)
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
+  (setq org-agenda-dim-blocked-tasks nil)
+  (setq org-agenda-inhibit-startup t)
   (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
   (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
   (setq org-agenda-restore-windows-after-quit t)
+  (setq org-agenda-use-tag-inheritance nil)
+  (setq org-agenda-ignore-drawer-properties '(effort appt category stats))
   (setq org-babel-load-languages '((emacs-lisp . t)
 				   (python     . t)
 				   (shell      . t)))
@@ -211,16 +217,10 @@
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
-   ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file))))
-  :hook
-  ((org-mode . org-indent-mode)))
+   ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))))
 
 (use-package org-tempo :after org)
 (use-package org-habit :after org)
-
-(use-package fish-mode
-  :straight t
-  :mode ("\\.fish\\'" .	fish-mode))
 
 (use-package eshell
   :commands eshell
