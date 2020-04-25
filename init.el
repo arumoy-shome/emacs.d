@@ -139,7 +139,7 @@
     (disable-theme 'modus-operandi)
     (load-theme 'modus-vivendi t)))
 
-(use-package emacs :hook (after-init . aru/colors-light))
+(use-package emacs :hook (after-init . aru/colors-dark))
 
 (use-package magit :straight t :bind ("C-x g" . magit-status))
 
@@ -215,14 +215,6 @@
 			     'face 'font-lock-keyword-face))
 	eshell-kill-processes-on-exit t))
 
-(use-package mu4e
-  :commands
-  (mu4e)
-  :config
-  (mu4e-maildir "~/mail")
-  ;; mu4e binary comes with mu which I install with brewn
-  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
-
 (use-package time
   :config
   (setq display-time-24hr-format t)
@@ -232,3 +224,28 @@
   (setq display-time-mail-directory nil)
   (setq display-time-default-load-average nil)
   :hook (after-init . display-time-mode))
+
+(use-package evil
+  :straight t
+  :config (evil-mode 1))
+
+(use-package evil-surround
+  :straight t
+  :after (evil)
+  :config (global-evil-surround-mode 1))
+
+(use-package evil-commentary
+  :straight t
+  :after (evil)
+  :config (evil-commentary-mode))
+
+(use-package markdown-mode
+  :straight t
+  :init (setq markdown-command "multimarkdown")
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
+
+(use-package powerline
+  :straight t
+  :config (powerline-center-evil-theme))
