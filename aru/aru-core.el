@@ -37,10 +37,11 @@
                   mode-line-end-spaces))
 (setq custom-safe-themes t)
 (setq max-mini-window-height 0.15)
+(add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "Source Code Pro" :weight 'light)
+		    :family "Source Code Pro" :height 140 :weight 'light)
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))

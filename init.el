@@ -142,6 +142,7 @@
 (use-package emacs :hook (after-init . aru/colors-dark))
 
 (use-package magit :straight t :bind ("C-x g" . magit-status))
+(use-package evil-magit :straight t :after magit)
 
 (use-package whitespace
   :commands
@@ -227,7 +228,13 @@
 
 (use-package evil
   :straight t
-  :config (evil-mode 1))
+  :init
+  (setq evil-want-C-u-scroll t
+        evil-want-C-u-delete t
+        evil-split-window-below t
+        evil-vsplit-window-right t)
+  :config
+  (evil-mode 1))
 
 (use-package evil-surround
   :straight t
