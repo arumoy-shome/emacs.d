@@ -8,4 +8,6 @@
 (add-to-list 'exec-path "/usr/local/opt/coreutils/libexec/gnubin")
 (add-to-list 'exec-path "/Library/TeX/texbin")
 
+;; set default directory to $HOME
+(setq default-directory (getenv "HOME"))
 (provide 'aru-path)
