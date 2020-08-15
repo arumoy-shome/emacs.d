@@ -1,16 +1,5 @@
 #    -*- mode: emacs-lisp -*-
 
-;; I am using the modus themes
-(use-package doom-themes
-  :disabled t
-  :straight t
-  :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (doom-themes-org-config)              ; correct and improve org-mode native fontification
-  :hook
-  (after-init . aru/colors-dark))
-
 ;; I am using a 'homegrown citation manager, relying on org and a set of convensions.
 (use-package org-ref
   :disabled t
@@ -100,3 +89,30 @@
   (mu4e-maildir "~/mail")
   ;; mu4e binary comes with mu which I install with brewn
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+
+(use-package evil-magit :straight t :after magit)
+
+(use-package evil
+  :straight t
+  :init
+  (setq evil-want-C-u-scroll t
+        evil-want-C-u-delete t
+        evil-split-window-below t
+        evil-vsplit-window-right t)
+  :config
+  (evil-mode 1)
+  (evil-set-initial-state 'term-mode 'emacs))
+
+(use-package evil-surround
+  :straight t
+  :after (evil)
+  :config (global-evil-surround-mode 1))
+
+(use-package evil-commentary
+  :straight t
+  :after (evil)
+  :config (evil-commentary-mode))
+
+(use-package linum-relative
+  :straight t
+  :config (linum-relative-global-mode))

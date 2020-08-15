@@ -27,7 +27,6 @@
   (horizontal-scroll-bar-mode -1))
 
 (use-package delsel     :config (setq delete-selection-mode t))
-(use-package frame      :config (blink-cursor-mode 0))
 (use-package hl-line    :config (global-hl-line-mode nil))
 (use-package novice     :config (setq disabled-command-function nil))
 (use-package isearch    :config (setq lazy-highlight-initial-delay 0))
@@ -42,6 +41,12 @@
 (use-package man        :config (setq Man-switches "-a"))
 (use-package hideshow   :hook (prog-mode . (lambda () (hs-minor-mode +1))))
 (use-package ffap       :config (ffap-bindings))
+(use-package mule-cmds  :bind (("C-h h . nil")))
+
+(use-package frame
+  :config (blink-cursor-mode 0)
+  :bind (("C-z" . nil)
+         ("C-x C-z" . nil)))
 
 (use-package dired-aux
   :config
@@ -121,7 +126,8 @@
           modus-operandi-theme-scale-3 1.15
           modus-operandi-theme-scale-4 1.2)
     (disable-theme 'modus-vivendi)
-    (load-theme 'modus-operandi t)))
+    (load-theme 'modus-operandi t)
+    (powerline-reset)))
 
 (use-package modus-vivendi-theme
   :straight t
@@ -137,12 +143,12 @@
           modus-vivendi-theme-scale-3 1.15
           modus-vivendi-theme-scale-4 1.2)
     (disable-theme 'modus-operandi)
-    (load-theme 'modus-vivendi t)))
+    (load-theme 'modus-vivendi t)
+    (powerline-reset)))
 
 (use-package emacs :hook (after-init . aru/colors-dark))
 
 (use-package magit :straight t :bind ("C-x g" . magit-status))
-(use-package evil-magit :straight t :after magit)
 
 (use-package whitespace
   :commands
@@ -226,26 +232,6 @@
   (setq display-time-default-load-average nil)
   :hook (after-init . display-time-mode))
 
-(use-package evil
-  :straight t
-  :init
-  (setq evil-want-C-u-scroll t
-        evil-want-C-u-delete t
-        evil-split-window-below t
-        evil-vsplit-window-right t)
-  :config
-  (evil-mode 1))
-
-(use-package evil-surround
-  :straight t
-  :after (evil)
-  :config (global-evil-surround-mode 1))
-
-(use-package evil-commentary
-  :straight t
-  :after (evil)
-  :config (evil-commentary-mode))
-
 (use-package markdown-mode
   :straight t
   :init (setq markdown-command "multimarkdown")
@@ -255,4 +241,15 @@
 
 (use-package powerline
   :straight t
-  :config (powerline-center-evil-theme))
+  :config (powerline-center-theme))
+
+(use-package doom-themes
+  :straight t
+  :commands (load-theme)
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-org-config)) ; correct and improve org-mode native fontification
+
+;; finally, start the server
+(server-start)
