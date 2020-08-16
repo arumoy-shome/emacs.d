@@ -41,7 +41,8 @@
 (use-package man        :config (setq Man-switches "-a"))
 (use-package hideshow   :hook (prog-mode . (lambda () (hs-minor-mode +1))))
 (use-package ffap       :config (ffap-bindings))
-(use-package mule-cmds  :bind (("C-h h . nil")))
+(use-package emacs      :bind (("C-h h" . nil)))
+(use-package hippie-exp :bind (("M-/" . hippie-expand)))
 
 (use-package frame
   :config (blink-cursor-mode 0)
@@ -56,6 +57,13 @@
 (use-package window
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))))
+
+(use-package windmove
+  :bind
+  (("<left>"  . windmove-left)
+   ("<right>" . windmove-right)
+   ("<up>"    . windmove-up)
+   ("<down>"  . windmove-down)))
 
 (use-package paren
   :config
@@ -126,8 +134,7 @@
           modus-operandi-theme-scale-3 1.15
           modus-operandi-theme-scale-4 1.2)
     (disable-theme 'modus-vivendi)
-    (load-theme 'modus-operandi t)
-    (powerline-reset)))
+    (load-theme 'modus-operandi t)))
 
 (use-package modus-vivendi-theme
   :straight t
@@ -143,8 +150,7 @@
           modus-vivendi-theme-scale-3 1.15
           modus-vivendi-theme-scale-4 1.2)
     (disable-theme 'modus-operandi)
-    (load-theme 'modus-vivendi t)
-    (powerline-reset)))
+    (load-theme 'modus-vivendi t)))
 
 (use-package emacs :hook (after-init . aru/colors-dark))
 
@@ -239,10 +245,6 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
 
-(use-package powerline
-  :straight t
-  :config (powerline-center-theme))
-
 (use-package doom-themes
   :straight t
   :commands (load-theme)
@@ -250,6 +252,10 @@
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
   (doom-themes-org-config)) ; correct and improve org-mode native fontification
+
+(use-package python
+  :config
+  (setq python-shell-interpreter "python3"))
 
 ;; finally, start the server
 (server-start)

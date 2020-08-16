@@ -53,14 +53,6 @@
   (("C-c p" . projectile-command-map))
   :blackout t)
 
-(use-package windmove
-  :disabled t
-  :bind
-  (("<left>"  . windmove-left)
-   ("<right>" . windmove-right)
-   ("<up>"    . windmove-up)
-   ("<down>"  . windmove-down)))
-
 (use-package fish-mode
   :disabled t
   :straight t
@@ -116,3 +108,7 @@
 (use-package linum-relative
   :straight t
   :config (linum-relative-global-mode))
+
+(use-package powerline
+  :straight t
+  :config (powerline-center-theme))
