@@ -257,5 +257,19 @@
   :config
   (setq python-shell-interpreter "python3"))
 
+(use-package custom
+  :config
+  (defun aru/load-theme (theme)
+    "Disable the current theme and load a new one. It is assumed
+    that only one theme is enabled."
+    ;; below sexp to interactively get theme is from the load-theme source
+    (interactive
+     (list
+      (intern (completing-read "Load custom theme: "
+                               (mapcar #'symbol-name
+				       (custom-available-themes))))))
+    (disable-theme (car custom-enabled-themes))
+    (load-theme theme t)))
+
 ;; finally, start the server
 (server-start)
