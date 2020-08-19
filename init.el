@@ -44,6 +44,12 @@
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
 
+(use-package tex-mode
+  :config
+  (setq latex-run-command "pdflatex -interaction=nonstopmode")
+  (setq tex-dvi-view-command "emacsclient -n")
+  (setq tex-print-file-extension ".pdf"))
+
 (use-package frame
   :config (blink-cursor-mode 0)
   :bind (("C-z" . nil)
