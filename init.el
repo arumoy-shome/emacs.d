@@ -99,8 +99,16 @@
 
 (use-package recentf
   :config
+  (recentf-mode 1)
   (add-to-list 'recentf-exclude no-littering-var-directory)
-  (add-to-list 'recentf-exclude no-littering-etc-directory))
+  (add-to-list 'recentf-exclude no-littering-etc-directory)
+  (defun aru/recentf-find-file ()
+    "Taken from
+    https://github.com/raxod502/selectrum/wiki/Useful-Commands#switch-to-recent-file"
+    (interactive)
+    (let ((files (mapcar 'abbreviate-file-name recentf-list)))
+      (find-file (completing-read "Find recent file: " files nil t))))
+  :bind (("C-x C-r" . aru/recentf-find-file))) ; overrides ffap-read-only
 
 (use-package simple                     ; case bindings for active region
   :bind
@@ -280,6 +288,12 @@
 				       (custom-available-themes))))))
     (disable-theme (car custom-enabled-themes))
     (load-theme theme t)))
+
+(use-package mwheel
+  :config
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  (setq mouse-wheel-progressive-speed nil)
+  (setq mouse-wheel-follow-mouse t))     ; default
 
 ;; finally, start the server
 (server-start)
