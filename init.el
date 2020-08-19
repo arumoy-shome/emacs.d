@@ -56,7 +56,11 @@
 
 (use-package window
   :bind (("s-]" . other-window)
-         ("s-[" . (lambda () (interactive) (other-window -1)))))
+         ("s-[" . (lambda () (interactive) (other-window -1)))
+         ("C-x 3" . (lambda () (interactive) (split-window-right)
+                      (other-window 1)))
+         ("C-x 2" . (lambda () (interactive) (split-window-below)
+                      (other-window 1)))))
 
 (use-package windmove
   :bind
