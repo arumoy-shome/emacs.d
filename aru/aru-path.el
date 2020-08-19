@@ -6,6 +6,4 @@
 (add-to-list 'exec-path "/usr/local/bin")
 (add-to-list 'exec-path "/Library/TeX/texbin")
 
-;; set default directory to $HOME
-(setq default-directory (getenv "HOME"))
 (provide 'aru-path)
