@@ -184,17 +184,24 @@
 
 (use-package org
   :config
+  ;;; general
+  (org-indent-mode -1)                  ; [default] do not indent text based on outline
+  (setq org-reverse-note-order t)
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
   (setq org-goto-auto-isearch nil)
   (setq org-hide-block-startup t)
-  (setq org-return-follows-link t)
+  (setq org-return-follows-link nil)
   (setq org-directory "~/org")
   (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
     "File to use for capturing org items")
   (setq org-log-into-drawer t)
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
+  ;;; refile
+  (setq org-refile-targets '((nil . (:regexp . "^\* inbox"))
+                             (org-agenda-files . (:regexp . "^\* inbox"))))
+  ;;; agenda
   (setq org-agenda-dim-blocked-tasks nil)
   (setq org-agenda-inhibit-startup t)
   (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
@@ -202,9 +209,16 @@
   (setq org-agenda-restore-windows-after-quit t)
   (setq org-agenda-use-tag-inheritance nil)
   (setq org-agenda-ignore-drawer-properties '(effort appt category stats))
+  (setq org-agenda-custom-commands
+        '(("o" "List of all Open TODO entries"
+           ((todo ""
+                  ((org-agenda-overriding-header "\nUnscheduled TODO")
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))))))
+  ;;; babel
   (setq org-babel-load-languages '((emacs-lisp . t)
 				   (python     . t)
 				   (shell      . t)))
+  ;;; capture
   (setq org-capture-templates
 	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
 	   "- %U %?")
@@ -213,23 +227,22 @@
           ("p" "Paper" entry (file "~/org/reading-list.org")
            "* %?%^{Author}p%^{Title}p%^{Type}p%^{Genre}p")
           ("j" "Journal" entry (file "~/org/journal.org"))))
+  ;; todo
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
 	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")))
   (setq org-todo-keyword-faces
 	'(("WAITING" :inherit default :weight bold)
 	  ("LATER" :inherit warning :weight bold)))
-  (setq org-agenda-custom-commands
-        '(("o" "List of all Open TODO entries"
-           ((todo ""
-                  ((org-agenda-overriding-header "\nUnscheduled TODO")
-                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))))))
+  ;; archive
+  (setq org-archive-location "~/org/archive.org::datetree/") ; archive in single file, in datetree
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
    ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))))
 
+(use-package ox-html :config (setq org-html-validation-link nil))
 (use-package org-tempo :after org)
 (use-package org-habit :after org)
 
