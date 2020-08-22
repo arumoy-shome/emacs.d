@@ -199,8 +199,8 @@
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
   ;;; refile
-  (setq org-refile-targets '((nil . (:regexp . "^\* inbox"))
-                             (org-agenda-files . (:regexp . "^\* inbox"))))
+  (setq org-refile-targets '((nil . (:level . 1))
+                             (org-agenda-files . (:level . 1))))
   ;;; agenda
   (setq org-agenda-dim-blocked-tasks nil)
   (setq org-agenda-inhibit-startup t)
