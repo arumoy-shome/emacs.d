@@ -284,10 +284,6 @@
         doom-themes-enable-italic t)
   (doom-themes-org-config)) ; correct and improve org-mode native fontification
 
-(use-package python
-  :config
-  (setq python-shell-interpreter "python3"))
-
 (use-package custom
   :config
   (defun aru/load-theme (theme)
