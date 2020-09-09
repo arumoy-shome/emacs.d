@@ -19,29 +19,13 @@
 (setq echo-keystrokes 0.02)
 (setq mode-line-defining-kbd-macro
       (propertize " Macro" 'face 'mode-line-emphasis))
-(setq-default mode-line-format
-                '("%e"
-                  mode-line-front-space
-                  mode-line-mule-info
-                  mode-line-client
-                  mode-line-modified
-                  mode-line-remote
-                  mode-line-frame-identification
-                  mode-line-buffer-identification
-                  " "
-                  mode-line-position
-                  " "
-                  mode-line-modes
-                  " "
-                  mode-line-misc-info
-                  mode-line-end-spaces))
 (setq custom-safe-themes t)
 (setq max-mini-window-height 0.15)
 (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "Source Code Pro" :height 140 :weight 'normal)
+		    :family "Victor Mono" :height 140 :width 'expanded :weight 'normal)
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))

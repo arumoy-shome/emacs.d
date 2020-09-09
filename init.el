@@ -43,11 +43,19 @@
 (use-package ffap       :config (ffap-bindings))
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
+(use-package flypell    :hook ((text-mode . flyspell-mode)
+                            (prog-mode . flyspell-prog-mode)))
+(use-package project :bind (("C-c p" . project-find-file)))
+
+(use-package vc-dispatcher
+  :config
+  (setq vc-suppress-confirm t)
+  (setq vc-command-messages t))
 
 (use-package tex-mode
   :config
   (setq latex-run-command "pdflatex -interaction=nonstopmode")
-  (setq tex-dvi-view-command "emacsclient -n")
+  (setq tex-dvi-view-command "open")
   (setq tex-print-file-extension ".pdf"))
 
 (use-package frame
@@ -63,10 +71,14 @@
 (use-package window
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
-         ("C-x 3" . (lambda () (interactive) (split-window-right)
+         ("s-3" . (lambda () (interactive) (split-window-right)
                       (other-window 1)))
-         ("C-x 2" . (lambda () (interactive) (split-window-below)
-                      (other-window 1)))))
+         ("s-2" . (lambda () (interactive) (split-window-below)
+                    (other-window 1)))
+         ("s-1" . delete-other-windows)
+         ("s-w" . delete-window)
+         ("s-b" . switch-to-buffer)
+         ("s-f" . find-file)))
 
 (use-package windmove
   :bind
@@ -114,7 +126,8 @@
   :bind
   (("M-c" . capitalize-dwim)
    ("M-l" . downcase-dwim)
-   ("M-u" . upcase-dwim))
+   ("M-u" . upcase-dwim)
+   ("s-p" . execute-extended-command))  ; alternative for M-x
   :config
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
@@ -186,6 +199,7 @@
   :config
   ;;; general
   (org-indent-mode -1)                  ; [default] do not indent text based on outline
+  (setq org-startup-folded t)
   (setq org-reverse-note-order t)
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
