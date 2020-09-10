@@ -39,13 +39,21 @@
 (use-package uniquify   :config (setq uniquify-buffer-name-style 'forward))
 (use-package elec-pair  :config (electric-pair-mode +1))
 (use-package man        :config (setq Man-switches "-a"))
-(use-package hideshow   :hook (prog-mode . (lambda () (hs-minor-mode +1))))
 (use-package ffap       :config (ffap-bindings))
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
+(use-package project    :bind (("C-c p" . project-find-file)))
+
 (use-package flypell    :hook ((text-mode . flyspell-mode)
                             (prog-mode . flyspell-prog-mode)))
-(use-package project :bind (("C-c p" . project-find-file)))
+
+(use-package hideshow                   ; I follow the vim pneumonic for the keybindings
+  :hook (prog-mode . (lambda () (hs-minor-mode +1)))
+  :bind (("C-z o" . hs-show-block)      ; "o" as in open
+         ("C-z c" . hs-hide-block)      ; "c" as in close
+         ("C-z a" . hs-toggle-hiding)   ; "a" as in alternate
+         ("C-z m" . hs-hide-all)        ; "m" as in more
+         ("C-z r" . hs-show-all)))      ; "r" as in reduce
 
 (use-package vc-dispatcher
   :config
@@ -78,7 +86,9 @@
          ("s-1" . delete-other-windows)
          ("s-w" . delete-window)
          ("s-b" . switch-to-buffer)
-         ("s-f" . find-file)))
+         ("s-B" . switch-to-buffer-other-window)
+         ("s-f" . find-file)
+         ("s-F" . find-file-other-window)))
 
 (use-package windmove
   :bind
@@ -317,6 +327,10 @@
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
   (setq mouse-wheel-progressive-speed nil)
   (setq mouse-wheel-follow-mouse t))     ; default
+
+(use-package python
+  :config
+  (add-to-list 'python-shell-completion-native-disabled-interpreters "python"))
 
 ;; finally, start the server
 (server-start)
