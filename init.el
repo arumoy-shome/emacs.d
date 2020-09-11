@@ -43,17 +43,21 @@
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
 (use-package project    :bind (("C-c p" . project-find-file)))
+(use-package eldoc      :blackout t)
 
-(use-package flypell    :hook ((text-mode . flyspell-mode)
-                            (prog-mode . flyspell-prog-mode)))
+(use-package flyspell
+  :blackout t
+  :hook ((text-mode . flyspell-mode)
+         (prog-mode . flyspell-prog-mode)))
 
 (use-package hideshow                   ; I follow the vim pneumonic for the keybindings
+  :blackout t
   :hook (prog-mode . (lambda () (hs-minor-mode +1)))
-  :bind (("C-z o" . hs-show-block)      ; "o" as in open
-         ("C-z c" . hs-hide-block)      ; "c" as in close
-         ("C-z a" . hs-toggle-hiding)   ; "a" as in alternate
-         ("C-z m" . hs-hide-all)        ; "m" as in more
-         ("C-z r" . hs-show-all)))      ; "r" as in reduce
+  :bind (("C-c z o" . hs-show-block)      ; "o" as in open
+         ("C-c z c" . hs-hide-block)      ; "c" as in close
+         ("C-c z a" . hs-toggle-hiding)   ; "a" as in alternate
+         ("C-c z m" . hs-hide-all)        ; "m" as in more
+         ("C-c z r" . hs-show-all)))      ; "r" as in reduce
 
 (use-package vc-dispatcher
   :config
@@ -80,7 +84,7 @@
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
          ("s-3" . (lambda () (interactive) (split-window-right)
-                      (other-window 1)))
+                    (other-window 1)))
          ("s-2" . (lambda () (interactive) (split-window-below)
                     (other-window 1)))
          ("s-1" . delete-other-windows)
