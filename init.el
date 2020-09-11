@@ -42,8 +42,13 @@
 (use-package ffap       :config (ffap-bindings))
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
-(use-package project    :bind (("C-c p" . project-find-file)))
 (use-package eldoc      :blackout t)
+
+(use-package project
+  :bind (("C-c p f" . project-find-file)
+         ("C-c p g" . project-find-regexp)
+         ("C-c p s" . project-search)
+         ("C-c p %" . project-query-replace-regexp)))
 
 (use-package flyspell
   :blackout t
