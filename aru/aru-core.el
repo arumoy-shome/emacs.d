@@ -25,7 +25,7 @@
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "Victor Mono" :height 140 :width 'expanded :weight 'normal)
+		    :family "IBM Plex Mono" :height 130 :weight 'normal)
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
