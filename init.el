@@ -85,6 +85,9 @@
   (setq dired-isearch-filenames t)
   (setq dired-create-destination-dirs 'ask))
 
+(use-package dired-x
+  :bind (:map ctl-x-map ("C-j" . dired-jump)))
+
 (use-package window
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
@@ -340,6 +343,10 @@
 (use-package python
   :config
   (add-to-list 'python-shell-completion-native-disabled-interpreters "python"))
+
+(use-package olivetti
+  :straight t
+  :blackout t)
 
 ;; finally, start the server
 (server-start)
