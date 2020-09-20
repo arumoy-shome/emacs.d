@@ -278,9 +278,31 @@
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
    ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))))
 
-(use-package ox-html :config (setq org-html-validation-link nil))
+(use-package ox-html :after org :config (setq org-html-validation-link nil))
 (use-package org-tempo :after org)
 (use-package org-habit :after org)
+(use-package ox-md :after org)
+(use-package ox-publish
+  :after ox-html
+  :config
+  (setq org-publish-project-alist
+        '(("posts"
+           :base-directory "~/code/arumoy-src/"
+           :base-extension "org"
+           :publishing-directory "~/code/arumoy/"
+           :recursive t
+           :section-numbers nil
+           :table-of-contents nil
+           :auto-preamble t
+           :html-head "<link rel=\"stylesheet\" href=\"css/main.css\" type=\"text/css\"/>"
+           :publishing-function org-html-publish-to-html)
+          ("static"
+           :base-directory "~/code/arumoy-src/"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+           :publishing-directory "~/code/arumoy/"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("arumoy" :components ("posts" "static")))))
 
 (use-package eshell
   :commands eshell
