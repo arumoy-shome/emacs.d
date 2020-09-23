@@ -59,8 +59,8 @@
          (prog-mode . flyspell-prog-mode)))
 
 (use-package hideshow                   ; I follow the vim pneumonic for the keybindings
-  :blackout t
   :hook (prog-mode . (lambda () (hs-minor-mode +1)))
+  :config (blackout 'hs-minor-mode)
   :bind (("C-c z o" . hs-show-block)      ; "o" as in open
          ("C-c z c" . hs-hide-block)      ; "c" as in close
          ("C-c z a" . hs-toggle-hiding)   ; "a" as in alternate
@@ -342,8 +342,7 @@
   :commands (load-theme)
   :config
   (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (doom-themes-org-config)) ; correct and improve org-mode native fontification
+        doom-themes-enable-italic t))
 
 (use-package custom
   :config
