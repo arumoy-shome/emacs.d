@@ -1,5 +1,6 @@
 ;; emacs picks up the paths set explicitly in the config file but does
 ;; not pick up the paths set by libexec, so we add those back ourselves
+(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 (setenv "PATH" (concat "/Library/TeX/texbin:" (getenv "PATH")))
 
 ;; used by emacs to find programs (such as grep and find)
