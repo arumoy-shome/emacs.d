@@ -7,6 +7,7 @@ Emacs.
 
 ## Credits
 
+1. [protesilaos](https://gitlab.com/protesilaos/dotfiles/)
 1. [purcell/emacs.d](https://github.com/purcell/emacs.d)
 2. [spacemacs](https://github.com/syl20bnr/spacemacs)
 3. [doom-emacs](https://github.com/hlissner/doom-emacs)
