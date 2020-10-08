@@ -25,7 +25,11 @@
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "IBM Plex Mono" :height 130 :weight 'normal)
+		    :family "Source Code Pro" :height 140 :weight 'normal)
+(set-face-attribute 'fixed-pitch nil
+                    :family "Source Code Pro")
+(set-face-attribute 'variable-pitch nil
+                    :family "IBM Plex Serif")
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
