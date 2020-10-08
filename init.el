@@ -403,7 +403,24 @@
 
 (use-package olivetti
   :straight t
-  :blackout t)
+  :blackout t
+  :config
+  (defun aru/writing-on ()
+    "Turn on variable pitch mode and olivetti mode."
+    (interactive)
+    (variable-pitch-mode +1)
+    (olivetti-mode +1)
+    (setq cursor-type 'bar)
+    (text-scale-increase 1)
+    (delete-other-windows))
+  (defun aru/writing-off ()
+    "Turn off variable pitch mode and olivetti mode."
+    (interactive)
+    (variable-pitch-mode -1)
+    (olivetti-mode -1)
+    (setq cursor-type 'box)
+    (text-scale-increase 0)
+    (winner-undo)))
 
 ;; finally, start the server
 (server-start)
