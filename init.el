@@ -46,6 +46,32 @@
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
 (use-package eldoc      :blackout t)
+(use-package isearch    :blackout t)
+
+(use-package outline
+  :blackout outline-minor-mode
+  :bind (("C-c C-z a" . outline-show-all)
+         ("C-c C-z b" . outline-backward-same-level)
+         ("C-c C-z c" . outline-hide-entry)
+         ("C-c C-z d" . outline-hide-subtree)
+         ("C-c C-z e" . outline-show-entry)
+         ("C-c C-z f" . outline-forward-same-level)
+         ("C-c C-z <tab>" . outline-show-children)
+         ("C-c C-z k" . outline-show-branches)
+         ("C-c C-z l" . outline-hide-leaves)
+         ("C-c C-z <return>" . outline-insert-heading)
+         ("C-c C-z n" . outline-next-visible-heading)
+         ("C-c C-z o" . outline-hide-other)
+         ("C-c C-z p" . outline-previous-visible-heading)
+         ("C-c C-z q" . outline-hide-sublevels)
+         ("C-c C-z s" . outline-show-subtree)
+         ("C-c C-z t" . outline-hide-body)
+         ("C-c C-z u" . outline-up-heading)
+         ("C-c C-z <down>" . outline-move-subtree-down)
+         ("C-c C-z <up>" . outline-move-subtree-up)
+         ("C-c C-z @" . outline-mark-subtree)
+         ("C-c C-z <left>" . outline-promote)
+         ("C-c C-z <right>" . outline-demote)))
 
 (use-package project
   :bind (("C-c p f" . project-find-file)
