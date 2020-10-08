@@ -86,7 +86,7 @@
 
 (use-package hideshow                   ; I follow the vim pneumonic for the keybindings
   :hook (prog-mode . (lambda () (hs-minor-mode +1)))
-  :config (blackout 'hs-minor-mode)
+  :blackout hs-minor-mode
   :bind (("C-c z o" . hs-show-block)      ; "o" as in open
          ("C-c z c" . hs-hide-block)      ; "c" as in close
          ("C-c z a" . hs-toggle-hiding)   ; "a" as in alternate
@@ -102,7 +102,8 @@
   :config
   (setq latex-run-command "pdflatex -interaction=nonstopmode")
   (setq tex-dvi-view-command "open")
-  (setq tex-print-file-extension ".pdf"))
+  (setq tex-print-file-extension ".pdf")
+  :hook (latex-mode . outline-minor-mode))
 
 (use-package frame
   :config (blink-cursor-mode 0)
@@ -175,6 +176,8 @@
 
 (use-package simple                     ; case bindings for active region
   :bind
+  :blackout visual-line-mode
+  :blackout auto-fill-mode
   (("M-c" . capitalize-dwim)
    ("M-l" . downcase-dwim)
    ("M-u" . upcase-dwim)
@@ -183,8 +186,7 @@
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
   (setq shell-command-prompt-show-cwd t)
-  (column-number-mode +1)               ; show line and column numbers
-  (blackout 'auto-fill-mode))
+  (column-number-mode +1))              ; show line and column numbers
 
 (use-package selectrum
   :straight (selectrum :host github :repo "raxod502/selectrum")
@@ -292,7 +294,9 @@
 	   "* TODO %?")
           ("p" "Paper" entry (file "~/org/reading-list.org")
            "* %?%^{Author}p%^{Title}p%^{Type}p%^{Genre}p")
-          ("j" "Journal" entry (file "~/org/journal.org"))))
+          ("j" "Journal" entry (file "~/org/journal.org"))
+          ("e" "Experiment" entry (file aru/org-inbox-file)
+           "* %?\n*Motivation*\n*Hypothesis*\n*Result*\n*Next*")))
   ;; todo
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
