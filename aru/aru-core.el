@@ -7,8 +7,8 @@
 (setq inhibit-splash-screen t)
 (setq initial-scratch-message (concat ";; Welcome, " (system-name)))
 (setq initial-major-mode 'fundamental-mode)
-(setq shell-file-name "/usr/local/bin/zsh")          ; used by (async-)shell-command
-(setq explicit-shell-file-name "/usr/local/bin/zsh") ; used by shell & term
+(setq shell-file-name "/usr/local/bin/bash")          ; used by (async-)shell-command
+(setq explicit-shell-file-name "/usr/local/bin/bash") ; used by shell & term
 (setq user-full-name "Arumoy Shome")
 (setq user-mail-address "arumoy.shome@gmail.com")
 
