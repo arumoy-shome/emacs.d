@@ -172,7 +172,13 @@
     (interactive)
     (let ((files (mapcar 'abbreviate-file-name recentf-list)))
       (find-file (completing-read "Find recent file: " files nil t))))
-  :bind (("C-x C-r" . aru/recentf-find-file))) ; overrides ffap-read-only
+  (defun aru/recentf-find-file-other-window ()
+    "Like aru/recentf-find-file but in other window."
+    (interactive)
+    (let ((files (mapcar 'abbreviate-file-name recentf-list)))
+      (find-file-other-window (completing-read "Find recent file: " files nil t))))
+  :bind (("s-r" . aru/recentf-find-file)
+         ("s-R" . aru/recentf-find-file-other-window)))
 
 (use-package simple                     ; case bindings for active region
   :bind
