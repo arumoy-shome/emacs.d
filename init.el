@@ -181,9 +181,9 @@
          ("s-R" . aru/recentf-find-file-other-window)))
 
 (use-package simple                     ; case bindings for active region
+  :blackout ((visual-line-mode)
+             (auto-fill-mode))
   :bind
-  :blackout visual-line-mode
-  :blackout auto-fill-mode
   (("M-c" . capitalize-dwim)
    ("M-l" . downcase-dwim)
    ("M-u" . upcase-dwim)
