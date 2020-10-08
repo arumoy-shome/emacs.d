@@ -213,37 +213,40 @@
 
 (use-package modus-operandi-theme
   :straight t
+  :commands (load-theme)
   :config
-  (defun aru/colors-light ()
-    (interactive)
-    (setq modus-operandi-theme-slanted-constructs t
-          modus-operandi-theme-bold-constructs t
-          modus-operandi-theme-proportional-fonts nil
-          modus-operandi-theme-scale-headings t
-          modus-operandi-theme-scale-1 1.05
-          modus-operandi-theme-scale-2 1.1
-          modus-operandi-theme-scale-3 1.15
-          modus-operandi-theme-scale-4 1.2)
-    (disable-theme 'modus-vivendi)
-    (load-theme 'modus-operandi t)))
+  (setq modus-operandi-theme-slanted-constructs t
+        modus-operandi-theme-bold-constructs t
+        modus-operandi-theme-proportional-fonts nil
+        modus-operandi-theme-scale-headings t
+        modus-operandi-theme-scale-1 1.05
+        modus-operandi-theme-scale-2 1.1
+        modus-operandi-theme-scale-3 1.15
+        modus-operandi-theme-scale-4 1.2))
 
 (use-package modus-vivendi-theme
   :straight t
+  :commands (load-theme)
   :config
-  (defun aru/colors-dark ()
-    (interactive)
-    (setq modus-vivendi-theme-slanted-constructs t
-          modus-vivendi-theme-bold-constructs t
-          modus-vivendi-theme-proportional-fonts nil
-          modus-vivendi-theme-scale-headings t
-          modus-vivendi-theme-scale-1 1.05
-          modus-vivendi-theme-scale-2 1.1
-          modus-vivendi-theme-scale-3 1.15
-          modus-vivendi-theme-scale-4 1.2)
-    (disable-theme 'modus-operandi)
-    (load-theme 'modus-vivendi t)))
+  (setq modus-vivendi-theme-slanted-constructs t
+        modus-vivendi-theme-bold-constructs t
+        modus-vivendi-theme-proportional-fonts nil
+        modus-vivendi-theme-scale-headings t
+        modus-vivendi-theme-scale-1 1.05
+        modus-vivendi-theme-scale-2 1.1
+        modus-vivendi-theme-scale-3 1.15
+        modus-vivendi-theme-scale-4 1.2))
 
-(use-package emacs :hook (after-init . aru/colors-dark))
+(use-package doom-themes
+  :straight t
+  :commands (load-theme)
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
+
+(use-package poet-theme :straight t :commands (load-theme))
+(use-package leuven-theme :straight t :commands (load-theme))
+(use-package emacs :hook (after-init . (lambda () (aru/load-theme 'leuven))))
 
 (use-package magit :straight t :bind ("C-x g" . magit-status))
 
@@ -373,13 +376,6 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
-
-(use-package doom-themes
-  :straight t
-  :commands (load-theme)
-  :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
 
 (use-package custom
   :config
