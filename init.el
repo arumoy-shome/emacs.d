@@ -32,7 +32,6 @@
 (use-package delsel     :config (setq delete-selection-mode t))
 (use-package hl-line    :config (global-hl-line-mode nil))
 (use-package novice     :config (setq disabled-command-function nil))
-(use-package isearch    :config (setq lazy-highlight-initial-delay 0))
 (use-package saveplace  :config (save-place-mode +1))
 (use-package ibuffer    :bind (([remap list-buffers] . #'ibuffer)))
 (use-package winner     :config (winner-mode +1))
@@ -46,7 +45,16 @@
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
 (use-package eldoc      :blackout t)
-(use-package isearch    :blackout t)
+
+(use-package isearch
+  :blackout t
+  :config
+  (setq isearch-lazy-count t)
+  (setq lazy-count-prefix-format " (%s/%s)")
+  (setq lazy-count-suffix-format nil)
+  (setq isearch-yank-on-move 'shift)
+  (setq isearch-allow-scroll 'unlimited)
+  (setq lazy-highlight-initial-delay 0))
 
 (use-package outline
   :blackout outline-minor-mode
