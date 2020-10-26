@@ -61,7 +61,7 @@
   :blackout t
   :config
   (setq isearch-lazy-count t)
-  (setq lazy-count-prefix-format " (%s/%s)")
+  (setq lazy-count-prefix-format "(%s/%s) ")
   (setq lazy-count-suffix-format nil)
   (setq isearch-yank-on-move 'shift)
   (setq isearch-allow-scroll 'unlimited)
@@ -176,9 +176,13 @@
 
 (use-package cus-edit
   :config
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (when (file-exists-p custom-file)
-    (require 'custom)))
+  (setq aru/custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+  (defun aru/cus-edit ()
+    (unless (file-exists-p aru/custom-file)
+      (make-empty-file aru/custom-file))
+    (load-file aru/custom-file))
+  :hook (after-init . aru/cus-edit))
 
 (use-package recentf
   :config
@@ -320,9 +324,6 @@
 	   "- %U %?")
 	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
 	   "* TODO %?")
-          ("p" "Paper" entry (file "~/org/reading-list.org")
-           "* %?%^{Author}p%^{Title}p%^{Type}p%^{Genre}p")
-          ("j" "Journal" entry (file "~/org/journal.org"))
           ("e" "Experiment" entry (file aru/org-inbox-file)
            "* %?\n*Motivation*\n*Hypothesis*\n*Result*\n*Next*")))
   ;; todo
@@ -381,9 +382,9 @@
 
 (use-package time
   :config
-  (setq display-time-24hr-format t)
+  (setq display-time-24hr-format nil)
   (setq display-time-day-and-date nil)
-  (setq display-time-format nil)
+  (setq display-time-format "%H:%M %a %b %d")
   (setq display-time-interval 60)
   (setq display-time-mail-directory nil)
   (setq display-time-default-load-average nil)
