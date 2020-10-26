@@ -45,6 +45,17 @@
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
 (use-package eldoc      :blackout t)
+(use-package re-builder :config (setq reb-re-syntax 'read))
+
+(use-package wgrep
+  :straight t
+  :commands wgrep
+  :config
+  (setq wgrep-auto-save-buffer t)
+  (setq wgrep-change-readonly-file t)
+  :bind (:map grep-mode-map
+              ("e" . wgrep-change-to-wgrep-mode)
+              ("C-x C-q" . wgrep-change-to-wgrep-mode)))
 
 (use-package isearch
   :blackout t
