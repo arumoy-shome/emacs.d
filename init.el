@@ -46,6 +46,7 @@
 (use-package hippie-exp :bind (("M-/" . hippie-expand)))
 (use-package eldoc      :blackout t)
 (use-package re-builder :config (setq reb-re-syntax 'read))
+(use-package olivetti   :straight t :blackout t)
 
 (use-package wgrep
   :straight t
@@ -189,17 +190,20 @@
   (recentf-mode 1)
   (add-to-list 'recentf-exclude no-littering-var-directory)
   (add-to-list 'recentf-exclude no-littering-etc-directory)
+
   (defun aru/recentf-find-file ()
     "Taken from
     https://github.com/raxod502/selectrum/wiki/Useful-Commands#switch-to-recent-file"
     (interactive)
     (let ((files (mapcar 'abbreviate-file-name recentf-list)))
       (find-file (completing-read "Find recent file: " files nil t))))
+
   (defun aru/recentf-find-file-other-window ()
     "Like aru/recentf-find-file but in other window."
     (interactive)
     (let ((files (mapcar 'abbreviate-file-name recentf-list)))
       (find-file-other-window (completing-read "Find recent file: " files nil t))))
+
   :bind (("s-r" . aru/recentf-find-file)
          ("s-R" . aru/recentf-find-file-other-window)))
 
@@ -267,7 +271,6 @@
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
 
-(use-package poet-theme :straight t :commands (load-theme))
 (use-package leuven-theme :straight t :commands (load-theme))
 (use-package emacs :hook (after-init . (lambda () (aru/load-theme 'leuven))))
 
@@ -421,26 +424,9 @@
   :config
   (add-to-list 'python-shell-completion-native-disabled-interpreters "python"))
 
-(use-package olivetti
-  :straight t
-  :blackout t
+(use-package lisp
   :config
-  (defun aru/writing-on ()
-    "Turn on variable pitch mode and olivetti mode."
-    (interactive)
-    (variable-pitch-mode +1)
-    (olivetti-mode +1)
-    (setq cursor-type 'bar)
-    (text-scale-increase 1)
-    (delete-other-windows))
-  (defun aru/writing-off ()
-    "Turn off variable pitch mode and olivetti mode."
-    (interactive)
-    (variable-pitch-mode -1)
-    (olivetti-mode -1)
-    (setq cursor-type 'box)
-    (text-scale-increase 0)
-    (winner-undo)))
+  (setq narrow-to-defun-include-comments t))
 
 ;; finally, start the server
 (server-start)

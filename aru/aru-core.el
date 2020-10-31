@@ -21,15 +21,16 @@
       (propertize " Macro" 'face 'mode-line-emphasis))
 (setq custom-safe-themes t)
 (setq max-mini-window-height 0.15)
+(setq x-underline-at-descent-line t)
 (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "Source Code Pro" :height 140 :weight 'normal)
+		    :family "IBM Plex Mono" :height 140 :weight 'normal)
 (set-face-attribute 'fixed-pitch nil
-                    :family "Source Code Pro")
+                    :family "IBM Plex Mono" :height 1.0)
 (set-face-attribute 'variable-pitch nil
-                    :family "IBM Plex Serif")
+                    :family "IBM Plex Serif" :height 1.0)
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
