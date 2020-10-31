@@ -150,7 +150,9 @@
          ("s-b" . switch-to-buffer)
          ("s-B" . switch-to-buffer-other-window)
          ("s-f" . find-file)
-         ("s-F" . find-file-other-window)))
+         ("s-F" . find-file-other-window)
+         ("s-d" . list-directory)
+         ("s-D" . dired-other-window)))
 
 (use-package windmove
   :bind
