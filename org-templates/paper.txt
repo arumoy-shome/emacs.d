@@ -1,0 +1,4 @@
+* TODO %c
+  pdf: file:~/Documents/papers/%c.pdf
+
+  %?

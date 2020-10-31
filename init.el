@@ -295,6 +295,7 @@
   (setq org-goto-auto-isearch nil)
   (setq org-hide-block-startup t)
   (setq org-return-follows-link nil)
+  (setq org-id-link-to-org-use-id t)
   (setq org-directory "~/org")
   (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
     "File to use for capturing org items")
@@ -302,7 +303,7 @@
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
   ;;; refile
-  (setq org-refile-targets '((nil . (:level . 1))
+  (setq org-refile-targets '((nil . (:maxlevel . 6))
                              (org-agenda-files . (:level . 1))))
   ;;; agenda
   (setq org-agenda-dim-blocked-tasks nil)
@@ -323,12 +324,12 @@
 				   (shell      . t)))
   ;;; capture
   (setq org-capture-templates
-	'(("i" "Item" item (file+headline aru/org-inbox-file "Inbox")
-	   "- %U %?")
-	  ("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
+	'(("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
 	   "* TODO %?")
-          ("e" "Experiment" entry (file aru/org-inbox-file)
-           "* %?\n*Motivation*\n*Hypothesis*\n*Result*\n*Next*")))
+          ("e" "Experiment" entry (file+headline aru/org-inbox-file "Inbox")
+           "%[~/.emacs.d/org-templates/experiment.txt]")
+          ("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
+           "%[~/.emacs.d/org-templates/paper.txt]")))
   ;; todo
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
@@ -348,6 +349,7 @@
 (use-package org-tempo :after org)
 (use-package org-habit :after org)
 (use-package ox-md :after org)
+(use-package org-id :after org)
 (use-package ox-publish
   :after ox-html
   :config
