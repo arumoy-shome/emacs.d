@@ -241,28 +241,38 @@
 (use-package modus-operandi-theme
   :straight t
   :commands (load-theme)
-  :config
+  :init
   (setq modus-operandi-theme-slanted-constructs t
         modus-operandi-theme-bold-constructs t
-        modus-operandi-theme-proportional-fonts nil
-        modus-operandi-theme-scale-headings t
-        modus-operandi-theme-scale-1 1.05
-        modus-operandi-theme-scale-2 1.1
-        modus-operandi-theme-scale-3 1.15
-        modus-operandi-theme-scale-4 1.2))
+        modus-operandi-theme-syntax 'alt-syntax
+        modus-operandi-theme-completions 'opinionated
+        modus-operandi-theme-intense-hl-line t
+        modus-operandi-theme-intense-paren-match t
+        modus-operandi-theme-org-blocks 'grayscale
+        modus-operandi-theme-headings
+        '((1 . section)
+          (2 . line)
+          (3 . highlight)
+          (t . rainbow-no-bold))
+        modus-operandi-theme-scale-headings t))
 
 (use-package modus-vivendi-theme
   :straight t
   :commands (load-theme)
-  :config
+  :init
   (setq modus-vivendi-theme-slanted-constructs t
         modus-vivendi-theme-bold-constructs t
-        modus-vivendi-theme-proportional-fonts nil
-        modus-vivendi-theme-scale-headings t
-        modus-vivendi-theme-scale-1 1.05
-        modus-vivendi-theme-scale-2 1.1
-        modus-vivendi-theme-scale-3 1.15
-        modus-vivendi-theme-scale-4 1.2))
+        modus-vivendi-theme-syntax 'alt-syntax
+        modus-vivendi-theme-completions 'opinionated
+        modus-vivendi-theme-intense-hl-line t
+        modus-vivendi-theme-intense-paren-match t
+        modus-vivendi-theme-org-blocks 'grayscale
+        modus-vivendi-theme-headings
+        '((1 . section)
+          (2 . line)
+          (3 . highlight)
+          (t . ranbow-section))
+        modus-vivendi-theme-scale-headings t))
 
 (use-package doom-themes
   :straight t
@@ -405,15 +415,14 @@
 (use-package custom
   :config
   (defun aru/load-theme (theme)
-    "Disable the current theme and load a new one. It is assumed
-    that only one theme is enabled."
+    "Disable all current themes and load a new one."
     ;; below sexp to interactively get theme is from the load-theme source
     (interactive
      (list
       (intern (completing-read "Load custom theme: "
                                (mapcar #'symbol-name
 				       (custom-available-themes))))))
-    (disable-theme (car custom-enabled-themes))
+    (mapc #'disable-theme custom-enabled-themes)
     (load-theme theme t)))
 
 (use-package mwheel
