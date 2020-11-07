@@ -46,6 +46,7 @@
 (use-package eldoc      :blackout t)
 (use-package re-builder :config (setq reb-re-syntax 'read))
 (use-package olivetti   :straight t :blackout t)
+(use-package hydra      :straight t)
 
 (use-package wgrep
   :straight t
@@ -105,8 +106,62 @@
 
 (use-package flyspell
   :blackout t
-  :hook ((text-mode . flyspell-mode)
-         (prog-mode . flyspell-prog-mode)))
+  :config
+  (setq flyspell-issue-message-flag nil)
+  (setq flyspell-issue-welcome-flag nil)
+  (setq ispell-program-name "usr/local/bin/aspell")
+  (setq ispell-dictionary "en_GB")
+  :bind (:map flyspell-mode-map ("C-." . nil)))
+
+(use-package flymake
+  :commands flymake-mode
+  :config
+  (setq flymake-fringe-indicator-position 'left-fringe)
+  (setq flymake-suppress-zero-counters t)
+  (setq flymake-start-on-flymake-mode nil)
+  (setq flymake-no-changes-timeout nil)
+  (setq flymake-start-on-save-buffer t)
+  (setq flymake-proc-compilation-prevents-syntax-check t)
+  (setq flymake-wrap-around nil)
+
+  (defhydra aru/hydra-flymake (:color pink :hint nil)
+    "
+Actions
+-------
+_s_: Start checks
+_n_: Next error
+_p_: Previous error
+_d_: Diagnostics' buffer
+"
+    ("s" flymake-start)
+    ("d" flymake-show-diagnostics-buffer)
+    ("n" flymake-goto-next-error)
+    ("p" flymake-goto-prev-error)
+    ("q" nil "cancel" :color blue))
+
+  :bind (:map flymake-mode-map
+              ("C-c h l" . aru/hydra-flymake/body)))
+
+(use-package flymake-diagnostic-at-point
+  :straight t
+  :after flymake
+  :config
+  (setq flymake-diagnostic-at-point-display-diagnostic-function
+        'flymake-diagnostic-at-point-display-minibuffer))
+
+(use-package flymake-proselint
+  :straight (:host github :repo "manuel-uberti/flymake-proselint")
+  :after flymake
+  :init
+  (dolist (mode '("markdown-mode" "org-mode" "text-mode" "latex-mode"))
+    (add-hook (intern (concat mode "-hook")) #'flymake-proselint-setup)))
+
+(use-package flycheck-aspell
+  :straight (:host github :repo "leotaku/flycheck-aspell")
+  :after (flyspell flymake)
+  :init
+  (dolist (mode '("markdown-mode" "org-mode" "text-mode" "latex-mode"))
+    (add-hook (intern (concat mode "-hook")) #'flymake-aspell-setup)))
 
 (use-package hideshow                   ; I follow the vim pneumonic for the keybindings
   :hook (prog-mode . (lambda () (hs-minor-mode +1)))
@@ -453,6 +508,24 @@
 
 (use-package newcomment
   :bind (("s-/" . comment-line)))
+
+(use-package imenu
+  :config
+  (setq imenu-use-markers t)
+  (setq imenu-auto-rescan t)
+  (setq imenu-auto-rescan-maxout 600000)
+  (setq imenu-max-item-length 100)
+  (setq imenu-use-popup-menu nil)
+  (setq imenu-eager-completion-buffer t)
+  (setq imenu-space-replacement " ")
+  (setq imenu-level-separator "/")
+  :bind (("C-." . imenu)))
+
+(use-package flimenu
+  :straight t
+  :after imenu
+  :config (flimenu-global-mode 1))
+
 (use-package dabbrev
   :after (minibuffer)
   :config
