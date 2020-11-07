@@ -43,7 +43,6 @@
 (use-package man        :config (setq Man-switches "-a"))
 (use-package ffap       :config (ffap-bindings))
 (use-package emacs      :bind (("C-h h" . nil)))
-(use-package hippie-exp :bind (("M-/" . hippie-expand)))
 (use-package eldoc      :blackout t)
 (use-package re-builder :config (setq reb-re-syntax 'read))
 (use-package olivetti   :straight t :blackout t)
@@ -440,6 +439,36 @@
 (use-package lisp
   :config
   (setq narrow-to-defun-include-comments t))
+
+(use-package dabbrev
+  :after (minibuffer)
+  :config
+  (setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_")
+  (setq dabbrev-abbrev-skip-leading-regexp "[$*/=']")
+  (setq dabbrev-backward-only nil)
+  (setq dabbrev-case-distinction 'case-replace)
+  (setq dabbrev-case-fold-search t)
+  (setq dabbrev-case-replace 'case-replace)
+  (setq dabbrev-check-other-buffers t)
+  (setq dabbrev-eliminate-newlines t)
+  (setq dabbrev-upcase-means-case-search t)
+
+  (defun aru/dabbrev-completion ()
+    "Taken from protesilaos. Expand current phrase or call `dabbrev-completion'."
+    (interactive)
+    (let* ((abbrev (dabbrev--abbrev-at-point))
+           (ignore-case-p (dabbrev--ignore-case-p abbrev))
+           (completion-list (dabbrev--find-all-expansions abbrev ignore-case-p)))
+      (cond
+       ((when (and (eq completion-list nil)
+                   (not (eq last-repeatable-command 'mode-exit)))
+          (insert " ")
+          (dabbrev-expand 1)))
+       (t
+        (dabbrev-completion)))))
+
+    :bind (("M-/" . dabbrev-expand)
+           ("C-M-/" . aru/dabbrev-completion)))
 
 ;; finally, start the server
 (server-start)

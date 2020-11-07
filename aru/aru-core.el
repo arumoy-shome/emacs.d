@@ -38,6 +38,7 @@
 ;;; editor
 (setq sentence-end-double-space nil)
 (setq tab-width 2)			; length of tab
+(setq tab-always-indent 'complete)      ; first indent, then complete
 (setq-default indent-tabs-mode nil)	; use spaces instead of tabs
 
 (provide 'aru-core)
