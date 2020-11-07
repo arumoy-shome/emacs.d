@@ -196,14 +196,9 @@ _d_: Diagnostics' buffer
   (dolist (mode '("markdown-mode" "org-mode" "text-mode" "latex-mode"))
     (add-hook (intern (concat mode "-hook")) #'flymake-aspell-setup)))
 
-(use-package hideshow                   ; I follow the vim pneumonic for the keybindings
-  :hook (prog-mode . (lambda () (hs-minor-mode +1)))
-  :blackout hs-minor-mode
-  :bind (("C-c z o" . hs-show-block)      ; "o" as in open
-         ("C-c z c" . hs-hide-block)      ; "c" as in close
-         ("C-c z a" . hs-toggle-hiding)   ; "a" as in alternate
-         ("C-c z m" . hs-hide-all)        ; "m" as in more
-         ("C-c z r" . hs-show-all)))      ; "r" as in reduce
+(use-package hideshow                   ; aru/outline-minor-mode internally calls hideshow
+  :hook (prog-mode . aru/outline-minor-mode)
+  :blackout hs-minor-mode)
 
 (use-package vc-dispatcher
   :config
