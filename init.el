@@ -77,7 +77,8 @@
   (setq isearch-regexp-lax-whitespace nil))
 
 (use-package outline
-  :blackout outline-minor-mode
+  :blackout ((outline-minor-mode)
+             (aru/outline-minor-mode))
   :config
   (defun aru/bicycle-cycle-tab-dwim ()
     "Taken from protesilaos. Wrapper around TAB in outline-mode."
@@ -245,6 +246,21 @@ _d_: Diagnostics' buffer
                ("4 C-j" . dired-jump-other-window))))
 
 (use-package window
+  :init
+  (defvar aru/window-configuration nil
+    "Current window configuration.")
+
+  (define-minor-mode aru/window-single-toggle
+    "Taken from protesilaos. Toggle between single and multiple
+    windows. Equivalent to maximizing."
+    :lighter " [M]"
+    :global nil
+    (if (one-window-p)
+        (when aru/window-configuration
+          (set-window-configuration aru/window-configuration))
+      (setq aru/window-configuration (current-window-configuration))
+      (delete-other-windows)))
+
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
          ("s-3" . (lambda () (interactive) (split-window-right)
@@ -258,7 +274,10 @@ _d_: Diagnostics' buffer
          ("s-f" . find-file)
          ("s-F" . find-file-other-window)
          ("s-d" . list-directory)
-         ("s-D" . dired-other-window)))
+         ("s-D" . dired-other-window)
+         ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
+         ("s-l" . next-buffer) ; previously goto-line, use M-g g instead
+         ("s-m" . aru/window-single-toggle)))
 
 (use-package windmove
   :bind
@@ -326,7 +345,8 @@ _d_: Diagnostics' buffer
   (("M-c" . capitalize-dwim)
    ("M-l" . downcase-dwim)
    ("M-u" . upcase-dwim)
-   ("s-p" . execute-extended-command))  ; alternative for M-x
+   ("s-n" . next-error)
+   ("s-p" . previous-error))  ; alternative for M-x
   :config
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
@@ -612,6 +632,68 @@ _d_: Diagnostics' buffer
 
     :bind (("M-/" . dabbrev-expand)
            ("C-M-/" . aru/dabbrev-completion)))
+
+(use-package doom-modeline
+  :straight t
+  :config
+  (setq doom-modeline-height 15)
+  (setq doom-modeline-bar-width 2)
+  (setq doom-modeline-window-width-limit 'fill-column)
+  (setq doom-modeline-project-detection 'project)
+  (setq doom-modeline-buffer-file-name-style 'relative-from-project)
+  (setq doom-modeline-icon nil)
+  (setq doom-modeline-minor-modes t)
+  (setq doom-modeline-enable-word-count t)
+  (setq doom-modeline-buffer-encoding nil)
+  (setq doom-modeline-continuous-word-count-modes nil)
+  (setq doom-modeline-indent-info nil)
+  (setq doom-modeline-checker-simple-format t)
+  (setq doom-modeline-number-limit 0)
+  (setq doom-modeline-workspace-name t)
+  (setq doom-modeline-persp-name nil)
+  (setq doom-modeline-persp-icon nil)
+  (setq doom-modeline-lsp nil)
+  (setq doom-modeline-github nil)
+  (setq doom-modeline-modal-icon nil)
+  (setq doom-modeline-mu4e nil)
+  (setq doom-modeline-gnus nil)
+  (setq doom-modeline-irc nil)
+  (setq doom-modeline-env-version nil)
+
+  (defun aru/doom-modeline--make-xpm-filter-args (args)
+    "Taken from
+https://github.com/seagle0128/doom-modeline/issues/187#issuecomment-503950599
+Force function to use =doom-modeline-height= instead of the
+calculation done in =doom-modeline-refresh-bars=. Minimum height
+set to =frame-char-height= + 2."
+    (list (car args) (cadr args) (max (+ (frame-char-height) 2) doom-modeline-height)))
+
+  (advice-add 'doom-modeline--make-xpm :filter-args
+              #'aru/doom-modeline--make-xpm-filter-args)
+
+  :hook (after-init . doom-modeline-mode))
+
+(use-package subword
+  :blackout t
+  :hook (prog-mode . subword-mode))
+
+
+(use-package transpose-frame
+  :straight t
+  :commands (transpose-frame
+             flip-frame
+             flop-frame
+             rotate-frame
+             rotate-frame-clockwise
+             rotate-frame-anticlockwise)
+  :bind (("C-s-t" . flop-frame)
+         ("C-s-r" . rotate-frame-clockwise)))
+
+(use-package ibuffer-vc
+  :straight t
+  :after (ibuffer vc)
+  :bind (:map ibuffer-mode-map
+              ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)))
 
 ;; finally, start the server
 (server-start)
