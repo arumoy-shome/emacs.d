@@ -43,10 +43,13 @@
 (use-package man        :config (setq Man-switches "-a"))
 (use-package ffap       :config (ffap-bindings))
 (use-package emacs      :bind (("C-h h" . nil)))
-(use-package eldoc      :blackout t)
 (use-package re-builder :config (setq reb-re-syntax 'read))
 (use-package olivetti   :straight t :blackout t)
 (use-package hydra      :straight t)
+
+(use-package eldoc
+  :blackout t
+  :config (global-eldoc-mode 1))
 
 (use-package wgrep
   :straight t
@@ -313,7 +316,17 @@ _d_: Diagnostics' buffer
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
   (setq shell-command-prompt-show-cwd t)
-  (column-number-mode +1))              ; show line and column numbers
+  (column-number-mode +1)               ; show line and column numbers
+
+  (defun aru/unfill-region-or-paragraph (&optional region)
+    "Taken from protesilaos. Unfill paragraph or region when active."
+    (interactive)
+    (let ((fill-column most-positive-fixnum))
+      (if (use-region-p)
+          (fill-region (region-beginning) (region-end))
+        (fill-paragraph nil region))))
+
+  :bind ("M-Q" . aru/unfill-region-or-paragraph))
 
 (use-package selectrum
   :straight (selectrum :host github :repo "raxod502/selectrum")
