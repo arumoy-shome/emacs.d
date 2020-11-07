@@ -60,12 +60,17 @@
 (use-package isearch
   :blackout t
   :config
+  (setq isearch-lazy-highlight t)
   (setq isearch-lazy-count t)
   (setq lazy-count-prefix-format "(%s/%s) ")
   (setq lazy-count-suffix-format nil)
   (setq isearch-yank-on-move 'shift)
   (setq isearch-allow-scroll 'unlimited)
-  (setq lazy-highlight-initial-delay 0))
+  (setq lazy-highlight-initial-delay 0)
+  (setq search-highlight t)
+  (setq search-whitespace-regexp ".*?")
+  (setq isearch-lax-whitespace t)
+  (setq isearch-regexp-lax-whitespace nil))
 
 (use-package outline
   :blackout outline-minor-mode
@@ -192,17 +197,21 @@
   (add-to-list 'recentf-exclude no-littering-var-directory)
   (add-to-list 'recentf-exclude no-littering-etc-directory)
 
+  (defun aru/get-recentf-files ()
+    "Get a list of recent files."
+    (mapcar 'abbreviate-file-name recentf-list))
+
   (defun aru/recentf-find-file ()
     "Taken from
     https://github.com/raxod502/selectrum/wiki/Useful-Commands#switch-to-recent-file"
     (interactive)
-    (let ((files (mapcar 'abbreviate-file-name recentf-list)))
+    (let ((files (aru/get-recentf-files)))
       (find-file (completing-read "Find recent file: " files nil t))))
 
   (defun aru/recentf-find-file-other-window ()
     "Like aru/recentf-find-file but in other window."
     (interactive)
-    (let ((files (mapcar 'abbreviate-file-name recentf-list)))
+    (let ((files (aru/get-recentf-files)))
       (find-file-other-window (completing-read "Find recent file: " files nil t))))
 
   :bind (("s-r" . aru/recentf-find-file)
@@ -438,10 +447,12 @@
   :config
   (add-to-list 'python-shell-completion-native-disabled-interpreters "python"))
 
-(use-package lisp
+(use-package emacs
   :config
   (setq narrow-to-defun-include-comments t))
 
+(use-package newcomment
+  :bind (("s-/" . comment-line)))
 (use-package dabbrev
   :after (minibuffer)
   :config
