@@ -221,13 +221,28 @@ _d_: Diagnostics' buffer
   :bind (("C-z" . nil)
          ("C-x C-z" . nil)))
 
+(use-package dired
+  :config
+  (setq dired-recursive-copies 'always)
+  (setq dired-recursive-deletes 'always)
+  (setq delete-by-moving-to-trash t)
+  (setq dired-listing-switches
+        "-AGFhlv --group-directories-first --time-style=long-iso")
+  (setq dired-dwim-target t)
+  :hook ((dired-mode . dired-hide-details-mode)))
+
 (use-package dired-aux
   :config
   (setq dired-isearch-filenames t)
-  (setq dired-create-destination-dirs 'ask))
+  (setq dired-create-destination-dirs 'ask)
+  (setq dired-vc-rename-file t))
 
 (use-package dired-x
-  :bind (:map ctl-x-map ("C-j" . dired-jump)))
+  :bind (("s-j" . dired-jump)
+         ("s-J" . dired-jump-other-window)
+         :map ctl-x-map
+              (("C-j" . dired-jump)
+               ("4 C-j" . dired-jump-other-window))))
 
 (use-package window
   :bind (("s-]" . other-window)
