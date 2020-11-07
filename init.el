@@ -340,7 +340,9 @@
           ("e" "Experiment" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/experiment.txt]")
           ("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/paper.txt]")))
+           "%[~/.emacs.d/org-templates/paper.txt]")
+          ("i" "Idea" plain (file+headline aru/org-inbox-file "Inbox")
+           "%[~/.emacs.d/org-templates/idea.txt]")))
   ;; todo
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
@@ -349,7 +351,7 @@
 	'(("WAITING" :inherit default :weight bold)
 	  ("LATER" :inherit warning :weight bold)))
   ;; archive
-  (setq org-archive-location "~/org/archive.org::datetree/") ; archive in single file, in datetree
+  (setq org-archive-location "~/org/archive/%s_archive::") ; archive in single file, in datetree
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
