@@ -690,5 +690,42 @@ set to =frame-char-height= + 2."
   :bind (:map ibuffer-mode-map
               ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)))
 
+(use-package tab-bar
+  :config
+  (setq tab-bar-close-button-show nil)
+  (setq tab-bar-close-last-tab-choice 'tab-bar-mode-disable)
+  (setq tab-bar-close-tab-select 'recent)
+  (setq tab-bar-new-tab-choice t)
+  (setq tab-bar-new-tab-to 'right)
+  (setq tab-bar-position nil)
+  (setq tab-bar-show nil)
+  (setq tab-bar-tab-hints nil)
+  (setq tab-bar-tab-name-function 'tab-bar-tab-name-all)
+
+  (tab-bar-mode +1)
+  (tab-bar-history-mode -1)
+
+  (defun aru/tab-bar-select-tab-dwim ()
+    "Taken from protesilaos. Do-What-I-Mean function for getting to a
+`tab-bar-mode' tab. If no other tab exists, create one and switch to
+it. If there is one other tab (so two in total) switch to it without
+further questions. Else use completion to select the tab to switch
+to."
+    (interactive)
+    (let ((tabs (mapcar (lambda (tab)
+                          (alist-get 'name tab))
+                        (tab-bar--tabs-recent))))
+      (cond ((eq tabs nil)
+             (tab-new))
+            ((eq (length tabs) 1)
+             (tab-next))
+            (t (tab-bar-switch-to-tab tabs)))))
+
+  :bind (("s-t" . aru/tab-bar-select-tab-dwim)
+         :map ctl-x-map
+         ("t t" . aru/tab-bar-select-tab-dwim)
+         ("t n" . tab-next)
+         ("t p" . tab-previous)))
+
 ;; finally, start the server
 (server-start)
