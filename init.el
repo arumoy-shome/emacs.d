@@ -143,7 +143,7 @@ uses by default.")
   :config
   (setq flyspell-issue-message-flag nil)
   (setq flyspell-issue-welcome-flag nil)
-  (setq ispell-program-name "usr/local/bin/aspell")
+  (setq ispell-program-name "/usr/local/bin/aspell")
   (setq ispell-dictionary "en_GB")
   :bind (:map flyspell-mode-map ("C-." . nil)))
 
@@ -342,22 +342,15 @@ _d_: Diagnostics' buffer
    ("M-l" . downcase-dwim)
    ("M-u" . upcase-dwim)
    ("s-n" . next-error)
-   ("s-p" . previous-error))  ; alternative for M-x
+   ("s-p" . previous-error)
+   ("M-SPC" . cycle-spacing))           ; previously just-one-space
   :config
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
   (setq shell-command-prompt-show-cwd t)
   (column-number-mode +1)               ; show line and column numbers
 
-  (defun aru/unfill-region-or-paragraph (&optional region)
-    "Taken from protesilaos. Unfill paragraph or region when active."
-    (interactive)
-    (let ((fill-column most-positive-fixnum))
-      (if (use-region-p)
-          (fill-region (region-beginning) (region-end))
-        (fill-paragraph nil region))))
-
-  :bind ("M-Q" . aru/unfill-region-or-paragraph))
+  :bind ("M-Q" . delete-indentation))
 
 (use-package selectrum
   :straight (selectrum :host github :repo "raxod502/selectrum")
