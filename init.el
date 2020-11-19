@@ -477,7 +477,7 @@ _d_: Diagnostics' buffer
            "%[~/.emacs.d/org-templates/experiment.txt]")
           ("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/paper.txt]")
-          ("i" "Idea" plain (file+headline aru/org-inbox-file "Inbox")
+          ("i" "Idea" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/idea.txt]")))
   ;; todo
   (setq org-todo-keywords
