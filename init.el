@@ -16,8 +16,9 @@
 (use-package aru-core :demand t)
 (use-package aru-path :demand t)
 (use-package aru-windows
-  :bind (:map ctl-x-map (("C-\\" . aru/split-window-horizontally-instead)
-                         ("C--" . aru/split-window-vertically-instead)))) ; use s-- instead
+  :bind (:map ctl-x-map
+              ("C-\\" . aru/split-window-horizontally-instead)
+              ("C--" . aru/split-window-vertically-instead))) ; use s-- instead
 
 (use-package org :straight t)
 
@@ -237,8 +238,8 @@ _d_: Diagnostics' buffer
   :bind (("s-j" . dired-jump)
          ("s-J" . dired-jump-other-window)
          :map ctl-x-map
-              (("C-j" . dired-jump)
-               ("4 C-j" . dired-jump-other-window))))
+              ("C-j" . dired-jump)
+              ("4 C-j" . dired-jump-other-window)))
 
 (use-package window
   :init
