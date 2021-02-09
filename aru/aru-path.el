@@ -8,6 +8,6 @@
 (add-to-list 'exec-path "/usr/local/opt/coreutils/libexec/gnubin")
 (add-to-list 'exec-path "/Library/TeX/texbin")
 (add-to-list 'exec-path "/usr/local/opt/python@3.8/libexec/bin")
-(add-to-list 'exec-path "/usr/local/opt/ruby/bin")
+(add-to-list 'exec-path "/usr/local/opt/ruby@2.7/bin")
 (add-to-list 'exec-path "/usr/local/lib/ruby/gems/2.7.0/bin")
 (provide 'aru-path)
