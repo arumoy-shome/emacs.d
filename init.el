@@ -498,19 +498,22 @@ _d_: Diagnostics' buffer
   :config
   (setq org-publish-project-alist
         '(("posts"
-           :base-directory "~/code/arumoy-src/"
+           :base-directory "~/org"
            :base-extension "org"
            :publishing-directory "~/code/arumoy/"
+           :exclude "^private.*\\.org\\|inbox\\.org\\|org-agenda-files\\.org"
            :recursive t
            :section-numbers nil
            :table-of-contents nil
            :auto-preamble t
-           :html-head "<link rel=\"stylesheet\" href=\"css/main.css\" type=\"text/css\"/>"
+           :auto-sitemap t
+           :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>\n<meta name=\"robots\" content=\"noindex\">"
            :publishing-function org-html-publish-to-html)
           ("static"
-           :base-directory "~/code/arumoy-src/"
+           :base-directory "~/org"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
            :publishing-directory "~/code/arumoy/"
+           :include ("CNAME")
            :recursive t
            :publishing-function org-publish-attachment)
           ("arumoy" :components ("posts" "static")))))
