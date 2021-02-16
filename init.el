@@ -30,7 +30,7 @@
   (scroll-bar-mode -1)
   (horizontal-scroll-bar-mode -1))
 
-(use-package delsel     :config (setq delete-selection-mode t))
+(use-package delsel     :hook (after-init . delete-selection-mode))
 (use-package hl-line    :config (global-hl-line-mode nil))
 (use-package novice     :config (setq disabled-command-function nil))
 (use-package saveplace  :config (save-place-mode +1))
