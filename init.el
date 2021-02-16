@@ -426,6 +426,7 @@ _d_: Diagnostics' buffer
   :blackout t)
 
 (use-package org
+  :hook (org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
   :config
   ;;; general
   (org-indent-mode -1)                  ; [default] do not indent text based on outline
