@@ -265,8 +265,6 @@ _d_: Diagnostics' buffer
                     (other-window 1)))
          ("s-1" . delete-other-windows)
          ("s-w" . delete-window)
-         ("s-b" . switch-to-buffer)
-         ("s-B" . switch-to-buffer-other-window)
          ("s-f" . find-file)
          ("s-F" . find-file-other-window)
          ("s-d" . list-directory)
@@ -312,27 +310,7 @@ _d_: Diagnostics' buffer
   :config
   (recentf-mode 1)
   (add-to-list 'recentf-exclude no-littering-var-directory)
-  (add-to-list 'recentf-exclude no-littering-etc-directory)
-
-  (defun aru/get-recentf-files ()
-    "Get a list of recent files."
-    (mapcar 'abbreviate-file-name recentf-list))
-
-  (defun aru/recentf-find-file ()
-    "Taken from
-    https://github.com/raxod502/selectrum/wiki/Useful-Commands#switch-to-recent-file"
-    (interactive)
-    (let ((files (aru/get-recentf-files)))
-      (find-file (completing-read "Find recent file: " files nil t))))
-
-  (defun aru/recentf-find-file-other-window ()
-    "Like aru/recentf-find-file but in other window."
-    (interactive)
-    (let ((files (aru/get-recentf-files)))
-      (find-file-other-window (completing-read "Find recent file: " files nil t))))
-
-  :bind (("s-r" . aru/recentf-find-file)
-         ("s-R" . aru/recentf-find-file-other-window)))
+  (add-to-list 'recentf-exclude no-littering-etc-directory))
 
 (use-package simple                     ; case bindings for active region
   :blackout ((visual-line-mode)
@@ -368,6 +346,30 @@ _d_: Diagnostics' buffer
   :after selectrum
   :config
   (selectrum-prescient-mode +1))
+
+(use-package consult
+  :straight t
+  :bind (("s-b" . consult-buffer)
+         ("s-B" . consult-buffer-other-window)
+         ("C-." . consult-imenu)
+         :map ctl-x-map                    ; C-x bindings
+         ("M-:" . consult-complex-command) ; [default] repeat-complex-command
+         ("b" . consult-buffer)            ; [default] switch-to-buffer
+         ("4 b" . consult-buffer-other-window) ; [default] switch-to-buffer-other-window
+         ("5 b" . consult-buffer-other-frame)  ; [default] switch-to-buffer-other-frame
+         :map help-map
+         ("a" . consult-apropos)
+         :map search-map
+         ("f" . consult-find)
+         ("L" . consult-locate)
+         ("g" . consult-grep)
+         ("G" . consult-git-grep)
+         ("r" . consult-ripgrep)
+         ("l" . consult-line)
+         ("m" . consult-multi-occur)
+         )
+  :config
+  (setq consult-project-root-function #'vc-root-dir))
 
 (use-package modus-operandi-theme
   :straight t
@@ -588,8 +590,7 @@ _d_: Diagnostics' buffer
   (setq imenu-use-popup-menu nil)
   (setq imenu-eager-completion-buffer t)
   (setq imenu-space-replacement " ")
-  (setq imenu-level-separator "/")
-  :bind (("C-." . imenu)))
+  (setq imenu-level-separator "/"))
 
 (use-package flimenu
   :straight t
