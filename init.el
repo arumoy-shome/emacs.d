@@ -415,7 +415,7 @@ _d_: Diagnostics' buffer
         doom-themes-enable-italic t))
 
 (use-package leuven-theme :straight t :commands (load-theme))
-(use-package emacs :hook (after-init . (lambda () (aru/load-theme 'leuven))))
+(use-package emacs :hook (after-init . (lambda () (aru/load-theme 'modus-operandi))))
 
 (use-package magit :straight t :bind ("C-x g" . magit-status))
 
