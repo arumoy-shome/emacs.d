@@ -500,11 +500,11 @@ _d_: Diagnostics' buffer
   :after ox-html
   :config
   (setq org-publish-project-alist
-        '(("posts"
+        '(("org-posts"
            :base-directory "~/org"
            :base-extension "org"
-           :publishing-directory "~/code/arumoy/"
-           :exclude "^private.*\\.org\\|inbox\\.org\\|org-agenda-files\\.org"
+           :publishing-directory "~/org/docs/"
+           :exclude "inbox\\.org\\|org-agenda-files\\.org"
            :recursive t
            :section-numbers nil
            :table-of-contents nil
@@ -512,14 +512,30 @@ _d_: Diagnostics' buffer
            :auto-sitemap t
            :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>\n<meta name=\"robots\" content=\"noindex\">"
            :publishing-function org-html-publish-to-html)
-          ("static"
+          ("org-static"
            :base-directory "~/org"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/code/arumoy/"
+           :publishing-directory "~/org/docs/"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("org" :components ("org-posts" "org-static"))
+          ("website-posts"
+           :base-directory "~/code/arumoy"
+           :base-extension "org"
+           :publishing-directory "~/code/arumoy/docs/"
+           :section-numbers nil
+           :auto-preamble t
+           :auto-sitemap t
+           :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>"
+           :publishing-function org-html-publish-to-html)
+          ("website-static"
+           :base-directory "~/code/arumoy"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+           :publishing-directory "~/code/arumoy/docs/"
            :include ("CNAME")
            :recursive t
            :publishing-function org-publish-attachment)
-          ("arumoy" :components ("posts" "static")))))
+          ("website" :components ("website-posts" "website-static")))))
 
 (use-package eshell
   :commands eshell
