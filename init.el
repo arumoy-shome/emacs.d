@@ -513,9 +513,9 @@ _d_: Diagnostics' buffer
            :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>\n<meta name=\"robots\" content=\"noindex\">"
            :publishing-function org-html-publish-to-html)
           ("org-static"
-           :base-directory "~/org"
+           :base-directory "~/org/assets"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/org/docs/"
+           :publishing-directory "~/org/docs/assets/"
            :recursive t
            :publishing-function org-publish-attachment)
           ("org" :components ("org-posts" "org-static"))
@@ -529,13 +529,18 @@ _d_: Diagnostics' buffer
            :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>"
            :publishing-function org-html-publish-to-html)
           ("website-static"
-           :base-directory "~/code/arumoy"
+           :base-directory "~/code/arumoy/assets"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/code/arumoy/docs/"
-           :include ("CNAME")
+           :publishing-directory "~/code/arumoy/docs/assets/"
            :recursive t
            :publishing-function org-publish-attachment)
-          ("website" :components ("website-posts" "website-static")))))
+          ("website-cname"
+           :base-directory "~/code/arumoy/"
+           :base-extension ""
+           :publishing-directory "~/code/arumoy/docs/"
+           :include ("CNAME")
+           :publishing-function org-publish-attachment)
+          ("website" :components ("website-posts" "website-static" "website-cname")))))
 
 (use-package eshell
   :commands eshell
