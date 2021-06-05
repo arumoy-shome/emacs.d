@@ -1,4 +1,10 @@
-* TODO %c
-  pdf: file:~/Documents/papers/%c.pdf
+* TODO %(aru/org-capture-template-paper)
+  :PROPERTIES:
+  :PDF: file:~/Documents/papers/%(aru/org-capture-template-paper).pdf
+  :END:
 
   %?
+
+  #+begin_src bibtex :tangle yes
+  %c
+  #+end_src
