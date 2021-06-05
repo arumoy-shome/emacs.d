@@ -15,10 +15,6 @@
 
 (use-package aru-core :demand t)
 (use-package aru-path :demand t)
-(use-package aru-windows
-  :bind (:map ctl-x-map
-              ("C-\\" . aru/split-window-horizontally-instead)
-              ("C--" . aru/split-window-vertically-instead))) ; use s-- instead
 
 (use-package org :straight t)
 
