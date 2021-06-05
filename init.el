@@ -747,5 +747,22 @@ to."
          ("t n" . tab-next)
          ("t p" . tab-previous)))
 
+(use-package usls
+  :straight (:type git :host gitlab :repo "protesilaos/usls")
+  :config
+  (setq usls-directory org-directory)
+  (setq usls-known-categories '("phd" "project" "emacs"))
+  (setq usls-file-type-extension ".org")
+  (setq usls-subdir-support nil)
+  (setq usls-file-region-separator 'line)
+  (setq usls-file-region-separator-heading-level 1)
+  (setq usls-custom-header-function nil)
+  :bind (("C-c n d" . usls-dired)
+         ("C-c n f" . usls-find-file)
+         ("C-c n a" . usls-append-region-buffer-or-file)
+         ("C-c n n" . usls-new-note)
+         :map usls-mode-map
+         ("C-c n i" . usls-id-insert)
+         ("C-c n l" . usls-follow-link)))
 ;; finally, start the server
 (server-start)
