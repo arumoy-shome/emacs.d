@@ -473,16 +473,6 @@ _d_: Diagnostics' buffer
           ("i" "Idea" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/idea.txt]")))
 
-  (defun aru/org-capture-template-paper()
-    "Return the bibkey. Assumes the last entry in the kill-ring
-    is a bibtex entry."
-    ;; TODO: extracting `current-kill' into a variable does not update
-    ;; it's value for subsequent kills. I suspect it's an elisp thing,
-    ;; but I do not know enough elisp yet. Ideally I would want the
-    ;; `current-kill' in a variable to be reused.
-    (string-match "@\\w+{\\(\\w+\\)," (current-kill 0 t))
-    (match-string 1 (current-kill 0 t)))
-
   ;; todo
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
@@ -498,6 +488,7 @@ _d_: Diagnostics' buffer
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
    ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))))
 
+(use-package aru-org :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
 (use-package org-tempo :after org)
 (use-package org-habit :after org)

@@ -1,9 +1,13 @@
-* TODO %(aru/org-capture-template-paper)
+* TODO %(aru/org-capture-template-paper nil)%?
   :PROPERTIES:
-  :PDF: file:~/Documents/papers/%(aru/org-capture-template-paper).pdf
+  :PDF: file:~/Documents/papers/%(aru/org-capture-template-paper t).pdf
   :END:
 
-  %?
++ problem statement ::
++ solution ::
++ results ::
++ limitations ::
++ remarks ::
 
   #+begin_src bibtex :tangle yes
   %c
