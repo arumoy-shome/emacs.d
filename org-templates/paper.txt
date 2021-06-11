@@ -1,8 +1,12 @@
-* TODO %(aru/org-capture-template-paper nil)%?
+* TODO %(aocp--get-bibkey nil)
   :PROPERTIES:
-  :PDF: file:~/Documents/papers/%(aru/org-capture-template-paper t).pdf
+  :PDF: file:~/Documents/papers/%(aocp--get-bibkey t).pdf
+  :FIRST_AUTHOR: %(aocp--get-first-author)
+  :LAST_AUTHOR: %(aocp--get-last-author)
+  :SOURCE: %(aocp--get-source)
+  :RANK:
   :END:
-
+%?
 + problem statement ::
 + solution ::
 + results ::

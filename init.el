@@ -489,7 +489,7 @@ _d_: Diagnostics' buffer
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
    ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))))
 
-(use-package aru-org :after org)
+(use-package aocp :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
 (use-package org-tempo :after org)
 (use-package org-habit :after org)
