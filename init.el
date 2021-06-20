@@ -477,7 +477,8 @@ _d_: Diagnostics' buffer
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)")
 	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")
-          (sequence "1PASS(1)" "2PASS(2)" "3PASS(3)")))
+          (sequence "1PASS(1)" "2PASS(2)" "3PASS(3)")
+          (sequence "IDEA")))
   (setq org-todo-keyword-faces
 	'(("WAITING" :inherit default :weight bold)
 	  ("LATER" :inherit warning :weight bold)))
