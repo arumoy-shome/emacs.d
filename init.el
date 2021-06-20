@@ -489,7 +489,7 @@ _d_: Diagnostics' buffer
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
    ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))))
 
-(use-package aocp :after org)
+(use-package aocp :straight (:host github :repo "arumoy-shome/aocp.el") :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
 (use-package org-tempo :after org)
 (use-package org-habit :after org)
