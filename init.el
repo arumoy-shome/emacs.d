@@ -50,7 +50,7 @@
 
 (use-package wgrep
   :straight t
-  :commands wgrep
+  :commands (wgrep)
   :config
   (setq wgrep-auto-save-buffer t)
   (setq wgrep-change-readonly-file t)
@@ -144,7 +144,7 @@ uses by default.")
   :bind (:map flyspell-mode-map ("C-." . nil)))
 
 (use-package flymake
-  :commands flymake-mode
+  :commands (flymake-mode)
   :config
   (setq flymake-fringe-indicator-position 'left-fringe)
   (setq flymake-suppress-zero-counters t)
@@ -543,7 +543,7 @@ _d_: Diagnostics' buffer
           ("website" :components ("website-posts" "website-static" "website-cname")))))
 
 (use-package eshell
-  :commands eshell
+  :commands (eshell)
   :config
   (setq eshell-prefer-lisp-functions t)
   (setq eshell-expand-input-functions '(eshell-expand-history-references))
