@@ -4,6 +4,7 @@
   :FIRST_AUTHOR: %(aocp--get-first-author)
   :LAST_AUTHOR: %(aocp--get-last-author)
   :SOURCE: %(aocp--get-source)
+  :YEAR: %(aocp--get-year)
   :RANK:
   :END:
 %?
