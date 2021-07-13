@@ -41,8 +41,44 @@
 (use-package ffap       :config (ffap-bindings))
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package re-builder :config (setq reb-re-syntax 'read))
-(use-package olivetti   :straight t :blackout t)
 (use-package hydra      :straight t)
+
+(use-package olivetti
+  :straight t
+  :blackout t
+  :config
+  (setq olivetti-body-width 0.8)
+  (setq olivetti-body-minimum-body-width 80)
+  (setq olivetti-recall-visual-line-mode-entry-state t))
+
+(use-package org-tree-slide
+  :straight t
+  :blackout t
+  :config
+  (setq org-tree-slide-breadcrumbs t)
+  (setq org-tree-slide-header nil)
+  (setq org-tree-slide-slide-in-effect nil)
+  (setq org-tree-slide-heading-emphasis t)
+  (setq org-tree-slide-cursor-init t)
+  (setq org-tree-slide-modeline-display nil)
+  (setq org-tree-slide-skip-done nil)
+  (setq org-tree-slide-skip-comments t)
+  (setq org-tree-slide-fold-subtrees-skipped t)
+  (setq org-tree-slide-skip-outline-level 8)
+  (setq org-tree-slide-never-touch-face t)
+  (setq org-tree-slide-activate-message
+        (format "Presentation %s" (propertize "ON" 'face 'success)))
+  (setq org-tree-slide-deactivate-message
+        (format "Presentation %s" (propertize "OFF" 'face 'error)))
+  :bind (:map org-tree-slide-mode-map
+              ("s-<down>" . org-tree-slide-display-header-toggle)
+              ("s-<right>" . org-tree-slide-move-next-tree)
+              ("s-<left>" . org-tree-slide-move-previous-tree)))
+
+(use-package aru-focus
+  :config
+  (setq aru-focus-org-presentation t)
+  (setq aru-focus-hidden-modeline t))
 
 (use-package eldoc
   :blackout t
