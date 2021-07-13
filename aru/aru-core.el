@@ -10,7 +10,7 @@
 (setq shell-file-name "/usr/local/bin/bash")          ; used by (async-)shell-command
 (setq explicit-shell-file-name "/usr/local/bin/bash") ; used by shell & term
 (setq user-full-name "Arumoy Shome")
-(setq user-mail-address "arumoy.shome@gmail.com")
+(setq user-mail-address "contact@arumoy.me")
 
 ;;; ui
 (setq ring-bell-function 'ignore) ;; disable bells and confirmation dialog boxes
