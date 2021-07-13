@@ -26,9 +26,9 @@
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "Iosevka" :height 130 :weight 'normal)
+		    :family "Source Code Pro" :height 130 :weight 'normal)
 (set-face-attribute 'fixed-pitch nil
-                    :family "IBM Plex Mono" :height 1.0)
+                    :family "Iosevka" :height 1.0)
 (set-face-attribute 'variable-pitch nil
                     :family "IBM Plex Serif" :height 1.0)
 
