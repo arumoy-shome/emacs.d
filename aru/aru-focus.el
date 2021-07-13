@@ -34,6 +34,15 @@
       (olivetti-mode -1)
     (olivetti-mode 1)))
 
+(autoload 'text-scale-mode "face-remap")
+
+(defun aru-focus--increase-text-scale ()
+  "Increase the text size by 1 point."
+  (if (or (bound-and-true-p text-scale-mode)
+          (not (bound-and-true-p aru-focus-mode)))
+      (text-scale-decrease 1)
+    (text-scale-increase 1)))
+
 (autoload 'org-tree-slide-mode "org-tree-slide")
 
 (defun aru-focus--org-tree-slide-toggle ()
@@ -57,6 +66,7 @@
       (force-mode-line-update))))
 
 (add-hook 'aru-focus--mode-hook #'aru-focus--olivetti-toggle)
+(add-hook 'aru-focus--mode-hook #'aru-focus--increase-text-scale)
 (add-hook 'aru-focus--mode-hook #'aru-focus--org-tree-slide-toggle)
 (add-hook 'aru-focus--mode-hook #'aru-focus--modeline-toggle)
 
