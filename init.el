@@ -43,6 +43,8 @@
 (use-package re-builder :config (setq reb-re-syntax 'read))
 (use-package hydra      :straight t)
 (use-package help-at-pt :config (setq help-at-pt-display-when-idle 'always))
+(use-package emacs      :config (setq narrow-to-defun-include-comments t))
+(use-package newcomment :bind (("s-/" . comment-line)))
 
 (use-package winner
   :config
@@ -548,13 +550,6 @@ _d_: Diagnostics' buffer
   :config
   (add-to-list 'python-shell-completion-native-disabled-interpreters "python"))
 
-(use-package emacs
-  :config
-  (setq narrow-to-defun-include-comments t))
-
-(use-package newcomment
-  :bind (("s-/" . comment-line)))
-
 (use-package imenu
   :config
   (setq imenu-use-markers t)
@@ -624,13 +619,11 @@ set to =frame-char-height= + 2."
 
   (advice-add 'doom-modeline--make-xpm :filter-args
               #'aru/doom-modeline--make-xpm-filter-args)
-
   :hook (after-init . doom-modeline-mode))
 
 (use-package subword
   :blackout t
   :hook (prog-mode . subword-mode))
-
 
 (use-package transpose-frame
   :straight t
