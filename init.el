@@ -31,7 +31,6 @@
 (use-package novice     :config (setq disabled-command-function nil))
 (use-package saveplace  :config (save-place-mode +1))
 (use-package ibuffer    :bind (([remap list-buffers] . #'ibuffer)))
-(use-package winner     :config (winner-mode +1))
 (use-package text-mode  :hook (text-mode	. auto-fill-mode))
 (use-package vc-hooks   :config (setq vc-follow-symlinks t))
 (use-package autorevert :config (global-auto-revert-mode +1))
@@ -42,12 +41,19 @@
 (use-package emacs      :bind (("C-h h" . nil)))
 (use-package re-builder :config (setq reb-re-syntax 'read))
 (use-package hydra      :straight t)
+(use-package help-at-pt :config (setq help-at-pt-display-when-idle 'always))
+
+(use-package winner
+  :config
+  (winner-mode +1)
+  :bind (("s-<left>"  . winner-undo)    ; previously ns-prev-frame
+         ("s-<right>" . winner-redo)))  ; previously ns-next-frame
 
 (use-package olivetti
   :straight t
   :blackout t
-  :config
-  (setq olivetti-body-width 0.8)
+  :init                                 ; changes require restart
+  (setq olivetti-body-width 80)
   (setq olivetti-body-minimum-body-width 80)
   (setq olivetti-recall-visual-line-mode-entry-state t))
 
@@ -71,9 +77,9 @@
   (setq org-tree-slide-deactivate-message
         (format "Presentation %s" (propertize "OFF" 'face 'error)))
   :bind (:map org-tree-slide-mode-map
-              ("s-<down>" . org-tree-slide-display-header-toggle)
-              ("s-<right>" . org-tree-slide-move-next-tree)
-              ("s-<left>" . org-tree-slide-move-previous-tree)))
+              ("<down>" . org-tree-slide-display-header-toggle)
+              ("<right>" . org-tree-slide-move-next-tree)
+              ("<left>" . org-tree-slide-move-previous-tree)))
 
 (use-package aru-focus
   :config
