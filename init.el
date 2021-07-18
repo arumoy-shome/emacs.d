@@ -583,23 +583,9 @@ _d_: Diagnostics' buffer
   (setq dabbrev-check-other-buffers t)
   (setq dabbrev-eliminate-newlines t)
   (setq dabbrev-upcase-means-case-search t)
+  :bind (("M-/" . dabbrev-expand)))
 
-  (defun aru/dabbrev-completion ()
-    "Taken from protesilaos. Expand current phrase or call `dabbrev-completion'."
-    (interactive)
-    (let* ((abbrev (dabbrev--abbrev-at-point))
-           (ignore-case-p (dabbrev--ignore-case-p abbrev))
-           (completion-list (dabbrev--find-all-expansions abbrev ignore-case-p)))
-      (cond
-       ((when (and (eq completion-list nil)
-                   (not (eq last-repeatable-command 'mode-exit)))
-          (insert " ")
-          (dabbrev-expand 1)))
-       (t
-        (dabbrev-completion)))))
-
-    :bind (("M-/" . dabbrev-expand)
-           ("C-M-/" . aru/dabbrev-completion)))
+(use-package aru-dabbrev :bind (("C-M-/" . aru-dabbrev-completion)))
 
 (use-package doom-modeline
   :straight t
