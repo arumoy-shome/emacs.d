@@ -15,6 +15,7 @@
 
 (use-package aru-core :demand t)
 (use-package aru-path :demand t)
+(use-package aru-cus-edit :demand t)
 
 (use-package org :straight t)
 
@@ -273,16 +274,6 @@ _d_: Diagnostics' buffer
   (setq find-file-visit-truename t)
   (setq find-file-suppress-same-file-warnings t)
   (setq require-final-newline t))
-
-(use-package cus-edit
-  :config
-  (setq aru/custom-file (expand-file-name "custom.el" user-emacs-directory))
-
-  (defun aru/cus-edit ()
-    (unless (file-exists-p aru/custom-file)
-      (make-empty-file aru/custom-file))
-    (load-file aru/custom-file))
-  :hook (after-init . aru/cus-edit))
 
 (use-package recentf
   :config
