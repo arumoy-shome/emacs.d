@@ -234,21 +234,6 @@ _d_: Diagnostics' buffer
               ("4 C-j" . dired-jump-other-window)))
 
 (use-package window
-  :init
-  (defvar aru/window-configuration nil
-    "Current window configuration.")
-
-  (define-minor-mode aru/window-single-toggle
-    "Taken from protesilaos. Toggle between single and multiple
-    windows. Equivalent to maximizing."
-    :lighter " [M]"
-    :global nil
-    (if (one-window-p)
-        (when aru/window-configuration
-          (set-window-configuration aru/window-configuration))
-      (setq aru/window-configuration (current-window-configuration))
-      (delete-other-windows)))
-
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
          ("s-3" . (lambda () (interactive) (split-window-right)
@@ -262,8 +247,9 @@ _d_: Diagnostics' buffer
          ("s-d" . list-directory)
          ("s-D" . dired-other-window)
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
-         ("s-l" . next-buffer) ; previously goto-line, use M-g g instead
-         ("s-m" . aru/window-single-toggle)))
+         ("s-l" . next-buffer))) ; previously goto-line, use M-g g instead
+
+(use-package aru-window :bind (("s-m" . aru-window)))
 
 (use-package windmove
   :bind
