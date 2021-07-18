@@ -376,7 +376,8 @@ _d_: Diagnostics' buffer
         modus-vivendi-theme-scale-headings t))
 
 (use-package leuven-theme :straight t :commands (load-theme))
-(use-package emacs :hook (after-init . (lambda () (aru/load-theme 'modus-operandi))))
+(use-package aru-custom
+  :hook (after-init . (lambda () (aru-load-theme 'modus-operandi))))
 
 (use-package magit :straight t :bind ("C-x g" . magit-status))
 
@@ -536,19 +537,6 @@ _d_: Diagnostics' buffer
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
-
-(use-package custom
-  :config
-  (defun aru/load-theme (theme)
-    "Disable all current themes and load a new one."
-    ;; below sexp to interactively get theme is from the load-theme source
-    (interactive
-     (list
-      (intern (completing-read "Load custom theme: "
-                               (mapcar #'symbol-name
-				       (custom-available-themes))))))
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme theme t)))
 
 (use-package mwheel
   :config
