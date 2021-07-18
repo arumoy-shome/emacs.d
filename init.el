@@ -385,13 +385,6 @@ _d_: Diagnostics' buffer
           (t . ranbow-section))
         modus-vivendi-theme-scale-headings t))
 
-(use-package doom-themes
-  :straight t
-  :commands (load-theme)
-  :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
-
 (use-package leuven-theme :straight t :commands (load-theme))
 (use-package emacs :hook (after-init . (lambda () (aru/load-theme 'modus-operandi))))
 
