@@ -12,7 +12,7 @@
   :type 'boolean
   :group 'aru-focus)
 
-(defvar aru-focus---mode-hook nil
+(defvar aru-focus--mode-hook nil
   "Hook that runs from function `aru-focus-mode'.")
 
 ;;;###autoload
