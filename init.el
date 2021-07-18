@@ -299,14 +299,13 @@ _d_: Diagnostics' buffer
    ("M-u" . upcase-dwim)
    ("s-n" . next-error)
    ("s-p" . previous-error)
-   ("M-SPC" . cycle-spacing))           ; previously just-one-space
+   ("M-SPC" . cycle-spacing)           ; previously just-one-space
+   ("M-Q" . delete-indentation))
   :config
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
   (setq shell-command-prompt-show-cwd t)
-  (column-number-mode +1)               ; show line and column numbers
-
-  :bind ("M-Q" . delete-indentation))
+  (column-number-mode +1))               ; show line and column numbers
 
 (use-package selectrum
   :straight (selectrum :host github :repo "raxod502/selectrum")
