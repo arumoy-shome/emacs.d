@@ -221,11 +221,12 @@ _d_: Diagnostics' buffer
   (setq dired-listing-switches
         "-AGFhlv --group-directories-first --time-style=long-iso")
   (setq dired-dwim-target t)
+  (setq dired-auto-revert-buffer #'dired-directory-changed-p)
   :hook ((dired-mode . dired-hide-details-mode)))
 
 (use-package dired-aux
   :config
-  (setq dired-isearch-filenames t)
+  (setq dired-isearch-filenames 'dwim)
   (setq dired-create-destination-dirs 'ask)
   (setq dired-vc-rename-file t))
 
@@ -663,14 +664,15 @@ set to =frame-char-height= + 2."
   (tab-bar-mode +1)
   (tab-bar-history-mode -1)
 
-  :bind (:map ctl-x-map
-         ("t n" . tab-next)
-         ("t p" . tab-previous)))
+  :bind (:map tab-prefix-map
+         ("n" . tab-next)
+         ("t" . tab-previous)))
 
 (use-package aru-tab-bar
+  :after tab-bar
   :bind (("s-t" . aru-tab-bar-select-tab-dwim)
-         :map ctl-x-map
-         ("t t" . aru-tab-bar-select-tab-dwim)))
+         :map tab-prefix-map
+         ("t" . aru-tab-bar-select-tab-dwim)))
 
 (use-package usls
   :straight (:type git :host gitlab :repo "protesilaos/usls")
