@@ -351,7 +351,10 @@ _d_: Diagnostics' buffer
         modus-operandi-theme-completions 'opinionated
         modus-operandi-theme-intense-hl-line t
         modus-operandi-theme-intense-paren-match t
-        modus-operandi-theme-org-blocks 'grayscale
+        modus-operandi-theme-org-blocks 'rainbow
+        modus-operandi-theme-mode-line 'moody
+        modus-operandi-theme-links 'faint-neutral-underline
+        modus-operandi-theme-prompts 'subtle
         modus-operandi-theme-headings
         '((1 . section)
           (2 . line)
@@ -369,7 +372,10 @@ _d_: Diagnostics' buffer
         modus-vivendi-theme-completions 'opinionated
         modus-vivendi-theme-intense-hl-line t
         modus-vivendi-theme-intense-paren-match t
-        modus-vivendi-theme-org-blocks 'grayscale
+        modus-vivendi-theme-org-blocks 'rainbow
+        modus-vivendi-theme-mode-line 'moody
+        modus-vivendi-theme-links 'faint-neutral-underline
+        modus-vivendi-theme-prompts 'subtle
         modus-vivendi-theme-headings
         '((1 . section)
           (2 . line)
