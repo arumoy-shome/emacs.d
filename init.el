@@ -240,10 +240,6 @@ _d_: Diagnostics' buffer
 (use-package window
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
-         ("s-3" . (lambda () (interactive) (split-window-right)
-                    (other-window 1)))
-         ("s-2" . (lambda () (interactive) (split-window-below)
-                    (other-window 1)))
          ("s-1" . delete-other-windows)
          ("s-w" . delete-window)
          ("s-f" . find-file)
@@ -253,7 +249,11 @@ _d_: Diagnostics' buffer
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
          ("s-l" . next-buffer))) ; previously goto-line, use M-g g instead
 
-(use-package aru-window :bind (("s-m" . aru-window)))
+(use-package aru-window
+  :bind (("s-m" . aru-window-mode)
+         ("s-o" . aru-window-other-window-dwim)
+         ("s-3" . aru-window-split-window-right)
+         ("s-2" . aru-window-split-window-below)))
 
 (use-package windmove
   :bind
