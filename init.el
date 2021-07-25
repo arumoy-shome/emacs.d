@@ -262,6 +262,26 @@ _d_: Diagnostics' buffer
    ("<up>"    . windmove-up)
    ("<down>"  . windmove-down)))
 
+(use-package popwin
+  :straight t
+  :config
+  (popwin-mode 1)
+  (setq popwin:popup-window-position "bottom")
+  (setq popwin:popup-window-width (+ fill-column 2))
+  (setq popwin:popup-window-height 0.15)
+  (setq popwin:special-display-config
+        '((help-mode :position left :noselect t)
+          (completion-list-mode :position bottom :noselect t)
+          (compilation-mode :position bottom :noselect t)
+          (grep-mode :position bottom :noselect t)
+          (occur-mode :position bottom :noselect t)
+          ("*shell*" :position bottom :stick t)
+          ("*eshell*" :position bottom :stick t)
+          ("*terminal*" :position bottom :stick t)
+          ("*Shell Command Output*" :position bottom :noselect t)
+          (magit-status-mode :position bottom :stick t)
+          (dired-mode :position left :width 30 :stick t))))
+
 (use-package paren
   :config
   (setq show-paren-delay 0.1)
@@ -554,8 +574,17 @@ _d_: Diagnostics' buffer
   (setq mouse-wheel-follow-mouse t))     ; default
 
 (use-package python
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
   :config
   (add-to-list 'python-shell-completion-native-disabled-interpreters "python"))
+
+(use-package pyvenv :straight t :after python)
+
+(use-package rust-mode
+  :straight t
+  :mode ("\\.rs\\'" . rust-mode)
+  :interpreter "rust")
 
 (use-package imenu
   :config
