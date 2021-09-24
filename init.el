@@ -433,7 +433,9 @@ _d_: Diagnostics' buffer
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
   (setq org-directory "~/org")
   (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
-    "File to use for capturing org items")
+    "File to use for capturing org items.")
+  (defconst aru/org-journal-file (expand-file-name "journal.org.gpg" org-directory)
+    "File to use for capturing journal entries.")
   (setq org-log-into-drawer t)
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
@@ -459,14 +461,16 @@ _d_: Diagnostics' buffer
 				   (shell      . t)))
   ;;; capture
   (setq org-capture-templates
-	'(("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
-	   "* TODO %?")
+	      '(("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
+	         "* TODO %?")
           ("e" "Experiment" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/experiment.txt]")
           ("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/paper.txt]")
           ("i" "Idea" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/idea.txt]")))
+           "%[~/.emacs.d/org-templates/idea.txt]")
+          ("j" "Journal" entry (file aru/org-journal-file)
+           "%[~/.emacs.d/org-templates/journal.txt]" :prepend t)))
 
   ;; todo
   (setq org-todo-keywords
