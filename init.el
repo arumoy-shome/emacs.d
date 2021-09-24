@@ -241,10 +241,11 @@ _d_: Diagnostics' buffer
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
          ("s-1" . delete-other-windows)
+         ("s-4 c" . clone-indirect-buffer-other-window)
          ("s-w" . delete-window)
          ("s-f" . find-file)
          ("s-F" . find-file-other-window)
-         ("s-d" . list-directory)
+         ("s-d" . dired)
          ("s-D" . dired-other-window)
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
          ("s-l" . next-buffer))) ; previously goto-line, use M-g g instead
@@ -261,26 +262,6 @@ _d_: Diagnostics' buffer
    ("<right>" . windmove-right)
    ("<up>"    . windmove-up)
    ("<down>"  . windmove-down)))
-
-(use-package popwin
-  :straight t
-  :config
-  (popwin-mode 1)
-  (setq popwin:popup-window-position "bottom")
-  (setq popwin:popup-window-width (+ fill-column 2))
-  (setq popwin:popup-window-height 0.15)
-  (setq popwin:special-display-config
-        '((help-mode :position left :noselect t)
-          (completion-list-mode :position bottom :noselect t)
-          (compilation-mode :position bottom :noselect t)
-          (grep-mode :position bottom :noselect t)
-          (occur-mode :position bottom :noselect t)
-          ("*shell*" :position bottom :stick t)
-          ("*eshell*" :position bottom :stick t)
-          ("*terminal*" :position bottom :stick t)
-          ("*Shell Command Output*" :position bottom :noselect t)
-          (magit-status-mode :position bottom :stick t)
-          (dired-mode :position left :width 30 :stick t))))
 
 (use-package paren
   :config
@@ -357,52 +338,30 @@ _d_: Diagnostics' buffer
          ("G" . consult-git-grep)
          ("r" . consult-ripgrep)
          ("l" . consult-line)
-         ("m" . consult-multi-occur)
-         )
+         ("m" . consult-multi-occur))
   :config
   (setq consult-project-root-function #'vc-root-dir))
 
-(use-package modus-operandi-theme
+(use-package modus-themes
   :straight t
   :commands (load-theme)
   :init
-  (setq modus-operandi-theme-slanted-constructs t
-        modus-operandi-theme-bold-constructs t
-        modus-operandi-theme-syntax 'alt-syntax
-        modus-operandi-theme-completions 'opinionated
-        modus-operandi-theme-intense-hl-line t
-        modus-operandi-theme-intense-paren-match t
-        modus-operandi-theme-org-blocks 'rainbow
-        modus-operandi-theme-mode-line 'moody
-        modus-operandi-theme-links 'faint-neutral-underline
-        modus-operandi-theme-prompts 'subtle
-        modus-operandi-theme-headings
+  (setq modus-themes-slanted-constructs t
+        modus-themes-bold-constructs t
+        modus-themes-syntax 'alt-syntax
+        modus-themes-completions 'opinionated
+        modus-themes-intense-hl-line t
+        modus-themes-intense-paren-match t
+        modus-themes-org-blocks 'rainbow
+        modus-themes-mode-line 'moody
+        modus-themes-links 'faint-neutral-underline
+        modus-themes-prompts 'subtle
+        modus-themes-headings
         '((1 . section)
           (2 . line)
           (3 . highlight)
           (t . rainbow-no-bold))
-        modus-operandi-theme-scale-headings t))
-
-(use-package modus-vivendi-theme
-  :straight t
-  :commands (load-theme)
-  :init
-  (setq modus-vivendi-theme-slanted-constructs t
-        modus-vivendi-theme-bold-constructs t
-        modus-vivendi-theme-syntax 'alt-syntax
-        modus-vivendi-theme-completions 'opinionated
-        modus-vivendi-theme-intense-hl-line t
-        modus-vivendi-theme-intense-paren-match t
-        modus-vivendi-theme-org-blocks 'rainbow
-        modus-vivendi-theme-mode-line 'moody
-        modus-vivendi-theme-links 'faint-neutral-underline
-        modus-vivendi-theme-prompts 'subtle
-        modus-vivendi-theme-headings
-        '((1 . section)
-          (2 . line)
-          (3 . highlight)
-          (t . ranbow-section))
-        modus-vivendi-theme-scale-headings t))
+        modus-themes-scale-headings t))
 
 (use-package leuven-theme :straight t :commands (load-theme))
 (use-package aru-custom
@@ -707,22 +666,5 @@ set to =frame-char-height= + 2."
          :map tab-prefix-map
          ("t" . aru-tab-bar-select-tab-dwim)))
 
-(use-package usls
-  :straight (:type git :host gitlab :repo "protesilaos/usls")
-  :config
-  (setq usls-directory org-directory)
-  (setq usls-known-categories '("phd" "project" "emacs"))
-  (setq usls-file-type-extension ".org")
-  (setq usls-subdir-support nil)
-  (setq usls-file-region-separator 'line)
-  (setq usls-file-region-separator-heading-level 1)
-  (setq usls-custom-header-function nil)
-  :bind (("C-c n d" . usls-dired)
-         ("C-c n f" . usls-find-file)
-         ("C-c n a" . usls-append-region-buffer-or-file)
-         ("C-c n n" . usls-new-note)
-         :map usls-mode-map
-         ("C-c n i" . usls-id-insert)
-         ("C-c n l" . usls-follow-link)))
 ;; finally, start the server
 (server-start)
