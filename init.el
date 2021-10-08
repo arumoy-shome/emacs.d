@@ -131,12 +131,6 @@
   :after outline
   :hook (outline-minor-mode . outline-minor-faces-add-font-lock-keywords))
 
-(use-package project
-  :bind (("C-c p f" . project-find-file)
-         ("C-c p g" . project-find-regexp)
-         ("C-c p s" . project-search)
-         ("C-c p %" . project-query-replace-regexp)))
-
 (use-package flyspell
   :blackout t
   :config
