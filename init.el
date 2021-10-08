@@ -440,7 +440,10 @@ _d_: Diagnostics' buffer
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
-   ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))))
+   ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))
+   ("C-c T" . (lambda () (interactive) (find-file-other-window aru/org-inbox-file)))
+   ("C-c d" . (lambda () (interactive) (dired org-directory)))
+   ("C-c D" . (lambda () (interactive) (dired-other-window org-directory)))))
 
 (use-package aocp :straight (:host github :repo "arumoy-shome/aocp.el") :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
