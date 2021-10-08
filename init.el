@@ -409,9 +409,11 @@ _d_: Diagnostics' buffer
                   ((org-agenda-overriding-header "\nUnscheduled TODO")
                    (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))))))
   ;;; babel
-  (setq org-babel-load-languages '((emacs-lisp . t)
-				   (python     . t)
-				   (shell      . t)))
+  (setq org-confirm-babel-evaluate nil)
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((emacs-lisp . t)
+				                         (python     . t)
+				                         (shell      . t)))
   ;;; capture
   (setq org-capture-templates
 	      '(("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
