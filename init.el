@@ -663,5 +663,9 @@ set to =frame-char-height= + 2."
          :map tab-prefix-map
          ("t" . aru-tab-bar-select-tab-dwim)))
 
+(use-package calendar
+  :config
+  (setq calendar-week-start-day 1))     ; start on Mondays
+
 ;; finally, start the server
 (server-start)
