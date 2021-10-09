@@ -337,7 +337,6 @@ _d_: Diagnostics' buffer
   (setq consult-project-root-function #'vc-root-dir))
 
 (use-package modus-themes
-  :straight t
   :commands (load-theme)
   :init
   (setq modus-themes-slanted-constructs t
