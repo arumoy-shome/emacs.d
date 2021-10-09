@@ -360,7 +360,10 @@ _d_: Diagnostics' buffer
 (use-package aru-custom
   :hook (after-init . (lambda () (aru-load-theme 'modus-operandi))))
 
-(use-package magit :straight t :bind ("C-x g" . magit-status))
+(use-package magit
+  :straight t
+  :bind (:map ctl-x-map
+              ("g" . magit-status)))
 
 (use-package whitespace
   :commands
