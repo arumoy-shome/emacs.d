@@ -141,56 +141,6 @@
   (setq ispell-dictionary "en_GB")
   :bind (:map flyspell-mode-map ("C-." . nil)))
 
-(use-package flymake
-  :commands (flymake-mode)
-  :config
-  (setq flymake-fringe-indicator-position 'left-fringe)
-  (setq flymake-suppress-zero-counters t)
-  (setq flymake-start-on-flymake-mode nil)
-  (setq flymake-no-changes-timeout nil)
-  (setq flymake-start-on-save-buffer t)
-  (setq flymake-proc-compilation-prevents-syntax-check t)
-  (setq flymake-wrap-around nil)
-
-  (defhydra aru/hydra-flymake (:color pink :hint nil)
-    "
-Actions
--------
-_s_: Start checks
-_n_: Next error
-_p_: Previous error
-_d_: Diagnostics' buffer
-"
-    ("s" flymake-start)
-    ("d" flymake-show-diagnostics-buffer)
-    ("n" flymake-goto-next-error)
-    ("p" flymake-goto-prev-error)
-    ("q" nil "cancel" :color blue))
-
-  :bind (:map flymake-mode-map
-              ("C-c h l" . aru/hydra-flymake/body)))
-
-(use-package flymake-diagnostic-at-point
-  :straight t
-  :after flymake
-  :config
-  (setq flymake-diagnostic-at-point-display-diagnostic-function
-        'flymake-diagnostic-at-point-display-minibuffer))
-
-(use-package flymake-proselint
-  :straight (:host github :repo "manuel-uberti/flymake-proselint")
-  :after flymake
-  :init
-  (dolist (mode '("markdown-mode" "org-mode" "text-mode" "latex-mode"))
-    (add-hook (intern (concat mode "-hook")) #'flymake-proselint-setup)))
-
-(use-package flycheck-aspell
-  :straight (:host github :repo "leotaku/flycheck-aspell")
-  :after (flyspell flymake)
-  :init
-  (dolist (mode '("markdown-mode" "org-mode" "text-mode" "latex-mode"))
-    (add-hook (intern (concat mode "-hook")) #'flymake-aspell-setup)))
-
 (use-package vc-dispatcher
   :config
   (setq vc-suppress-confirm t)
