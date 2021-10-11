@@ -118,13 +118,14 @@
   (setq isearch-lax-whitespace t)
   (setq isearch-regexp-lax-whitespace nil))
 
-(use-package outline :blackout outline-minor-mode)
+(use-package outline
+  :blackout outline-minor-mode
+  :config
+  (setq outline-minor-mode-prefix "\C-z")
+  (setq outline-minor-mode-cycle t)
+  :hook (prog-mode . outline-minor-mode))
+
 (use-package foldout :after outline)
-(use-package bicycle :straight t :after outline)
-(use-package hideshow :blackout hs-minor-mode)
-(use-package aru-outline
-  :blackout aru-outline-minor-mode
-  :hook (prog-mode . aru-outline-minor-mode))
 
 (use-package outline-minor-faces
   :straight t
@@ -200,7 +201,7 @@ _d_: Diagnostics' buffer
   (setq latex-run-command "pdflatex -interaction=nonstopmode")
   (setq tex-dvi-view-command "open")
   (setq tex-print-file-extension ".pdf")
-  :hook (latex-mode . aru-outline-minor-mode))
+  :hook (latex-mode . outline-minor-mode))
 
 (use-package frame
   :config (blink-cursor-mode 0)
