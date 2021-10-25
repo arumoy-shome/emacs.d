@@ -322,6 +322,7 @@
   :config
   ;;; general
   (org-indent-mode -1)                  ; [default] do not indent text based on outline
+  (setq org-src-window-setup 'split-window-below)
   (setq org-startup-folded t)
   (setq org-reverse-note-order t)
   (setq org-special-ctrl-a/e t)
