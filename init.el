@@ -409,51 +409,6 @@
 (use-package org-habit :after org)
 (use-package ox-md :after org)
 (use-package org-id :after org)
-(use-package ox-publish
-  :after ox-html
-  :config
-  (setq org-publish-project-alist
-        '(("org-posts"
-           :base-directory "~/org"
-           :base-extension "org"
-           :publishing-directory "~/org/docs/"
-           :exclude "inbox\\.org\\|org-agenda-files\\.org"
-           :recursive t
-           :section-numbers nil
-           :table-of-contents nil
-           :auto-preamble t
-           :auto-sitemap t
-           :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>\n<meta name=\"robots\" content=\"noindex\">"
-           :publishing-function org-html-publish-to-html)
-          ("org-static"
-           :base-directory "~/org/assets"
-           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/org/docs/assets/"
-           :recursive t
-           :publishing-function org-publish-attachment)
-          ("org" :components ("org-posts" "org-static"))
-          ("website-posts"
-           :base-directory "~/code/arumoy"
-           :base-extension "org"
-           :publishing-directory "~/code/arumoy/docs/"
-           :section-numbers nil
-           :auto-preamble t
-           :auto-sitemap t
-           :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>"
-           :publishing-function org-html-publish-to-html)
-          ("website-static"
-           :base-directory "~/code/arumoy/assets"
-           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/code/arumoy/docs/assets/"
-           :recursive t
-           :publishing-function org-publish-attachment)
-          ("website-cname"
-           :base-directory "~/code/arumoy/"
-           :base-extension ""
-           :publishing-directory "~/code/arumoy/docs/"
-           :include ("CNAME")
-           :publishing-function org-publish-attachment)
-          ("website" :components ("website-posts" "website-static" "website-cname")))))
 
 (use-package eshell
   :commands (eshell)
