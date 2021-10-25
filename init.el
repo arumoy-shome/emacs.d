@@ -45,7 +45,6 @@
 (use-package help-at-pt :config (setq help-at-pt-display-when-idle 'always))
 (use-package emacs      :config (setq narrow-to-defun-include-comments t))
 (use-package newcomment :bind (("s-/" . comment-line)))
-(use-package emacs :bind-keymap ("C-s-n" . narrow-map))
 
 (use-package winner
   :config
@@ -177,24 +176,15 @@
   (setq dired-vc-rename-file t))
 
 (use-package dired-x
-  :bind (("s-j" . dired-jump)
-         ("s-J" . dired-jump-other-window)
-         :map ctl-x-map
-              ("C-j" . dired-jump)
-              ("4 C-j" . dired-jump-other-window)))
+  :bind (("s-j" . dired-jump)))
 
 (use-package window
-  :bind-keymap ("C-s-p" . project-prefix-map)
+  :bind-keymap (("s-4" . ctl-x-4-map)
+                ("s-5" . ctl-x-5-map))
   :bind (("s-]" . other-window)
          ("s-[" . (lambda () (interactive) (other-window -1)))
          ("s-1" . delete-other-windows)
-         ("C-S-s-p" . project-other-window-command)
-         ("s-C" . clone-indirect-buffer-other-window)
          ("s-w" . delete-window)
-         ("s-f" . find-file)
-         ("s-F" . find-file-other-window)
-         ("s-d" . dired)
-         ("s-D" . dired-other-window)
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
          ("s-l" . next-buffer))) ; previously goto-line, use M-g g instead
 
@@ -269,14 +259,14 @@
 
 (use-package consult
   :straight t
-  :bind (("s-b" . consult-buffer)
-         ("s-B" . consult-buffer-other-window)
-         ("C-." . consult-imenu)
+  :bind (("C-." . consult-imenu)
          :map ctl-x-map                    ; C-x bindings
          ("M-:" . consult-complex-command) ; [default] repeat-complex-command
          ("b" . consult-buffer)            ; [default] switch-to-buffer
-         ("4 b" . consult-buffer-other-window) ; [default] switch-to-buffer-other-window
-         ("5 b" . consult-buffer-other-frame)  ; [default] switch-to-buffer-other-frame
+         :map ctl-x-4-map
+         ("b" . consult-buffer-other-window) ; [default] switch-to-buffer-other-window
+         :map ctl-x-5-map
+         ("b" . consult-buffer-other-frame)  ; [default] switch-to-buffer-other-frame
          :map help-map
          ("a" . consult-apropos)
          :map search-map
