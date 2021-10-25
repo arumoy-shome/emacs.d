@@ -611,15 +611,7 @@ set to =frame-char-height= + 2."
   (tab-bar-mode +1)
   (tab-bar-history-mode -1)
 
-  :bind (:map tab-prefix-map
-         ("n" . tab-next)
-         ("t" . tab-previous)))
-
-(use-package aru-tab-bar
-  :after tab-bar
-  :bind (("s-t" . aru-tab-bar-select-tab-dwim)
-         :map tab-prefix-map
-         ("t" . aru-tab-bar-select-tab-dwim)))
+  :bind-keymap ("s-t" . tab-prefix-map))
 
 (use-package calendar
   :config
