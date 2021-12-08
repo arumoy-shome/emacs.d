@@ -421,9 +421,13 @@
    ("C-c a" . org-agenda)
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
    ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))
-   ("C-c T" . (lambda () (interactive) (find-file-other-window aru/org-inbox-file)))
    ("C-c d" . (lambda () (interactive) (dired org-directory)))
-   ("C-c D" . (lambda () (interactive) (dired-other-window org-directory)))))
+   :map ctl-x-4-map
+   ("C-c t" . (lambda () (interactive) (find-file-other-window aru/org-inbox-file)))
+   ("C-c d" . (lambda () (interactive) (dired-other-window org-directory)))
+   :map ctl-x-5-map
+   ("C-c t" . (lambda () (interactive) (find-file-other-frame aru/org-inbox-file)))
+   ("C-c d" . (lambda () (interactive) (dired-other-frame org-directory)))))
 
 (use-package aocp :straight (:host github :repo "arumoy-shome/aocp.el") :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
