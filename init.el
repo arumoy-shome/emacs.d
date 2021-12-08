@@ -128,11 +128,6 @@
 
 (use-package foldout :after outline)
 
-(use-package outline-minor-faces
-  :straight t
-  :after outline
-  :hook (outline-minor-mode . outline-minor-faces-add-font-lock-keywords))
-
 (use-package flyspell
   :blackout t
   :config
