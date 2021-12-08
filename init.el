@@ -47,12 +47,6 @@
 (use-package emacs      :config (setq narrow-to-defun-include-comments t))
 (use-package newcomment :bind (("s-/" . comment-line)))
 
-(use-package winner
-  :config
-  (winner-mode +1)
-  :bind (("s-<left>"  . winner-undo)    ; previously ns-prev-frame
-         ("s-<right>" . winner-redo)))  ; previously ns-next-frame
-
 (use-package olivetti
   :straight t
   :blackout t
@@ -174,6 +168,12 @@
 (use-package dired-x
   :bind (("s-j" . dired-jump)))
 
+(use-package winner
+  :config
+  (winner-mode +1)
+  :bind (("s-<left>"  . winner-undo)    ; previously ns-prev-frame
+         ("s-<right>" . winner-redo)))  ; previously ns-next-frame
+
 (use-package window
   :bind-keymap (("s-4" . ctl-x-4-map)
                 ("s-5" . ctl-x-5-map))
@@ -183,7 +183,37 @@
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
          ("s-l" . next-buffer)  ; previously goto-line, use M-g g instead
          :map ctl-x-5-map
-         ("w" . delete-frame)))
+         ("w" . delete-frame))
+  :config
+  (setq display-buffer-alist
+  `(;; no window
+    ("\\`\\*Async Shell Command\\*\\'"
+     (display-buffer-no-window))
+    ;; top side window
+    ("\\*Flymake diagnostics.*"
+     (display-buffer-in-side-window)
+     (window-height . 0.25))
+    ("\\*Messages.*"
+     (display-buffer-in-side-window))
+    ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Flymake log\\)\\*"
+     (display-buffer-in-side-window))
+    ;; left side window
+    ("\\*\\(.* # Help.*\\|Help\\)\\*"
+     (display-buffer-in-side-window))
+    ;; bottom side window
+    ("\\*Org Select\\*"
+     (display-buffer-in-side-window)
+     (dedicated . t)
+     (window-parameters . ((mode-line-format . none))))
+    ;; below current window
+    ("\\*.*\\(e?shell\\|v?term\\).*"
+     (display-buffer-reuse-mode-window display-buffer-in-side-window)
+     (window-height . 0.25))
+    ("\\*\\(Calendar\\|Bookmark Annotation\\).*"
+     (display-buffer-reuse-mode-window display-buffer-below-selected)
+     (window-height . fit-window-to-buffer))))
+  (setq window-combination-resize t)
+  (setq even-window-sizes 'height-only))
 
 (use-package aru-window
   :bind (("s-m" . aru-window-mode)
