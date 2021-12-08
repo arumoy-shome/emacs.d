@@ -181,12 +181,13 @@
 (use-package window
   :bind-keymap (("s-4" . ctl-x-4-map)
                 ("s-5" . ctl-x-5-map))
-  :bind (("s-]" . other-window)
-         ("s-[" . (lambda () (interactive) (other-window -1)))
+  :bind (("s-f" . find-file)
          ("s-1" . delete-other-windows)
          ("s-w" . delete-window)
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
-         ("s-l" . next-buffer))) ; previously goto-line, use M-g g instead
+         ("s-l" . next-buffer)  ; previously goto-line, use M-g g instead
+         :map ctl-x-5-map
+         ("w" . delete-frame)))
 
 (use-package aru-window
   :bind (("s-m" . aru-window-mode)
@@ -199,7 +200,11 @@
   (("<left>"  . windmove-left)
    ("<right>" . windmove-right)
    ("<up>"    . windmove-up)
-   ("<down>"  . windmove-down)))
+   ("<down>"  . windmove-down)
+   ("S-<left>" . windmove-swap-states-left)
+   ("S-<right>" . windmove-swap-states-right)
+   ("S-<up>" . windmove-swap-states-up)
+   ("S-<down>" . windmove-swap-states-down)))
 
 (use-package paren
   :config
@@ -259,7 +264,8 @@
 
 (use-package consult
   :straight t
-  :bind (("C-." . consult-imenu)
+  :bind (("s-b" . consult-buffer)
+         ("C-." . consult-imenu)
          :map ctl-x-map                    ; C-x bindings
          ("M-:" . consult-complex-command) ; [default] repeat-complex-command
          ("b" . consult-buffer)            ; [default] switch-to-buffer
@@ -557,7 +563,9 @@ set to =frame-char-height= + 2."
   (tab-bar-mode +1)
   (tab-bar-history-mode -1)
 
-  :bind-keymap ("s-t" . tab-prefix-map))
+  :bind-keymap ("s-t" . tab-prefix-map)
+  :bind (:map tab-prefix-map
+              ("w" . tab-close)))
 
 (use-package calendar
   :config
