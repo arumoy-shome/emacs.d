@@ -447,7 +447,9 @@
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
   :config
-  (add-to-list 'python-shell-completion-native-disabled-interpreters "python"))
+  (add-to-list 'python-shell-completion-native-disabled-interpreters "python")
+  (setq python-indent-guess-indent-offset t)
+  (setq python-indent-guess-indent-offset-verbose nil))
 
 (use-package pyvenv :straight t :after python)
 
