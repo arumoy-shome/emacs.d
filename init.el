@@ -29,6 +29,7 @@
 
 (use-package delsel     :hook (after-init . delete-selection-mode))
 (use-package hl-line    :config (global-hl-line-mode nil))
+(use-package hi-lock    :blackout t)
 (use-package novice     :config (setq disabled-command-function nil))
 (use-package saveplace  :config (save-place-mode +1))
 (use-package ibuffer    :bind (([remap list-buffers] . #'ibuffer)))
