@@ -310,6 +310,7 @@
   (setq consult-project-root-function #'vc-root-dir))
 
 (use-package modus-themes
+  :straight t                           ; install from source, don't use built-in version
   :commands (load-theme)
   :init
   (setq modus-themes-slanted-constructs t
@@ -322,14 +323,8 @@
         modus-themes-mode-line 'moody
         modus-themes-links 'faint-neutral-underline
         modus-themes-prompts 'subtle
-        modus-themes-headings
-        '((1 . section)
-          (2 . line)
-          (3 . highlight)
-          (t . rainbow-no-bold))
         modus-themes-scale-headings t))
 
-(use-package leuven-theme :straight t :commands (load-theme))
 (use-package aru-custom
   :hook (after-init . (lambda () (aru-load-theme 'modus-operandi))))
 
