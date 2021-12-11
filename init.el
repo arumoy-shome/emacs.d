@@ -288,7 +288,7 @@
 (use-package consult
   :straight t
   :bind (("s-b" . consult-buffer)
-         ("C-." . consult-imenu)
+         ("C-." . consult-outline)
          :map ctl-x-map                    ; C-x bindings
          ("M-:" . consult-complex-command) ; [default] repeat-complex-command
          ("b" . consult-buffer)            ; [default] switch-to-buffer
