@@ -212,8 +212,7 @@
   (setq window-min-width fill-column))
 
 (use-package aru-window
-  :bind (("s-m" . aru-window-mode)
-         ("s-o" . aru-window-other-window-dwim)
+  :bind (("s-o" . aru-window-other-window-dwim)
          ("s-3" . aru-window-split-window-right)
          ("s-2" . aru-window-split-window-below)))
 

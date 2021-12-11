@@ -1,27 +1,9 @@
-(defvar aru-window-configuration nil
-  "Current window configuration.")
-
-;;;###autoload
-(define-minor-mode aru-window-mode
-  "Toggle between single and multiple windows. Equivalent to
-    maximizing."
-  :lighter " -M-"
-  :init-value nil
-  :global nil
-  (if (one-window-p)
-      (when aru-window-configuration
-        (set-window-configuration aru-window-configuration))
-    (setq aru-window-configuration (current-window-configuration))
-    (delete-other-windows)))
-
-
 (defun aru-window-other-window-dwim ()
-  "Wrapper around `other-window' which is aware of
-  `aru-window-mode'. When called while `aru-window-mode' is on,
-  disable it and go to other window. Else perform standard
-  `other-window'."
+  "Wrapper around `other-window'. When called while only one window
+  is visible, call `winner-undo' and go to `other-window'. Else
+  perform standard `other-window'."
   (interactive)
-  (if (bound-and-true-p aru-window-mode)
+  (if (one-window-p)
       (aru-window--other-window)
     (other-window -1)))
 
@@ -42,8 +24,8 @@
   (other-window 1))
 
 (defun aru-window--other-window ()
-  "Disable `aru-window-mode' and invoke `other-window'."
-  (aru-window-mode -1)
+  "Call `winner-undo' followed by `other-window'."
+  (winner-undo)
   (other-window -1))
 
 (provide 'aru-window)
