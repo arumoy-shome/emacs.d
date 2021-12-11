@@ -186,34 +186,31 @@
          ("w" . delete-frame))
   :config
   (setq display-buffer-alist
-  `(;; no window
-    ("\\`\\*Async Shell Command\\*\\'"
-     (display-buffer-no-window))
-    ;; top side window
-    ("\\*Flymake diagnostics.*"
-     (display-buffer-in-side-window)
-     (window-height . 0.25))
-    ("\\*Messages.*"
-     (display-buffer-in-side-window))
-    ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Flymake log\\)\\*"
-     (display-buffer-in-side-window))
-    ;; left side window
-    ("\\*\\(.* # Help.*\\|Help\\)\\*"
-     (display-buffer-in-side-window))
-    ;; bottom side window
-    ("\\*Org Select\\*"
-     (display-buffer-in-side-window)
-     (dedicated . t)
-     (window-parameters . ((mode-line-format . none))))
-    ;; below current window
-    ("\\*.*\\(e?shell\\|v?term\\).*"
-     (display-buffer-reuse-mode-window display-buffer-in-side-window)
-     (window-height . 0.25))
-    ("\\*\\(Calendar\\|Bookmark Annotation\\).*"
-     (display-buffer-reuse-mode-window display-buffer-below-selected)
-     (window-height . fit-window-to-buffer))))
-  (setq window-combination-resize t)
-  (setq even-window-sizes 'height-only))
+        `(("\\`\\*Async Shell Command\\*\\'"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (window-parameters . ((mode-line-format . none))))
+          ("\\*\\(Flymake diagnostics\\|Package-Lint\\).*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (window-parameters . ((mode-line-format . none))))
+          ("\\*\\(.* # Help.*\\|Help\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (window-parameters . ((mode-line-format . none))))
+          ("\\*Org Select\\*"
+           (display-buffer-in-side-window)
+           (window-height . fit-window-to-buffer)
+           (window-parameters . ((mode-line-format . none))))
+          ("\\*.*\\(e?shell\\|v?term\\).*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (window-parameters . ((mode-line-format . none))))
+          ("\\*compilation\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (window-parameters . ((mode-line-format . none))))))
+  (setq window-min-width fill-column))
 
 (use-package aru-window
   :bind (("s-m" . aru-window-mode)
