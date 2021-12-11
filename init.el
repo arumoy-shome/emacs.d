@@ -311,17 +311,22 @@
   :straight t                           ; install from source, don't use built-in version
   :commands (load-theme)
   :init
-  (setq modus-themes-slanted-constructs t
+  (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t
-        modus-themes-syntax 'alt-syntax
-        modus-themes-completions 'opinionated
-        modus-themes-intense-hl-line t
-        modus-themes-intense-paren-match t
-        modus-themes-org-blocks 'rainbow
-        modus-themes-mode-line 'moody
-        modus-themes-links 'faint-neutral-underline
-        modus-themes-prompts 'subtle
-        modus-themes-scale-headings t))
+        modus-themes-syntax '(alt-syntax)
+        modus-themes-completions 'moderate
+        modus-themes-hl-line '(accented)
+        modus-themes-paren-match '(intense)
+        modus-themes-org-blocks 'tinted-background
+        modus-themes-mode-line '(moody accented)
+        modus-themes-links '(faint neutral-underline)
+        modus-themes-prompts '(intense bold)
+        modus-themes-tabs-accented t
+        modus-themes-lang-checkers '(straight-underline faint)
+        modus-themes-subtle-line-numbers t
+        modus-themes-headings '((1 . (1.3))
+                                (2 . (1.2))
+                                (3 . (1.1)))))
 
 (use-package aru-custom
   :hook (after-init . (lambda () (aru-load-theme 'modus-operandi))))
