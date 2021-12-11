@@ -17,8 +17,6 @@
 (use-package aru-path :demand t)
 (use-package aru-cus-edit :demand t)
 
-(use-package org :straight t)
-
 (use-package menu-bar :config (menu-bar-mode -1))
 (use-package tool-bar :config (tool-bar-mode -1))
 (use-package tooltip  :config (tooltip-mode -1))
@@ -45,7 +43,8 @@
 (use-package hydra      :straight t)
 (use-package help-at-pt :config (setq help-at-pt-display-when-idle 'always))
 (use-package emacs      :config (setq narrow-to-defun-include-comments t))
-(use-package newcomment :bind (("s-/" . comment-line)))
+(use-package newcomment :bind (("s-;" . comment-line)))
+(use-package so-long    :config (global-so-long-mode 1))
 
 (use-package olivetti
   :straight t
@@ -342,6 +341,7 @@
   :blackout t)
 
 (use-package org
+  :straight t
   :hook (org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
   :config
   ;;; general
