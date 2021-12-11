@@ -587,8 +587,8 @@ set to =frame-char-height= + 2."
   (setq tab-bar-tab-hints nil)
   (setq tab-bar-tab-name-function 'tab-bar-tab-name-all)
 
-  (tab-bar-mode +1)
-  (tab-bar-history-mode -1)
+  (tab-bar-mode 1)
+  (tab-bar-history-mode 1)
 
   :bind-keymap ("s-t" . tab-prefix-map)
   :bind (:map tab-prefix-map
