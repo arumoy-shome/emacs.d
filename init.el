@@ -205,7 +205,7 @@
            (display-buffer-in-side-window)
            (window-height . 0.25)
            (window-parameters . ((mode-line-format . none))))
-          ("\\*compilation\\*"
+          ("\\*\\(compilation\\|grep\\|Occur\\)\\*"
            (display-buffer-in-side-window)
            (window-height . 0.25)
            (window-parameters . ((mode-line-format . none))))))
