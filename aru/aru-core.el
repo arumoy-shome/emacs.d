@@ -1,4 +1,4 @@
-;;; core
+;; aru-core.el  -*- lexical-binding: t; -*-
 (setq gnutls-min-prime-bits 4096)
 (defalias 'yes-or-no-p 'y-or-n-p)       ; quicker confirmations
 (setq gnutls-verify-error t)             ; secure network

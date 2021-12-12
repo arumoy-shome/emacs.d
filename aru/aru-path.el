@@ -1,3 +1,5 @@
+;; aru-path.el  -*- lexical-binding: t; -*-
+
 ;; emacs picks up the paths set explicitly in the config file but does
 ;; not pick up the paths set by libexec, so we add those back ourselves
 (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))

@@ -1,3 +1,5 @@
+;; aru-packages.el   -*- lexical-binding: t; -*-
+
 ;; init straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file

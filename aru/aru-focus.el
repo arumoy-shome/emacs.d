@@ -1,3 +1,4 @@
+;; aru-focus.el -*- lexical-binding: t; -*-
 (defgroup aru-focus ()
   "Setup focus mode for text buffers."
   :group 'files)

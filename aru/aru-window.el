@@ -1,3 +1,4 @@
+;; aru-window.el -*- lexical-binding: t; -*-
 (defun aru-window-other-window-dwim ()
   "Wrapper around `other-window'. When called while only one window
   is visible, call `winner-undo' and go to `other-window'. Else

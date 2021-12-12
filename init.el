@@ -1,3 +1,5 @@
+;; init.el -- Personal Emacs Config --   -*- lexical-binding: t; -*-
+
 ;; startup optimization: set `gc-cons-threshold' to a high value now
 ;; and reset it later
 (defvar aru/orig-gc-cons-threshold gc-cons-threshold

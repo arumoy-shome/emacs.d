@@ -1,3 +1,4 @@
+;; aru-custom.el -*- lexical-binding: t; -*-
 (defun aru-load-theme (theme)
   "Disable all current themes and load a new one."
   ;; below sexp to interactively get theme is from the load-theme source

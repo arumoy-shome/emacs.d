@@ -1,3 +1,4 @@
+;; aru-dabbrev.el -*- lexical-binding: t; -*-
 (defun aru-dabbrev-completion ()
   "Taken from protesilaos. Expand current phrase or call
 `dabbrev-completion'."
