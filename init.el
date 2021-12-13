@@ -180,6 +180,8 @@
                 ("s-5" . ctl-x-5-map))
   :bind (("s-f" . find-file)
          ("s-1" . delete-other-windows)
+         ("s-2" . split-window-below)
+         ("s-3" . split-window-right)
          ("s-w" . delete-window)
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
          ("s-l" . next-buffer)  ; previously goto-line, use M-g g instead
@@ -207,16 +209,18 @@
            (display-buffer-in-side-window)
            (window-height . 0.25)
            (window-parameters . ((mode-line-format . none))))
-          ("\\*\\(compilation\\|grep\\|Occur\\)\\*"
+          ("\\*\\(grep\\|Occur\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (window-parameters . ((mode-line-format . none))))
+          ("\\*\\(compilation\\|Warning\\|Backtrace\\)\\*"
            (display-buffer-in-side-window)
            (window-height . 0.25)
            (window-parameters . ((mode-line-format . none))))))
   (setq window-min-width fill-column))
 
 (use-package aru-window
-  :bind (("s-o" . aru-window-other-window-dwim)
-         ("s-3" . aru-window-split-window-right)
-         ("s-2" . aru-window-split-window-below)))
+  :bind (("s-o" . aru-window-other-window-dwim)))
 
 (use-package windmove
   :bind
