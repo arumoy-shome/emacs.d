@@ -604,5 +604,9 @@ set to =frame-char-height= + 2."
   :config
   (setq calendar-week-start-day 1))     ; start on Mondays
 
+(use-package aru-narrow
+  :bind (:map narrow-map
+              ("n" . aru-narrow-or-widen-dwim)))
+
 ;; finally, start the server
 (server-start)
