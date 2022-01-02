@@ -14,6 +14,7 @@
 (use-package blackout :straight (:host github :repo "raxod502/blackout") :demand t)
 (use-package gcmh :straight t :config (gcmh-mode +1) :blackout t)
 (use-package no-littering :straight t :demand t)
+(use-package org :straight t)           ; initialise early, config later
 
 (use-package aru-core :demand t)
 (use-package aru-path :demand t)
@@ -351,7 +352,6 @@
   :blackout t)
 
 (use-package org
-  :straight t
   :hook (org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
   :config
   ;;; general
@@ -374,8 +374,8 @@
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
   ;;; refile
-  (setq org-refile-targets '((nil . (:maxlevel . 6))
-                             (org-agenda-files . (:level . 1))))
+  (setq org-refile-targets '((nil . (:maxlevel . 2))
+                             (org-agenda-files . (:maxlevel . 2))))
   ;;; agenda
   (setq org-agenda-dim-blocked-tasks nil)
   (setq org-agenda-inhibit-startup t)
