@@ -198,7 +198,7 @@
            (display-buffer-in-side-window)
            (window-height . 0.25)
            (window-parameters . ((mode-line-format . none))))
-          ("\\*\\(.* # Help.*\\|Help\\)\\*"
+          ("\\*\\(.* # Help.*\\|Help\\|Man.*\\)\\*"
            (display-buffer-in-side-window)
            (window-height . 0.25)
            (window-parameters . ((mode-line-format . none))))
