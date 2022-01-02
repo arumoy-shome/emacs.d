@@ -438,11 +438,19 @@
 (use-package ox-md :after org)
 (use-package org-id :after org)
 
+(use-package em-hist
+  :bind (:map eshell-hist-mode-map      ; overrides for windmove
+              ("<up>" . nil)
+              ("<down>" . nil)))
+
 (use-package eshell
-  :commands (eshell)
+  :after em-hist
   :config
   (setq eshell-prefer-lisp-functions t)
   (setq eshell-expand-input-functions '(eshell-expand-history-references))
+  (setq eshell-cd-on-directory t)
+  (setq eshell-hist-ignoredups t)
+  (setq eshell-save-history-on-exit t)
   (setq eshell-banner-message
 	'(format "%s %s\n"
 		 (propertize (format " %s " (string-trim (buffer-name)))
