@@ -613,5 +613,41 @@ set to =frame-char-height= + 2."
   :bind (:map narrow-map
               ("n" . aru-narrow-or-widen-dwim)))
 
-;; finally, start the server
-(server-start)
+(use-package pdf-tools
+  :straight t
+  :magic ("%PDF" . pdf-view-mode)
+  :config
+  (setq pdf-tools-enabled-modes '(pdf-history-minor-mode
+                                  pdf-isearch-minor-mode
+                                  pdf-links-minor-mode
+                                  pdf-outline-minor-mode
+                                  pdf-misc-size-indication-minor-mode
+                                  pdf-occur-global-minor-mode))
+  (setq pdf-view-display-size 'fit-height)
+  (setq pdf-view-continuous t)
+  (setq pdf-view-use-dedicated-register nil)
+  (setq pdf-view-max-image-width 1080)
+  (setq pdf-outline-imenu-use-flat-menus t)
+  (pdf-loader-install)
+  :bind (:map pdf-view-mode-map            ; override for windmove
+              ("<up>" . nil)
+              ("<down>" . nil)))
+
+(use-package elfeed
+  :straight t
+  :config
+  (require 'aru-elfeed))
+
+(use-package browse-url
+  :config
+  (setq browse-url-browser-function 'eww-browse-url)
+  (setq browse-url-secondary-browser-function 'browse-url-default-browser))
+
+(use-package shr
+  :config
+  (setq shr-use-colors nil)
+  (setq shr-use-fonts nil)
+  (setq shr-max-image-proportion 0.75)
+  (setq shr-image-animate nil))
+
+(server-start)                          ; finally, start the server
