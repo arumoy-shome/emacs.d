@@ -524,10 +524,7 @@
   (setq dabbrev-case-replace 'case-replace)
   (setq dabbrev-check-other-buffers t)
   (setq dabbrev-eliminate-newlines t)
-  (setq dabbrev-upcase-means-case-search t)
-  :bind (("M-/" . dabbrev-expand)))
-
-(use-package aru-dabbrev :bind (("C-M-/" . aru-dabbrev-completion)))
+  (setq dabbrev-upcase-means-case-search t))
 
 (use-package doom-modeline
   :straight t
@@ -596,13 +593,13 @@ set to =frame-char-height= + 2."
   (setq tab-bar-close-tab-select 'recent)
   (setq tab-bar-new-tab-choice t)
   (setq tab-bar-new-tab-to 'right)
-  (setq tab-bar-position nil)
-  (setq tab-bar-show nil)
+  (setq tab-bar-position t)             ; show tab-bar below tool-bar
+  (setq tab-bar-show 1)                 ; only show when more than 1 tab open
   (setq tab-bar-tab-hints nil)
   (setq tab-bar-tab-name-function 'tab-bar-tab-name-all)
 
   (tab-bar-mode 1)
-  (tab-bar-history-mode 1)
+  (tab-bar-history-mode -1)             ; separate window history per tab
 
   :bind-keymap ("s-t" . tab-prefix-map)
   :bind (:map tab-prefix-map
