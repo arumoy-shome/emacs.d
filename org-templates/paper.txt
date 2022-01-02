@@ -14,6 +14,6 @@
 + limitations ::
 + remarks ::
 
-  #+begin_src bibtex :tangle yes
-  %c
-  #+end_src
+#+begin_src bibtex
+%c
+#+end_src
