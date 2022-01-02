@@ -1,0 +1,333 @@
+#+TITLE: init.el archive
+#+AUTHOR: Arumoy Shome
+#+DATE: Feb 09, 2021
+
+Old configuration for emacs and friends. Primarily for reference or if
+I decide to re-use a package in the future.
+
+* selectrum & prescient
+#+begin_src emacs-lisp
+(use-package prescient
+  :straight t
+  :config
+  (prescient-persist-mode +1))
+
+(use-package selectrum
+  :straight (selectrum :host github :repo "raxod502/selectrum")
+  :config
+  (selectrum-mode +1))
+
+(use-package selectrum-prescient
+  :straight (selectrum-prescient :host github :repo "raxod502/prescient.el"
+                                 :files ("selectrum-prescient.el"))
+  :after selectrum
+  :config
+  (selectrum-prescient-mode +1))
+#+end_src
+* outline-minor-faces
+#+begin_src emacs-lisp
+  (use-package outline-minor-faces
+    :disabled
+    :straight t
+    :after outline
+    :hook (outline-minor-mode . outline-minor-faces-add-font-lock-keywords))
+#+end_src
+* org-publish
+#+begin_src emacs-lisp
+  (use-package ox-publish
+    :after ox-html
+    :config
+    (setq org-publish-project-alist
+          '(("org-posts"
+             :base-directory "~/org"
+             :base-extension "org"
+             :publishing-directory "~/org/docs/"
+             :exclude "inbox\\.org\\|org-agenda-files\\.org"
+             :recursive t
+             :section-numbers nil
+             :table-of-contents nil
+             :auto-preamble t
+             :auto-sitemap t
+             :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>\n<meta name=\"robots\" content=\"noindex\">"
+             :publishing-function org-html-publish-to-html)
+            ("org-static"
+             :base-directory "~/org/assets"
+             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+             :publishing-directory "~/org/docs/assets/"
+             :recursive t
+             :publishing-function org-publish-attachment)
+            ("org" :components ("org-posts" "org-static"))
+            ("website-posts"
+             :base-directory "~/code/arumoy"
+             :base-extension "org"
+             :publishing-directory "~/code/arumoy/docs/"
+             :section-numbers nil
+             :auto-preamble t
+             :auto-sitemap t
+             :html-head "<link rel=\"stylesheet\" href=\"assets/css/main.css\" type=\"text/css\"/>"
+             :publishing-function org-html-publish-to-html)
+            ("website-static"
+             :base-directory "~/code/arumoy/assets"
+             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+             :publishing-directory "~/code/arumoy/docs/assets/"
+             :recursive t
+             :publishing-function org-publish-attachment)
+            ("website-cname"
+             :base-directory "~/code/arumoy/"
+             :base-extension ""
+             :publishing-directory "~/code/arumoy/docs/"
+             :include ("CNAME")
+             :publishing-function org-publish-attachment)
+            ("website" :components ("website-posts" "website-static" "website-cname")))))
+#+end_src
+* flyspell-aspell
+#+begin_src elisp
+  (use-package flycheck-aspell
+    :straight (:host github :repo "leotaku/flycheck-aspell")
+    :after (flyspell flymake)
+    :init
+    (dolist (mode '("markdown-mode" "org-mode" "text-mode" "latex-mode"))
+      (add-hook (intern (concat mode "-hook")) #'flymake-aspell-setup)))
+#+end_src
+* flymake
+#+begin_src elisp
+  (use-package flymake-proselint
+    :straight (:host github :repo "manuel-uberti/flymake-proselint")
+    :after flymake
+    :init
+    (dolist (mode '("markdown-mode" "org-mode" "text-mode" "latex-mode"))
+      (add-hook (intern (concat mode "-hook")) #'flymake-proselint-setup)))
+
+  (use-package flymake-diagnostic-at-point
+    :straight t
+    :after flymake
+    :config
+    (setq flymake-diagnostic-at-point-display-diagnostic-function
+          'flymake-diagnostic-at-point-display-minibuffer))
+
+  (use-package flymake
+    :commands (flymake-mode)
+    :config
+    (setq flymake-fringe-indicator-position 'left-fringe)
+    (setq flymake-suppress-zero-counters t)
+    (setq flymake-start-on-flymake-mode nil)
+    (setq flymake-no-changes-timeout nil)
+    (setq flymake-start-on-save-buffer t)
+    (setq flymake-proc-compilation-prevents-syntax-check t)
+    (setq flymake-wrap-around nil)
+
+    (defhydra aru/hydra-flymake (:color pink :hint nil)
+      "
+  Actions
+  -------
+  _s_: Start checks
+  _n_: Next error
+  _p_: Previous error
+  _d_: Diagnostics' buffer
+  "
+      ("s" flymake-start)
+      ("d" flymake-show-diagnostics-buffer)
+      ("n" flymake-goto-next-error)
+      ("p" flymake-goto-prev-error)
+      ("q" nil "cancel" :color blue))
+
+    :bind (:map flymake-mode-map
+                ("C-c h l" . aru/hydra-flymake/body)))
+#+end_src
+* Custom function to visit recent files
+The consult.el package provides the =consult-buffer= which includes
+recent files. This makes the custom functions =aru/recentf-find-file=
+and =aru/recentf-find-file-other-window= redundant and thus have been
+removed from my config. For future reference however, I document the
+functions here.
+
+#+begin_src emacs-lisp
+  (defun aru/get-recentf-files ()
+    "Get a list of recent files."
+    (mapcar 'abbreviate-file-name recentf-list))
+
+  (defun aru/recentf-find-file ()
+    "Taken from
+    https://github.com/raxod502/selectrum/wiki/Useful-Commands#switch-to-recent-file"
+    (interactive)
+    (let ((files (aru/get-recentf-files)))
+      (find-file (completing-read "Find recent file: " files nil t))))
+
+  (defun aru/recentf-find-file-other-window ()
+    "Like aru/recentf-find-file but in other window."
+    (interactive)
+    (let ((files (aru/get-recentf-files)))
+      (find-file-other-window (completing-read "Find recent file: " files nil t))))
+#+end_src
+
+* org-ref config
+I use latex to author the final documents and org-mode for managing my
+notes. I find that implicit links works perfectly well in notes.
+
+#+begin_src emacs-lisp
+(use-package org-ref
+  :disabled t
+  :after org
+  :straight t
+  :init
+  (setq reftex-default-bibliography '("~/org/bib/ref.bib")
+        org-ref-bibliography-notes "~/org/bib/notes.org"
+        org-ref-default-bibliography '("~/org/bib/ref.bib")
+        org-ref-pdf-directory "~/org/bib/pdfs/")
+  (setq bibtex-completion-bibliography reftex-default-bibliography
+        bibtex-completion-library-path org-ref-pdf-directory
+        bibtex-completion-notes-path org-ref-bibliography-notes)
+  :commands
+  (doi-add-bibtex-entry)
+  :bind
+  ("C-c ]" . org-ref-helm-insert-cite-link))
+#+end_src
+
+* ido config
+I made the switch the selectrum.el combined with prescient.el.
+
+#+begin_src emacs-lisp
+(use-package ido
+  :disabled t
+  :config
+  (ido-mode +1)
+  (ido-everywhere +1)
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-filename-at-point 'guess)
+  (setq ido-enable-dot-prefix t))
+#+end_src
+
+* projectile config
+The built in functionality for projects satisfy my needs.
+
+#+begin_src emacs-lisp
+(use-package projectile
+  :disabled t
+  :straight t
+  :config
+  (setq projectile-completion-system 'default) ; use selectrum instead of ido
+  (setq projectile-switch-project-action 'projectile-commander) ; ask what to do when switching
+
+  (def-projectile-commander-method ?\C-m
+    "Find file in project."
+    (call-interactively #'find-file))
+
+  (projectile-mode +1)
+
+  (defun aru/projectile-indexing-method-p (method)
+    "Non-nil if METHOD is a safe value for `projectile-indexing-method'."
+    (memq method '(native alien)))
+
+  (put 'projectile-indexing-method 'safe-local-variable
+       #'aru/projectile-indexing-method-p)
+
+  (dolist (key '("C-r" "R"))
+    (bind-key key #'projectile-replace-regexp projectile-command-map))
+  :bind-keymap*
+  (("C-c p" . projectile-command-map))
+  :blackout t)
+#+end_src
+
+* fish-mode config
+I switched to zsh as my default shell.
+
+#+begin_src emacs-lisp
+(use-package fish-mode
+  :disabled t
+  :straight t
+  :mode ("\\.fish\\'" .	fish-mode))
+#+end_src
+
+* exec-from-shell-package config
+This package adds a lot to my startup time (and I like things snappy).
+I fix the problem by manually setting up =PATH= in emacs (see [[id:EB6E0AC3-74F6-4904-9250-07AF42AC537C][=PATH=
+and =exec-path=]]).
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :disabled t
+  :straight t
+  :if (memq window-system '(mac ns))
+  :hook
+  (after-init . exec-path-from-shell-initialize))
+#+end_src
+
+* smartparens config
+The =electric-pair-mode= built into emacs does the same thing.
+
+#+begin_src emacs-lisp
+(use-package smartparens
+  :disabled t
+  :straight t
+  :config
+  (require 'smartparens-config)
+  :hook ((prog-mode . smartparens-mode)
+	 (text-mode . smartparens-mode))
+  :blackout t)
+#+end_src
+
+* mu4e config
+I have not found a strong motivation for dealing with email in emacs
+yet. I would also like to try the built in package (gnus) before
+switching to mu4e.
+
+#+begin_src emacs-lisp
+(use-package mu4e
+  :commands
+  (mu4e)
+  :config
+  (mu4e-maildir "~/mail")
+  ;; mu4e binary comes with mu which I install with brewn
+  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+#+end_src
+
+* evil config
+I prefer to use the emacs keybindings in emacs. I find this keeps a
+clear segregation and a lesser congitive load when switching from one
+program to another. I have noticed that I automatically adapt to the
+correct style of keybindings when I switch over to vim and vice-versa.
+
+#+begin_src emacs-lisp
+(use-package evil-magit :straight t :after magit)
+
+(use-package evil
+  :straight t
+  :init
+  (setq evil-want-C-u-scroll t
+        evil-want-C-u-delete t
+        evil-split-window-below t
+        evil-vsplit-window-right t)
+  :config
+  (evil-mode 1)
+  (evil-set-initial-state 'term-mode 'emacs))
+
+(use-package evil-surround
+  :straight t
+  :after (evil)
+  :config (global-evil-surround-mode 1))
+
+(use-package evil-commentary
+  :straight t
+  :after (evil)
+  :config (evil-commentary-mode))
+#+end_src
+
+* linum-relative config
+I thing emacs can do this by itself, also I prefer to use search
+instead.
+
+#+begin_src emacs-lisp
+(use-package linum-relative
+  :straight t
+  :config (linum-relative-global-mode))
+#+end_src
+
+* powerline config
+I switched to doom-modeline which is much quicker and satisfies my
+requirements.
+
+#+begin_src emacs-lisp
+(use-package powerline
+  :straight t
+  :config (powerline-center-theme))
+#+end_src
