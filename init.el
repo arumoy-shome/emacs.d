@@ -660,11 +660,6 @@ set to =frame-char-height= + 2."
   :bind (:map ctl-x-map
               ("w" . elfeed)))
 
-(use-package browse-url
-  :config
-  (setq browse-url-browser-function 'eww-browse-url)
-  (setq browse-url-secondary-browser-function 'browse-url-default-browser))
-
 (use-package shr
   :config
   (setq shr-use-colors nil)
