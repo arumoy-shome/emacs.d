@@ -24,6 +24,12 @@
   (balance-windows)
   (other-window 1))
 
+(defun aru-window-delete-window ()
+  "Wrapper around `delete-window'. Delete window and balance them."
+  (interactive)
+  (delete-window)
+  (balance-windows))
+
 (defun aru-window--other-window ()
   "Call `winner-undo' followed by `other-window'."
   (winner-undo)

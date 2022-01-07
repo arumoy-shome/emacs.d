@@ -181,47 +181,57 @@
                 ("s-5" . ctl-x-5-map))
   :bind (("s-f" . find-file)
          ("s-1" . delete-other-windows)
-         ("s-2" . split-window-below)
-         ("s-3" . split-window-right)
-         ("s-w" . delete-window)
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
          ("s-l" . next-buffer)  ; previously goto-line, use M-g g instead
          :map ctl-x-5-map
          ("w" . delete-frame))
   :config
+  ;; following is taken verbatim from the elisp manual
+  ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Layouts-with-Side-Windows.html
+    ;;  ___________________________________
+    ;; |          *Buffer List*            |
+    ;; |___________________________________|
+    ;; |     |                       |     |
+    ;; |  *  |                       |  *  |
+    ;; |  d  |                       |  T  |
+    ;; |  i  |                       |  a  |
+    ;; |  r  |   Main Window Area    |  g  |
+    ;; |  e  |                       |  s  |
+    ;; |  d  |                       |  *  |
+    ;; |  *  |                       |     |
+    ;; |_____|_______________________|_____|
+    ;; | *help*/*grep*/  |  *shell*/       |
+    ;; | *Completions*   |  *compilation*  |
+    ;; |_________________|_________________|
+    ;; |             Echo Area             |
+    ;; |___________________________________|
+  (defvar parameters
+    '(window-parameters . ((no-other-window . t)
+                           (no-delete-other-windows . t)
+                           (mode-line-format . none))))
+  (setq fit-window-to-buffer-horizontally t)
+  (setq window-resize-pixelwise t)
+  (setq window-min-width fill-column)
   (setq display-buffer-alist
-        `(("\\`\\*Async Shell Command\\*\\'"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (window-parameters . ((mode-line-format . none))))
-          ("\\*\\(Flymake diagnostics\\|Package-Lint\\).*"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (window-parameters . ((mode-line-format . none))))
-          ("\\*\\(.* # Help.*\\|Help\\|Man.*\\)\\*"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (window-parameters . ((mode-line-format . none))))
-          ("\\*Org Select\\*"
-           (display-buffer-in-side-window)
-           (window-height . fit-window-to-buffer)
-           (window-parameters . ((mode-line-format . none))))
-          ("\\*.*\\(e?shell\\|v?term\\).*"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (window-parameters . ((mode-line-format . none))))
-          ("\\*\\(grep\\|Occur\\)\\*"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (window-parameters . ((mode-line-format . none))))
-          ("\\*\\(compilation\\|Warning\\|Backtrace\\)\\*"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (window-parameters . ((mode-line-format . none))))))
-  (setq window-min-width fill-column))
+        `(("\\*\\(Buffer List\\|Ibuffer\\)\\*" display-buffer-in-side-window
+           (side . top) (slot . 0) (window-height . fit-window-to-buffer)
+           (preserve-size . (nil . t)) ,parameters)
+          ("\\*Tags List\\*" display-buffer-in-side-window
+           (side . right) (slot . 0) (window-width . fit-window-to-buffer)
+           (preserve-size . (t . nil)) ,parameters)
+          ("\\*\\(?:help\\|grep\\|Occur\\|Completions\\)\\*"
+           display-buffer-in-side-window
+           (side . bottom) (slot . -1) (preserve-size . (nil . t))
+           ,parameters)
+          ("\\*\\(?:shell\\|compilation\\)\\*" display-buffer-in-side-window
+           (side . bottom) (slot . 1) (preserve-size . (nil . t))
+           ,parameters))))
 
 (use-package aru-window
-  :bind (("s-o" . aru-window-other-window-dwim)))
+  :bind (("s-o" . aru-window-other-window-dwim)
+         ("s-2" . aru-window-split-window-below)
+         ("s-3" . aru-window-split-window-right)
+         ("s-w" . aru-window-delete-window)))
 
 (use-package windmove
   :bind
