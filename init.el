@@ -646,7 +646,19 @@ set to =frame-char-height= + 2."
 (use-package elfeed
   :straight t
   :config
-  (require 'aru-elfeed))
+  (setq elfeed-feeds
+        ;; blogs
+        '(("http://googleaiblog.blogspot.com/atom.xml" blog ai)
+          ("https://deepmind.com/blog/feed/basic/" blog ai)
+          ("https://martinfowler.com/feed.atom" blog se)
+          ("https://github.blog/engineering.atom" blog se)
+          ("https://research.atspotify.com/feed" blog research)
+          ("https://engineering.atspotify.com/feed" blog se)
+          ;; papers
+          ("http://arxiv.org/rss/cs.SE" paper research se)))
+  (setq-default elfeed-search-filter "@1-week-ago +unread ")
+  :bind (:map ctl-x-map
+              ("w" . elfeed)))
 
 (use-package browse-url
   :config
