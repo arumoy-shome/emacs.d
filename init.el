@@ -447,9 +447,9 @@
 
 (use-package aocp :straight (:host github :repo "arumoy-shome/aocp.el") :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
+(use-package ox-md :after org)
 (use-package org-tempo :after org)
 (use-package org-habit :after org)
-(use-package ox-md :after org)
 (use-package org-id :after org)
 
 (use-package em-hist
@@ -652,14 +652,32 @@ set to =frame-char-height= + 2."
   :config
   (setq elfeed-feeds
         ;; blogs
-        '(("http://googleaiblog.blogspot.com/atom.xml" blog ai)
-          ("https://deepmind.com/blog/feed/basic/" blog ai)
-          ("https://martinfowler.com/feed.atom" blog se)
-          ("https://github.blog/engineering.atom" blog se)
-          ("https://research.atspotify.com/feed" blog research)
-          ("https://engineering.atspotify.com/feed" blog se)
+        '(("http://googleaiblog.blogspot.com/atom.xml" blog)
+          ("https://deepmind.com/blog/feed/basic/" blog)
+          ("https://martinfowler.com/feed.atom" blog)
+          ("https://github.blog/engineering.atom" blog)
+          ("https://research.atspotify.com/feed" blog)
+          ("https://engineering.atspotify.com/feed" blog)
+          ("https://www.kdnuggets.com/feed" blog)
+          ("https://machinelearningmastery.com/feed/" blog)
+          ("https://api.quantamagazine.org/feed/" blog)
           ;; papers
-          ("http://arxiv.org/rss/cs.SE" paper research se)))
+          ("http://arxiv.org/rss/cs.SE" paper)
+          ;; videos
+          ("https://www.youtube.com/c/3blue1brown" video)
+          ("https://www.youtube.com/c/ProtesilaosStavrou" video)
+          ("https://www.youtube.com/user/Computerphile" video)
+          ("https://www.youtube.com/c/minutephysics" video)
+          ;; news
+          ("dutchnews.nl/feed" news)
+          ("http://feeds.bbci.co.uk/news/rss.xml" news)
+          ("https://www.aljazeera.com/xml/rss/all.xml" news)
+          ("https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml" news)
+          ("http://feeds.feedburner.com/euronews/en/home/" news)
+          ;; others
+          ("https://hnrss.org/frontpage" other)
+          ("https://hnrss.org/bestcomments" other)
+          ("https://hnrss.org/best" other)))
   (setq-default elfeed-search-filter "@1-week-ago +unread ")
   :bind (:map ctl-x-map
               ("w" . elfeed)))
