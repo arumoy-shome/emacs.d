@@ -34,7 +34,6 @@
 (use-package novice     :config (setq disabled-command-function nil))
 (use-package saveplace  :config (save-place-mode +1))
 (use-package ibuffer    :bind (([remap list-buffers] . #'ibuffer)))
-(use-package text-mode  :hook (text-mode	. auto-fill-mode))
 (use-package vc-hooks   :config (setq vc-follow-symlinks t))
 (use-package autorevert :config (global-auto-revert-mode +1))
 (use-package uniquify   :config (setq uniquify-buffer-name-style 'forward))
@@ -48,6 +47,11 @@
 (use-package emacs      :config (setq narrow-to-defun-include-comments t))
 (use-package newcomment :bind (("s-;" . comment-line)))
 (use-package so-long    :config (global-so-long-mode 1))
+
+(use-package text-mode
+  :hook (text-mode . auto-fill-mode)
+  :bind (:map text-mode-map
+              ("C-c !" . org-time-stamp-inactive)))
 
 (use-package olivetti
   :straight t
