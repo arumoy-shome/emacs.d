@@ -210,25 +210,46 @@
     ;; |             Echo Area             |
     ;; |___________________________________|
   (defvar parameters
-    '(window-parameters . ((no-other-window . t)
-                           (no-delete-other-windows . t)
-                           (mode-line-format . none))))
+    '(window-parameters . ((no-other-window . t))))
   (setq fit-window-to-buffer-horizontally t)
   (setq window-resize-pixelwise t)
   (setq window-min-width fill-column)
   (setq display-buffer-alist
-        `(("\\*\\(Buffer List\\|Ibuffer\\)\\*" display-buffer-in-side-window
-           (side . top) (slot . 0) (window-height . fit-window-to-buffer)
-           (preserve-size . (nil . t)) ,parameters)
-          ("\\*Tags List\\*" display-buffer-in-side-window
-           (side . right) (slot . 0) (window-width . fit-window-to-buffer)
-           (preserve-size . (t . nil)) ,parameters)
-          ("\\*\\(?:help\\|grep\\|Occur\\|Completions\\)\\*"
+        ;; top
+        `(("\\*\\(Buffer List\\|Ibuffer\\)\\*"
            display-buffer-in-side-window
-           (side . bottom) (slot . -1) (preserve-size . (nil . t))
+           (side . top)
+           (slot . 0)
+           (window-height . fit-window-to-buffer)
+           (preserve-size . (nil . t))
            ,parameters)
-          ("\\*\\(?:shell\\|compilation\\)\\*" display-buffer-in-side-window
-           (side . bottom) (slot . 1) (preserve-size . (nil . t))
+          ;; left
+          ("\\*\\(Tags List\\|Completions\\)\\*"
+           display-buffer-in-side-window
+           (side . right)
+           (slot . 0)
+           (window-width . fit-window-to-buffer)
+           (preserve-size . (t . nil))
+           ,parameters)
+          ;; bottom left
+          ("\\*\\(?:help\\|grep\\|Occur\\|xref\\)\\*"
+           display-buffer-in-side-window
+           (side . bottom)
+           (slot . -1)
+           (preserve-size . (nil . t))
+           ,parameters)
+          ;; bottom right
+          ("\\*\\(compilation\\|Warning\\|Backtrace\\|Async Shell Command\\)\\*"
+           display-buffer-in-side-window
+           (side . bottom)
+           (slot . 1)
+           (preserve-size . (nil . t))
+           ,parameters)
+          ("\\*.*\\(e?shell\\|v?term\\).*"
+           display-buffer-in-side-window
+           (side . bottom)
+           (slot . 1)
+           (preserve-size . (nil . t))
            ,parameters))))
 
 (use-package aru-window
