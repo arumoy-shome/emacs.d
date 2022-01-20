@@ -432,22 +432,16 @@
 				                         (shell      . t)))
   ;;; capture
   (setq org-capture-templates
-	      '(("t" "Todo" entry (file+headline aru/org-inbox-file "Inbox")
-	         "* TODO %?")
-          ("e" "Experiment" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/experiment.txt]")
-          ("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
+	'(("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/paper.txt]")
-          ("i" "Idea" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/idea.txt]")
+          ("c" "Capture" entry (file+headline aru/org-inbox-file "Inbox")
+           "%[~/.emacs.d/org-templates/capture.txt]")
           ("j" "Journal" entry (file aru/org-journal-file)
            "%[~/.emacs.d/org-templates/journal.txt]" :prepend t)))
 
   ;; todo
   (setq org-todo-keywords
-	'((sequence "TODO(t)" "|" "DONE(d!)")
-	  (sequence "NEXT(n)" "WAITING(w@/!)" "LATER(l)" "|" "CANCELLED(c@)")
-    (sequence "READ(r)" "IDEA")))
+	'((sequence "TODO(t)" "WAITING(w@/!)" "LATER(l)" "|" "DONE(d!)" "CANCEL(c@)")))
   (setq org-todo-keyword-faces
 	'(("WAITING" :inherit default :weight bold)
 	  ("LATER" :inherit warning :weight bold)))

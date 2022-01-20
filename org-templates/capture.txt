@@ -1,4 +1,4 @@
-* IDEA %U
+* %U
 %?
 
 + link :: %a
