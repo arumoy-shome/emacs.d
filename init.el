@@ -460,7 +460,7 @@
    ("C-c t" . (lambda () (interactive) (find-file-other-frame aru/org-inbox-file)))
    ("C-c d" . (lambda () (interactive) (dired-other-frame org-directory)))))
 
-(use-package aocp :straight (:host github :repo "arumoy-shome/aocp.el") :after org)
+(use-package aru-ocp :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
 (use-package ox-md :after org)
 (use-package org-tempo :after org)
