@@ -302,7 +302,8 @@
    ("s-n" . next-error)
    ("s-p" . previous-error)
    ("M-SPC" . cycle-spacing)           ; previously just-one-space
-   ("M-Q" . delete-indentation))
+   ("M-Q" . delete-indentation)
+   ("ESC M-g" . window-toggle-side-windows)) ; ESC ESC g
   :config
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
@@ -369,7 +370,8 @@
         modus-themes-subtle-line-numbers t
         modus-themes-headings '((1 . (1.3))
                                 (2 . (1.2))
-                                (3 . (1.1)))))
+                                (3 . (1.1))))
+  :bind (("ESC M-t" . modus-themes-toggle))) ; ESC ESC t
 
 (use-package aru-custom
   :hook (after-init . (lambda () (aru-load-theme 'modus-operandi))))
