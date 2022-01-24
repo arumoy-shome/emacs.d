@@ -283,7 +283,8 @@
   (setq make-backup-files nil)
   (setq find-file-visit-truename t)
   (setq find-file-suppress-same-file-warnings t)
-  (setq require-final-newline t))
+  (setq require-final-newline t)
+  :bind (("s-q" . nil)))
 
 (use-package recentf
   :config
