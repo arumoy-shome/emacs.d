@@ -1,4 +1,4 @@
-* %(aocp--get-bibkey nil)
+* %U %(aocp--get-bibkey nil)
   :PROPERTIES:
   :PDF: file:~/Documents/papers/%(aocp--get-bibkey t).pdf
   :FIRST_AUTHOR: %(aocp--get-first-author)

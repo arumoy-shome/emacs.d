@@ -404,10 +404,8 @@
   (setq org-return-follows-link nil)
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
   (setq org-directory "~/org")
-  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
+  (defconst aru/org-inbox-file (expand-file-name "aru.org" org-directory)
     "File to use for capturing org items.")
-  (defconst aru/org-journal-file (expand-file-name "journal.org.gpg" org-directory)
-    "File to use for capturing journal entries.")
   (setq org-log-into-drawer t)
   (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
@@ -431,16 +429,14 @@
   (setq org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((emacs-lisp . t)
-				                         (python     . t)
-				                         (shell      . t)))
+				 (python     . t)
+				 (shell      . t)))
   ;;; capture
   (setq org-capture-templates
 	'(("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/paper.txt]")
+           "%[~/.emacs.d/org-templates/paper.txt]" :prepend t)
           ("c" "Capture" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/capture.txt]")
-          ("j" "Journal" entry (file aru/org-journal-file)
-           "%[~/.emacs.d/org-templates/journal.txt]" :prepend t)))
+           "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)))
 
   ;; todo
   (setq org-todo-keywords
