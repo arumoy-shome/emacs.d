@@ -308,7 +308,8 @@
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
   (setq shell-command-prompt-show-cwd t)
-  (column-number-mode +1))               ; show line and column numbers
+  (column-number-mode +1)
+  (indent-tabs-mode -1))               ; show line and column numbers
 
 (use-package selectrum
   :straight (selectrum :host github :repo "raxod502/selectrum")
