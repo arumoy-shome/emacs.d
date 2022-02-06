@@ -14,7 +14,7 @@
 (use-package blackout :straight (:host github :repo "raxod502/blackout") :demand t)
 (use-package gcmh :straight t :config (gcmh-mode +1) :blackout t)
 (use-package no-littering :straight t :demand t)
-(use-package org :straight t)           ; initialise early, config later
+(use-package org :straight (:host github :repo "bzg/org-mode")) ; initialise early, config later
 
 (use-package aru-core :demand t)
 (use-package aru-path :demand t)
