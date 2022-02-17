@@ -1,12 +1,5 @@
 ;; init.el -- Personal Emacs Config --   -*- lexical-binding: t; -*-
 
-;; startup optimization: set `gc-cons-threshold' to a high value now
-;; and reset it later
-(defvar aru/orig-gc-cons-threshold gc-cons-threshold
-  "Original value of `gc-cons-threshold.'")
-(setq gc-cons-threshold most-positive-fixnum)
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold aru/orig-gc-cons-threshold)))
-
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
 
 (require 'aru-packages)
@@ -19,14 +12,6 @@
 (use-package aru-core :demand t)
 (use-package aru-path :demand t)
 (use-package aru-cus-edit :demand t)
-
-(use-package menu-bar :config (menu-bar-mode -1))
-(use-package tool-bar :config (tool-bar-mode -1))
-(use-package tooltip  :config (tooltip-mode -1))
-(use-package scroll-bar
-  :config
-  (scroll-bar-mode -1)
-  (horizontal-scroll-bar-mode -1))
 
 (use-package delsel     :hook (after-init . delete-selection-mode))
 (use-package hl-line    :config (global-hl-line-mode nil))
