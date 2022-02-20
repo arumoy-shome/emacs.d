@@ -528,44 +528,14 @@
   (setq dabbrev-eliminate-newlines t)
   (setq dabbrev-upcase-means-case-search t))
 
-(use-package doom-modeline
+(use-package moody
   :straight t
+  :custom
+  (moody-mode-line-height 20)		; works best for 12pt font
   :config
-  (setq doom-modeline-height 15)
-  (setq doom-modeline-bar-width 2)
-  (setq doom-modeline-window-width-limit 'fill-column)
-  (setq doom-modeline-project-detection 'project)
-  (setq doom-modeline-buffer-file-name-style 'relative-from-project)
-  (setq doom-modeline-icon nil)
-  (setq doom-modeline-minor-modes t)
-  (setq doom-modeline-enable-word-count t)
-  (setq doom-modeline-buffer-encoding nil)
-  (setq doom-modeline-continuous-word-count-modes nil)
-  (setq doom-modeline-indent-info nil)
-  (setq doom-modeline-checker-simple-format t)
-  (setq doom-modeline-number-limit 0)
-  (setq doom-modeline-workspace-name t)
-  (setq doom-modeline-persp-name nil)
-  (setq doom-modeline-persp-icon nil)
-  (setq doom-modeline-lsp nil)
-  (setq doom-modeline-github nil)
-  (setq doom-modeline-modal-icon nil)
-  (setq doom-modeline-mu4e nil)
-  (setq doom-modeline-gnus nil)
-  (setq doom-modeline-irc nil)
-  (setq doom-modeline-env-version nil)
-
-  (defun aru/doom-modeline--make-xpm-filter-args (args)
-    "Taken from
-https://github.com/seagle0128/doom-modeline/issues/187#issuecomment-503950599
-Force function to use =doom-modeline-height= instead of the
-calculation done in =doom-modeline-refresh-bars=. Minimum height
-set to =frame-char-height= + 2."
-    (list (car args) (cadr args) (max (+ (frame-char-height) 2) doom-modeline-height)))
-
-  (advice-add 'doom-modeline--make-xpm :filter-args
-              #'aru/doom-modeline--make-xpm-filter-args)
-  :hook (after-init . doom-modeline-mode))
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode)
+  (moody-replace-eldoc-minibuffer-message-function))
 
 (use-package subword
   :blackout t
