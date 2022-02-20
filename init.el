@@ -172,28 +172,15 @@
          ("s-1" . delete-other-windows)
          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
          ("s-l" . next-buffer)  ; previously goto-line, use M-g g instead
+	 ("s-2" . split-window-below)
+	 ("s-3" . split-window-right)
+	 ("s-w" . delete-window)
+	 ("s-o" . other-window)		; previously ns-open-file-using-panel
          :map ctl-x-5-map
          ("w" . delete-frame))
   :config
-  ;; following is taken verbatim from the elisp manual
+  ;; adapted from elisp manual
   ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Layouts-with-Side-Windows.html
-    ;;  ___________________________________
-    ;; |          *Buffer List*            |
-    ;; |___________________________________|
-    ;; |     |                       |     |
-    ;; |  *  |                       |  *  |
-    ;; |  d  |                       |  T  |
-    ;; |  i  |                       |  a  |
-    ;; |  r  |   Main Window Area    |  g  |
-    ;; |  e  |                       |  s  |
-    ;; |  d  |                       |  *  |
-    ;; |  *  |                       |     |
-    ;; |_____|_______________________|_____|
-    ;; | *help*/*grep*/  |  *shell*/       |
-    ;; | *Completions*   |  *compilation*  |
-    ;; |_________________|_________________|
-    ;; |             Echo Area             |
-    ;; |___________________________________|
   (defvar parameters
     '(window-parameters . ((no-other-window . t))))
   (setq fit-window-to-buffer-horizontally t)
@@ -238,6 +225,7 @@
            ,parameters))))
 
 (use-package aru-window
+  :disabled t
   :bind (("s-o" . aru-window-other-window-dwim)
          ("s-2" . aru-window-split-window-below)
          ("s-3" . aru-window-split-window-right)
@@ -431,7 +419,7 @@
 	'(("WAITING" :inherit default :weight bold)
 	  ("LATER" :inherit warning :weight bold)))
   ;; archive
-  (setq org-archive-location "~/org/archive/%s_archive::") ; archive in single file, in datetree
+  (setq org-archive-location "~/org/archive/%s_archive::")
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)

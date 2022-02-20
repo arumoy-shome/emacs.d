@@ -1,7 +1,8 @@
 ;; aru-core.el  -*- lexical-binding: t; -*-
-(defalias 'yes-or-no-p 'y-or-n-p)       ; quicker confirmations
+
+(setq use-short-answers t)		; quicker confirmations
 (setq create-lockfiles nil)
-(setq inhibit-splash-screen t)
+
 (setq initial-scratch-message (concat ";; Welcome, " (system-name)))
 (setq initial-major-mode 'fundamental-mode)
 (setq shell-file-name "/usr/local/bin/bash")          ; used by (async-)shell-command
@@ -11,7 +12,6 @@
 
 ;;; ui
 (setq ring-bell-function 'ignore) ;; disable bells and confirmation dialog boxes
-(setq use-dialog-box nil)
 (setq echo-keystrokes 0.02)
 (setq mode-line-defining-kbd-macro
       (propertize " Macro" 'face 'mode-line-emphasis))
@@ -21,7 +21,7 @@
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "Source Code Pro" :height 130)
+		    :family "Source Code Pro" :height 120)
 (set-face-attribute 'fixed-pitch nil
                     :family "Iosevka" :height 1.0)
 (set-face-attribute 'variable-pitch nil
