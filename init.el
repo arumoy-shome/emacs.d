@@ -613,5 +613,3 @@
   (setq shr-use-fonts nil)
   (setq shr-max-image-proportion 0.75)
   (setq shr-image-animate nil))
-
-(server-start)                          ; finally, start the server
