@@ -119,7 +119,9 @@
   (setq flyspell-issue-welcome-flag nil)
   (setq ispell-program-name "/usr/local/bin/aspell")
   (setq ispell-dictionary "en_GB")
-  :bind (:map flyspell-mode-map ("C-." . nil)))
+  :bind (("ESC M-s" . flyspell-mode)	; ESC ESC s
+	 :map flyspell-mode-map
+	 ("C-." . nil)))
 
 (use-package vc-dispatcher
   :config
@@ -359,6 +361,8 @@
    whitespace-cleanup
    whitespace-mode
    whitespace-turn-off)
+  :bind (("ESC M-w" . whitespace-mode))	; ESC ESC w
+  :hook ((prog-mode . (lambda () (setq show-trailing-whitespace t))))
   :blackout t)
 
 (use-package org
