@@ -416,10 +416,8 @@
 
   ;; todo
   (setq org-todo-keywords
-	'((sequence "TODO(t)" "WAITING(w@/!)" "LATER(l)" "|" "DONE(d!)" "CANCEL(c@)")))
-  (setq org-todo-keyword-faces
-	'(("WAITING" :inherit default :weight bold)
-	  ("LATER" :inherit warning :weight bold)))
+	'((sequence "TODO(t)" "|" "DONE(d!)" "CANCEL(c@)")))
+
   ;; archive
   (setq org-archive-location "~/org/archive/%s_archive::")
   :bind
