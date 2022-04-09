@@ -10,7 +10,6 @@
 (use-package org :straight (:host github :repo "bzg/org-mode")) ; initialise early, config later
 
 (use-package aru-core :demand t)
-(use-package aru-path :demand t)
 (use-package aru-cus-edit :demand t)
 
 (use-package delsel     :hook (after-init . delete-selection-mode))
