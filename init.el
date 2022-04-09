@@ -181,8 +181,6 @@
   :config
   ;; adapted from elisp manual
   ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Layouts-with-Side-Windows.html
-  (defvar parameters
-    '(window-parameters . ((no-other-window . t))))
   (setq fit-window-to-buffer-horizontally t)
   (setq window-resize-pixelwise t)
   (setq window-min-width fill-column)
@@ -193,36 +191,31 @@
            (side . top)
            (slot . 0)
            (window-height . fit-window-to-buffer)
-           (preserve-size . (nil . t))
-           ,parameters)
+           (preserve-size . (nil . t)))
           ;; left
           ("\\*\\(Tags List\\|Completions\\)\\*"
            display-buffer-in-side-window
            (side . right)
            (slot . 0)
            (window-width . fit-window-to-buffer)
-           (preserve-size . (t . nil))
-           ,parameters)
+           (preserve-size . (t . nil)))
           ;; bottom left
           ("\\*\\(?:help\\|grep\\|Occur\\|xref\\)\\*"
            display-buffer-in-side-window
            (side . bottom)
            (slot . -1)
-           (preserve-size . (nil . t))
-           ,parameters)
+           (preserve-size . (nil . t)))
           ;; bottom right
           ("\\*\\(compilation\\|Warning\\|Backtrace\\|Async Shell Command\\)\\*"
            display-buffer-in-side-window
            (side . bottom)
            (slot . 1)
-           (preserve-size . (nil . t))
-           ,parameters)
+           (preserve-size . (nil . t)))
           ("\\*.*\\(e?shell\\|v?term\\).*"
            display-buffer-in-side-window
            (side . bottom)
            (slot . 1)
-           (preserve-size . (nil . t))
-           ,parameters))))
+           (preserve-size . (nil . t))))))
 
 (use-package aru-window
   :disabled t
