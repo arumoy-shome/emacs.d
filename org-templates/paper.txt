@@ -1,12 +1,11 @@
 * %U %(aocp--get-bibkey)
-  :PROPERTIES:
-  :PDF: file:~/Documents/papers/%(aocp--get-bibkey t).pdf
-  :FIRST_AUTHOR: %(aocp--get-first-author)
-  :LAST_AUTHOR: %(aocp--get-last-author)
-  :SOURCE: %(aocp--get-source)
-  :YEAR: %(aocp--get-year)
-  :RANK:
-  :END:
+:PROPERTIES:
+:PDF: file:~/Documents/papers/%(aocp--get-bibkey t).pdf
+:FIRST_AUTHOR: %(aocp--get-first-author)
+:LAST_AUTHOR: %(aocp--get-last-author)
+:SOURCE: %(aocp--get-source)
+:YEAR: %(aocp--get-year)
+:END:
 %?
 + problem statement ::
 + solution ::
