@@ -16,8 +16,8 @@
 (setq max-mini-window-height 0.15)
 (setq x-underline-at-descent-line t)
 
-(add-hook 'window-setup-hook #'toggle-frame-maximized)
-(add-to-list 'default-frame-alist '(undecorated . t))
+(set-face-attribute 'default nil
+		    :family "Source Code Pro" :height 130)
 
 ;;; editor
 (setq sentence-end-double-space nil)

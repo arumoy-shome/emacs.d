@@ -5,14 +5,8 @@
 (defconst aocp-bibkey-regex  "@\\w+{\\(\\w+\\)"
   "Format of bibkey in a bibentry.")
 
-(defconst aocp-author-regex "author=\\({.+}\\)"
+(defconst aocp-author-regex "author={\\(.+\\)}"
   "Format of authors in a bibentry.")
-
-(defconst aocp-first-author-regex "^{\\(\\w+,?.\\(\\w+.\\)+\\)and\\|}"
-  "Format of first author in a bibentry.")
-
-(defconst aocp-last-author-regex "\\(\\w+,?.\\(\\w+.?\\)+\\)}$"
-  "Format of last author in a bibentry.")
 
 (defconst aocp-source-regex "\\(booktitle\\|journal\\)={\\(.+\\)}"
   "Format of publishing source in a bibentry.")
@@ -49,29 +43,14 @@
     (when mod-kill-ring-p (aocp--mod-kill-ring-hooks))
     bibkey))
 
-(defun aocp--get-first-author ()
-  "Return the first author name from a bibentry."
+(defun aocp--get-author ()
+  "Return the authors of publication from a bibentry."
 
   (when bibentry
-    (let ((authors nil)
-          (first-author nil))
-      (string-match aocp-author-regex bibentry)
-      (setq authors (match-string 1 bibentry))
-      (string-match aocp-first-author-regex authors)
-      (setq first-author (match-string 1 authors))
-      first-author)))
-
-(defun aocp--get-last-author ()
-  "Return the last author name from a bibentry."
-
-  (when bibentry
-    (let ((authors nil)
-          (last-author nil))
-      (string-match aocp-author-regex bibentry)
-      (setq authors (match-string 1 bibentry))
-      (string-match aocp-last-author-regex authors)
-      (setq last-author (match-string 1 authors))
-      last-author)))
+    (let ((author nil)))
+    (string-match aocp-author-regex bibentry)
+    (setq author (match-string 1 bibentry))
+    author))
 
 (defun aocp--get-source ()
   "Return the source of publication from a bibentry."
