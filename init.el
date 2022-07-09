@@ -9,15 +9,16 @@
 
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
 
+(use-package package
+  :demand t
+  :config
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+
 (use-package aru-core
   :demand t)
 
 (use-package aru-cus-edit
   :demand t)
-
-(use-package aru-custom
-  :config
-  (aru-load-theme 'modus-operandi))
 
 (use-package hl-line
   :config
@@ -157,7 +158,7 @@
 (use-package org
   :hook (org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
   :config
-  ;;; general
+  ;; general
   (org-indent-mode -1)                  ; [default] do not indent text based on outline
   (setq org-src-window-setup 'split-window-below)
   (setq org-startup-folded t)
@@ -174,12 +175,13 @@
   (defconst aru/org-block-file (expand-file-name "blocks.org" org-directory)
     "File to use for capturing work blocks.")
   (setq org-log-into-drawer t)
-  ;; (setq org-ellipsis " ▼ ")
   (setq org-default-notes-file aru/org-inbox-file)
-  ;;; refile
+  (setq org-goto-interface 'outline-path-completion)
+  (setq org-outline-path-complete-in-steps nil)
+  ;; refile
   (setq org-refile-targets '((nil . (:maxlevel . 2))
                              (org-agenda-files . (:maxlevel . 2))))
-  ;;; agenda
+  ;; agenda
   (setq org-agenda-dim-blocked-tasks nil)
   (setq org-agenda-inhibit-startup t)
   (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
@@ -187,13 +189,13 @@
   (setq org-agenda-restore-windows-after-quit t)
   (setq org-agenda-use-tag-inheritance nil)
   (setq org-agenda-ignore-drawer-properties '(effort appt category stats))
-  ;;; babel
+  ;; babel
   (setq org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((emacs-lisp . t)
 				 (python     . t)
 				 (shell      . t)))
-  ;;; capture
+  ;; capture
   (setq org-capture-templates
 	'(("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
            "%[~/.emacs.d/org-templates/paper.txt]" :prepend t)
@@ -204,28 +206,26 @@
 	   :prepend t
 	   :immediate-finish t
 	   :clock-in t)))
-
-  ;;; todo
+  ;; todo
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "|" "DONE(d!)" "CANCEL(c@)")))
 
-  ;;; archive
+  ;; archive
   (setq org-archive-location "~/org/archive/%s_archive::")
-  ;;; clocking
+  ;; clocking
   (setq org-clock-persist 'history)
   (org-clock-persistence-insinuate)
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
    ("C-c c" . (lambda () (interactive) (org-capture nil)))
-   ("C-c t" . (lambda () (interactive) (find-file aru/org-inbox-file)))
    ("C-c d" . (lambda () (interactive) (dired org-directory)))
    :map ctl-x-4-map
-   ("C-c t" . (lambda () (interactive) (find-file-other-window aru/org-inbox-file)))
    ("C-c d" . (lambda () (interactive) (dired-other-window org-directory)))
    :map ctl-x-5-map
-   ("C-c t" . (lambda () (interactive) (find-file-other-frame aru/org-inbox-file)))
-   ("C-c d" . (lambda () (interactive) (dired-other-frame org-directory)))))
+   ("C-c d" . (lambda () (interactive) (dired-other-frame org-directory)))
+   :map org-mode-map
+   ("C-." . org-goto)))			; override imenu in org-mode
 
 (use-package aru-ocp :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
@@ -255,6 +255,15 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
+
+(use-package python
+  :config
+  (add-to-list 'python-shell-completion-native-disabled-interpreters "python")
+  (setq python-shell-interpreter "python3")
+  (setq python-indent-guess-indent-offset t)
+  (setq python-indent-guess-indent-offset-verbose nil))
+
+(use-package pyvenv :ensure t :after python)
 
 (use-package imenu
   :config
@@ -297,12 +306,22 @@
 
 (use-package icomplete
   :config
-  (icomplete-vertical-mode +1)
-  (fido-mode +1))
+  (fido-vertical-mode +1))
 
 (use-package doc-view
   :config
   (setq doc-view-resolution 180))
 
 (use-package modus-themes
+  :init
+  (setq modus-themes-italic-constructs t
+	modus-themes-bold-constructs t
+	modus-themes-org-blocks 'tinted-background)
   :bind (("ESC M-t" . modus-themes-toggle))) ; ESC ESC t
+
+(use-package aru-custom
+  :config
+  (aru-load-theme 'modus-operandi))
+
+(use-package display-line-numbers
+  :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l

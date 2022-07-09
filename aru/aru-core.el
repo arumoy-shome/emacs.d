@@ -17,7 +17,7 @@
 (setq x-underline-at-descent-line t)
 
 (set-face-attribute 'default nil
-		    :family "Source Code Pro" :height 130)
+		    :family "Source Code Pro" :height 130 :weight 'normal)
 
 ;;; editor
 (setq sentence-end-double-space nil)

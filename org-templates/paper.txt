@@ -5,6 +5,7 @@
 :AUTHOR: %(aocp--get-author)
 :SOURCE: %(aocp--get-source)
 :YEAR: %(aocp--get-year)
+:PASS: 0
 :END:
 %?
 + problem statement ::

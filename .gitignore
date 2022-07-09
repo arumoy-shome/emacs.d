@@ -18,3 +18,10 @@ transient/
 /ido.last
 /#backups#
 /var/
+.local/
+eln-cache/
+elpa/
+org-clock-save.el
+packages/
+projects
+viper
