@@ -1,4 +1,36 @@
-;; personal emacs config
+;;; init.el --- personal emacs config
+
+;;; Commentary:
+;; This is my personal emacs configuration for Emacs 28 & above. While
+;; many in the emacs community prefer a literate programming style
+;; configuration, I prefer to keep mine in a single init.el file. This
+;; file is loaded by emacs during the initialisation process.
+
+;; Where possible & relevant I provide detailed comments on the
+;; rationale behind a particular configuration/setting. Sometimes I
+;; document my experience with alternative configs and why I chose the
+;; one that is exists in this file. This is primarily to help me
+;; remember if I revisit that particular config (which I often do).
+
+;; I use outline-minor-mode to create an outline of this file.
+;; Comments preceded by 3 semi-colons (;;;) result in an outline
+;; header. Any comments with more than 3 semi-colons result in a
+;; sub-header.
+
+;;; Code:
+;; This section contains the actual configuration. It is divided into
+;; several sub sections. You can navigate this file using
+;; outline-minor-mode bindings. Use C-c @ t to fold everything. With
+;; point on a header, you can hit C-c @ s to show the header. You can
+;; navigate between headers using C-c @ n and C-c @ p. You can see all
+;; outline-minor-mode bindings using C-c @ C-h.
+
+;; Emacs provides several toggle-like functionality. For example,
+;; minor-modes for spell checking, syntax checking, line numbers, etc
+;; can be toggled using the same command. I follow a convension of
+;; assigning such frequently used minor modes to the ESC ESC
+;; (translates to ESC M-<k> where k is the key I specify in my config)
+;; prefix. Someday, I may migrate this to a dedicated keymap.
 
 (eval-when-compile
   (add-to-list 'load-path (concat user-emacs-directory "packages/" "use-package/"))
@@ -17,7 +49,10 @@
 (use-package aru-core
   :demand t)
 
-(use-package aru-cus-edit
+(use-package cus-edit
+  :config
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load custom-file)
   :demand t)
 
 (use-package hl-line
@@ -43,10 +78,20 @@
 (use-package ibuffer
   :bind (([remap list-buffers] . #'ibuffer)))
 
+(use-package savehist
+  :init
+  (savehist-mode +1))
+
 (use-package outline
-  :config
+  :init
+  ;; I used to use `outline-minor-mode-cycle' but found it to be
+  ;; buggy. First it would randomly obliterate the entire keymap
+  ;; associated with TAB (I was never able to debug this) and second
+  ;; it would get confused between outline-headers and regular code (I
+  ;; noticed this problem in python files mostly). The alternative is
+  ;; to assign a nicer prefix for outline-minor-mode (the default C-c
+  ;; @ is super clunky).
   (setq outline-minor-mode-prefix "\C-z")
-  (setq outline-minor-mode-cycle t)
   :hook (prog-mode . outline-minor-mode))
 
 (use-package foldout :after outline)
@@ -61,6 +106,11 @@
 	 :map flyspell-mode-map
 	 ("C-." . nil)))
 
+(use-package flymake
+  :bind (("ESC M-f" . flymake-mode)	; ESC ESC f
+	 ("M-n" . flymake-goto-next-error)
+	 ("M-p" . flymake-goto-prev-error)))
+
 (use-package dired
   :config
   (setq dired-recursive-copies 'always)
@@ -72,12 +122,14 @@
   (setq dired-auto-revert-buffer #'dired-directory-changed-p)
   :hook ((dired-mode . dired-hide-details-mode)))
 
-
 (use-package winner
   :config
   (winner-mode +1)
   :bind (("s-<left>"  . winner-undo)    ; previously ns-prev-frame
          ("s-<right>" . winner-redo)))  ; previously ns-next-frame
+
+(use-package frame
+  :bind (("C-z" . nil)))		; use C-x C-z instead
 
 (use-package window
   :bind-keymap (("s-4" . ctl-x-4-map)
@@ -238,7 +290,7 @@
   :config
   (setq display-time-24hr-format nil)
   (setq display-time-day-and-date nil)
-  (setq display-time-format "%H:%M %a %b %d")
+  (setq display-time-format "%H:%M %a %b(%m) %d")
   (setq display-time-interval 60)
   (setq display-time-mail-directory nil)
   (setq display-time-default-load-average nil)
@@ -249,6 +301,9 @@
   :bind (:map text-mode-map
               ("C-c !" . org-time-stamp-inactive)))
 
+(use-package tex-mode
+  :hook (tex-mode . outline-minor-mode))
+
 (use-package markdown-mode
   :ensure t
   :init (setq markdown-command "multimarkdown")
@@ -258,7 +313,6 @@
 
 (use-package python
   :config
-  (add-to-list 'python-shell-completion-native-disabled-interpreters "python")
   (setq python-shell-interpreter "python3")
   (setq python-indent-guess-indent-offset t)
   (setq python-indent-guess-indent-offset-verbose nil))
@@ -305,12 +359,38 @@
               ("n" . aru-narrow-or-widen-dwim)))
 
 (use-package icomplete
+  :demand t		       ; need this since I am using :bind here
   :config
-  (fido-vertical-mode +1))
+  (fido-vertical-mode +1)
+  :bind (:map icomplete-vertical-mode-minibuffer-map
+	      ;; the usual RET doesn't work when using commands that
+	      ;; accept multiple arguments (and expect an empty string
+	      ;; to exit the completion). I map RET to
+	      ;; icomplete-fido-exit instead which exits the
+	      ;; completion with an empty string.
+
+	      ;; The downside is that the first argument is no longer
+	      ;; selected automatically, which is the default
+	      ;; behaviour. To make this a bit easier, I bind TAB to
+	      ;; icomplete-force-complete which completes using the
+	      ;; first entry. This is better than the default
+	      ;; behaviour (minibuffer-complete) which opens the
+	      ;; *Completions* buffer.
+	      ("RET" . icomplete-fido-exit)
+	      ("TAB" . icomplete-force-complete)))
 
 (use-package doc-view
   :config
-  (setq doc-view-resolution 180))
+  (setq doc-view-resolution 180)
+  :bind (:map doc-view-mode-map	; rebind windmove since doc-view overrides them
+	      ("<left>" . windmove-left)
+	      ("<right>" . windmove-right)
+	      ("<up>" . windmove-up)
+	      ("<down>" . windmove-down)
+	      ("S-<left>" . windmove-swap-states-left)
+	      ("S-<right>" . windmove-swap-states-right)
+	      ("S-<up>" . windmove-swap-states-up)
+	      ("S-<down>" . windmove-swap-states-down)))
 
 (use-package modus-themes
   :init
@@ -325,3 +405,25 @@
 
 (use-package display-line-numbers
   :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l
+
+(use-package tree-sitter
+  :ensure t
+  :init
+  (global-tree-sitter-mode)
+  :hook (tree-sitter-after-on . tree-sitter-hl-mode))
+
+(use-package tree-sitter-langs
+  :ensure t)
+
+(use-package term
+  :bind (:map term-mode-map ; rebind windmove since doc-view overrides them
+	      ("<left>" . windmove-left)
+	      ("<right>" . windmove-right)
+	      ("<up>" . windmove-up)
+	      ("<down>" . windmove-down)
+	      ("S-<left>" . windmove-swap-states-left)
+	      ("S-<right>" . windmove-swap-states-right)
+	      ("S-<up>" . windmove-swap-states-up)
+	      ("S-<down>" . windmove-swap-states-down)))
+
+;;; init.el ends here
