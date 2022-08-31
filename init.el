@@ -396,12 +396,24 @@
   :init
   (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs t
-	modus-themes-org-blocks 'tinted-background)
-  :bind (("ESC M-t" . modus-themes-toggle))) ; ESC ESC t
+	modus-themes-org-blocks 'tinted-background))
+
+(use-package ef-themes
+  :ensure t
+  :init
+  (setq ef-themes-to-toggle '(ef-summer ef-winter))
+  (setq ef-themes-headings ; read the manual's entry or the doc string
+        '((0 . (light 2.0))
+          (1 . (light 1.5))	      ; absence of weight means `bold'
+          (2 . (light 1.4))
+          (3 . (light 1.3))
+          (4 . (light 1.2))
+	  (t . 1.1)))
+  :bind (("ESC M-t" . ef-themes-toggle))) ; ESC ESC t
 
 (use-package aru-custom
   :config
-  (aru-load-theme 'modus-operandi))
+  (aru-load-theme 'ef-summer))
 
 (use-package display-line-numbers
   :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l
