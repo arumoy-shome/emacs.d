@@ -1,4 +1,4 @@
-;;; init.el --- personal emacs config
+;;; init.el --- personal emacs config -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; This is my personal emacs configuration for Emacs 28 & above. While
@@ -92,6 +92,14 @@
   ;; to assign a nicer prefix for outline-minor-mode (the default C-c
   ;; @ is super clunky).
   (setq outline-minor-mode-prefix "\C-z")
+  (setq outline-minor-mode-cycle t)
+  (setq outline-minor-mode-use-buttons nil)
+  :bind (:map outline-minor-mode-map
+	      ("C-c C-n" . outline-next-visible-heading)
+	      ("C-c C-p" . outline-previous-visible-heading)
+	      ("C-c C-f" . outline-forward-same-level)
+	      ("C-c C-b" . outline-backward-same-level)
+	      ("C-c C-u" . outline-up-heading))
   :hook (prog-mode . outline-minor-mode))
 
 (use-package foldout :after outline)
@@ -148,7 +156,10 @@
   :config
   (setq fit-window-to-buffer-horizontally t)
   (setq window-resize-pixelwise t)
-  (setq window-min-width fill-column))
+  (setq window-min-width fill-column)
+  :hook ((help-mode . visual-line-mode)
+	 (man-mode . visual-line-mode)
+	 (woman-mode . visual-line-mode)))
 
 (use-package windmove
   :bind
@@ -190,7 +201,8 @@
    ("s-n" . next-error)
    ("s-p" . previous-error)
    ("M-SPC" . cycle-spacing)           ; previously just-one-space
-   ("M-Q" . delete-indentation))
+   ("M-Q" . delete-indentation)
+   ("ESC M-v" . visual-line-mode))	; ESC ESC v
   :config
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
@@ -208,7 +220,8 @@
   (setq show-trailing-whitespace t))
 
 (use-package org
-  :hook (org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
+  :hook ((org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
+	 (org-capture-mode . org-id-get-create))		  ; add ID automatically to all captured items
   :config
   ;; general
   (org-indent-mode -1)                  ; [default] do not indent text based on outline
@@ -394,21 +407,38 @@
 
 (use-package modus-themes
   :init
+  :disabled t
   (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs t
-	modus-themes-org-blocks 'tinted-background))
+	modus-themes-org-blocks 'tinted-background
+	modus-themes-tabs-accented t
+	modus-themes-intense-mouseovers t
+	modus-themes-mode-line '(borderless accented)
+	modus-themes-markup '(intense)
+	modus-themes-syntax '(alt-syntax)
+	modus-themes-hl-line '(intense)
+	modus-themes-paren-match '(intense)
+	modus-themes-links '(faint)
+	modus-themes-prompts '(intense)
+	modus-themes-lang-checkers '(straight-underline faint)
+	modus-themes-headings
+	(quote ((1 . (light 1.5))
+		(2 . (light 1.4))
+		(3 . (light 1.3))
+		(4 . (light 1.2))
+		(t . (light 1.1))))))
 
 (use-package ef-themes
   :ensure t
   :init
-  (setq ef-themes-to-toggle '(ef-summer ef-winter))
+  (setq ef-themes-to-toggle '(ef-duo-light ef-duo-dark))
   (setq ef-themes-headings ; read the manual's entry or the doc string
         '((0 . (light 2.0))
           (1 . (light 1.5))	      ; absence of weight means `bold'
           (2 . (light 1.4))
           (3 . (light 1.3))
           (4 . (light 1.2))
-	  (t . 1.1)))
+	  (t . (1.1))))
   :bind (("ESC M-t" . ef-themes-toggle))) ; ESC ESC t
 
 (use-package aru-custom
@@ -417,15 +447,6 @@
 
 (use-package display-line-numbers
   :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l
-
-(use-package tree-sitter
-  :ensure t
-  :init
-  (global-tree-sitter-mode)
-  :hook (tree-sitter-after-on . tree-sitter-hl-mode))
-
-(use-package tree-sitter-langs
-  :ensure t)
 
 (use-package term
   :bind (:map term-mode-map ; rebind windmove since doc-view overrides them
@@ -436,6 +457,15 @@
 	      ("S-<left>" . windmove-swap-states-left)
 	      ("S-<right>" . windmove-swap-states-right)
 	      ("S-<up>" . windmove-swap-states-up)
-	      ("S-<down>" . windmove-swap-states-down)))
+	      ("S-<down>" . windmove-swap-states-down))
+  :hook (term-mode . visual-line-mode))
+
+(use-package shell
+  :hook (shell-mode . visual-line-mode))
+
+(use-package pdf-tools
+  :ensure t
+  :config
+  (setq pdf-view-use-scaling t))	; sharper text on retina displays
 
 ;;; init.el ends here
