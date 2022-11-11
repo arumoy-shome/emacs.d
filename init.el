@@ -202,7 +202,8 @@
    ("s-p" . previous-error)
    ("M-SPC" . cycle-spacing)           ; previously just-one-space
    ("M-Q" . delete-indentation)
-   ("ESC M-v" . visual-line-mode))	; ESC ESC v
+   ("ESC M-v" . visual-line-mode)	; ESC ESC v
+   ("ESC C-M-i" . indent-tab-mode))	; ESC ESC TAB
   :config
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
@@ -221,7 +222,8 @@
 
 (use-package org
   :hook ((org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
-	 (org-capture-mode . org-id-get-create))		  ; add ID automatically to all captured items
+	 (org-capture-mode . org-id-get-create)	; add ID automatically to all captured items
+	 (org-mode . (lambda () (setq-default indent-tabs-mode nil)))) ; do not use tabs for indent
   :config
   ;; general
   (org-indent-mode -1)                  ; [default] do not indent text based on outline
@@ -254,6 +256,7 @@
   (setq org-agenda-restore-windows-after-quit t)
   (setq org-agenda-use-tag-inheritance nil)
   (setq org-agenda-ignore-drawer-properties '(effort appt category stats))
+
   ;; babel
   (setq org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages 'org-babel-load-languages
@@ -431,19 +434,18 @@
 (use-package ef-themes
   :ensure t
   :init
-  (setq ef-themes-to-toggle '(ef-duo-light ef-duo-dark))
-  (setq ef-themes-headings ; read the manual's entry or the doc string
-        '((0 . (light 2.0))
-          (1 . (light 1.5))	      ; absence of weight means `bold'
-          (2 . (light 1.4))
-          (3 . (light 1.3))
-          (4 . (light 1.2))
-	  (t . (1.1))))
   :bind (("ESC M-t" . ef-themes-toggle))) ; ESC ESC t
+
+(use-package doom-themes
+  :ensure t
+  :config
+  (setq doom-themes-enable-bold t)
+  (setq doom-themes-enable-italic t)
+  (doom-themes-org-config))
 
 (use-package aru-custom
   :config
-  (aru-load-theme 'ef-summer))
+  (aru-load-theme 'ef-day))
 
 (use-package display-line-numbers
   :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l
