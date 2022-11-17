@@ -153,10 +153,45 @@
 	 ("s-o" . other-window)		; previously ns-open-file-using-panel
          :map ctl-x-5-map
          ("w" . delete-frame))
-  :config
-  (setq fit-window-to-buffer-horizontally t)
-  (setq window-resize-pixelwise t)
-  (setq window-min-width fill-column)
+  :init
+    (setq display-buffer-alist
+	'(("\\`\\*Warnings\\*"
+	   (display-buffer-no-window))
+	  ("\\*help"
+	   (display-buffer--maybe-same-window
+	    display-buffer-reuse-window
+	    display-buffer-reuse-mode-window
+	    display-buffer-in-side-window)
+	   (side . right)
+	   (window-width . 0.25)
+           (window-parameters (mode-line-format . " %* %b %p")))
+	  ("e?shell"
+	   (display-buffer--maybe-same-window
+	    display-buffer-reuse-window
+	    display-buffer-reuse-mode-window
+	    display-buffer-in-side-window)
+	   (side . bottom)
+	   (slot . -1)
+	   (window-height . 0.25)
+           (window-parameters (mode-line-format . " %* %b %p")))
+	  ("\\*gud"
+	   (display-buffer--maybe-same-window
+	    display-buffer-reuse-window
+	    display-buffer-reuse-mode-window
+	    display-buffer-in-side-window)
+	   (side . bottom)
+	   (slot . -1)
+	   (window-height . 0.25)
+	   (window-parameters (mode-line-format . " %* %b %p")))
+	  ("\\*compilation"
+	   (display-buffer--maybe-same-window
+	    display-buffer-reuse-window
+	    display-buffer-reuse-mode-window
+	    display-buffer-in-side-window)
+	   (side . bottom)
+	   (slot . 0)
+	   (window-height . 0.25)
+           (window-parameters (mode-line-format . " %* %b %p")))))
   :hook ((help-mode . visual-line-mode)
 	 (man-mode . visual-line-mode)
 	 (woman-mode . visual-line-mode)))
@@ -329,11 +364,22 @@
 
 (use-package python
   :config
-  (setq python-shell-interpreter "python3")
+  (setq python-shell-interpreter "python") ; managed with direnv
   (setq python-indent-guess-indent-offset t)
-  (setq python-indent-guess-indent-offset-verbose nil))
+  (setq python-indent-guess-indent-offset-verbose nil)
+  (setq python-shell-completion-native-enable nil)
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Python\\*"
+                 (display-buffer--maybe-same-window
+		  display-buffer-reuse-window
+		  display-buffer-reuse-mode-window
+		  display-buffer-in-side-window)
+		 (side . bottom)
+		 (slot . -1)
+		 (window-height . 0.25)
+                 (window-parameters (mode-line-format . " %* %b %p")))))
 
-(use-package pyvenv :ensure t :after python)
+(use-package pyvenv :ensure t :disabled t :after python)
 
 (use-package imenu
   :config
