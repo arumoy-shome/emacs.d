@@ -26,3 +26,6 @@ packages/
 projects
 viper
 history
+.cache/
+.lsp-session*
+multisession/
