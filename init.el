@@ -46,8 +46,14 @@
   :config
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
+(use-package diminish
+  :ensure t)
+
 (use-package aru-core
   :demand t)
+
+(use-package eldoc
+  :diminish)
 
 (use-package cus-edit
   :config
@@ -76,22 +82,19 @@
   (global-so-long-mode 1))
 
 (use-package ibuffer
-  :bind (([remap list-buffers] . #'ibuffer)))
+  :bind (([remap list-buffers] . ibuffer)))
 
 (use-package savehist
   :init
   (savehist-mode +1))
 
+(use-package compile
+  :config
+  (setq compilation-scroll-output t))
+
 (use-package outline
+  :diminish outline-minor-mode
   :init
-  ;; I used to use `outline-minor-mode-cycle' but found it to be
-  ;; buggy. First it would randomly obliterate the entire keymap
-  ;; associated with TAB (I was never able to debug this) and second
-  ;; it would get confused between outline-headers and regular code (I
-  ;; noticed this problem in python files mostly). The alternative is
-  ;; to assign a nicer prefix for outline-minor-mode (the default C-c
-  ;; @ is super clunky).
-  (setq outline-minor-mode-prefix "\C-z")
   (setq outline-minor-mode-cycle t)
   (setq outline-minor-mode-use-buttons nil)
   :bind (:map outline-minor-mode-map
@@ -132,6 +135,8 @@
 
 (use-package winner
   :config
+(use-package winner
+  :init
   (winner-mode +1)
   :bind (("s-<left>"  . winner-undo)    ; previously ns-prev-frame
          ("s-<right>" . winner-redo)))  ; previously ns-next-frame
@@ -183,7 +188,7 @@
 	   (slot . -1)
 	   (window-height . 0.25)
 	   (window-parameters (mode-line-format . " %* %b %p")))
-	  ("\\*compilation"
+	  ("\\*\\(compilation\\|flymake\\)"
 	   (display-buffer--maybe-same-window
 	    display-buffer-reuse-window
 	    display-buffer-reuse-mode-window
@@ -252,7 +257,7 @@
 
 (use-package whitespace
   :bind (("ESC M-w" . whitespace-mode))	; ESC ESC w
-  :config
+  :init
   (setq show-trailing-whitespace t))
 
 (use-package org
@@ -315,20 +320,15 @@
 
   ;; archive
   (setq org-archive-location "~/org/archive/%s_archive::")
+
   ;; clocking
   (setq org-clock-persist 'history)
   (org-clock-persistence-insinuate)
+
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
-   ("C-c c" . (lambda () (interactive) (org-capture nil)))
-   ("C-c d" . (lambda () (interactive) (dired org-directory)))
-   :map ctl-x-4-map
-   ("C-c d" . (lambda () (interactive) (dired-other-window org-directory)))
-   :map ctl-x-5-map
-   ("C-c d" . (lambda () (interactive) (dired-other-frame org-directory)))
-   :map org-mode-map
-   ("C-." . org-goto)))			; override imenu in org-mode
+   ("C-c c" . (lambda () (interactive) (org-capture nil)))))
 
 (use-package aru-ocp :after org)
 (use-package ox-html :after org :config (setq org-html-validation-link nil))
@@ -396,21 +396,36 @@
 (use-package tab-bar
   :config
   (setq tab-bar-close-button-show nil)
-  (setq tab-bar-close-last-tab-choice 'tab-bar-mode-disable)
+  (setq tab-bar-close-last-tab-choice nil)
   (setq tab-bar-close-tab-select 'recent)
   (setq tab-bar-new-tab-choice t)
   (setq tab-bar-new-tab-to 'right)
   (setq tab-bar-position t)             ; show tab-bar below tool-bar
-  (setq tab-bar-show 1)                 ; only show when more than 1 tab open
+  (setq tab-bar-show t)                 ; always show tab-bar
   (setq tab-bar-tab-hints nil)
   (setq tab-bar-tab-name-function 'tab-bar-tab-name-all)
+  (setq tab-bar-format
+        '(tab-bar-format-tabs-groups
+          tab-bar-separator
+          tab-bar-format-align-right
+          tab-bar-format-global))
 
   (tab-bar-mode +1)
-  (tab-bar-history-mode -1)             ; separate window history per tab
+  (tab-bar-history-mode +1)             ; separate window history per tab
 
   :bind-keymap ("s-t" . tab-prefix-map)
   :bind (:map tab-prefix-map
               ("w" . tab-close)))
+
+(use-package time
+  :config
+  (setq display-time-24hr-format nil)
+  (setq display-time-day-and-date nil)
+  (setq display-time-format "%a %e %b, %H:%M")
+  (setq display-time-interval 60)
+  (setq display-time-mail-directory nil)
+  (setq display-time-default-load-average nil)
+  :hook (after-init . display-time-mode))
 
 (use-package calendar
   :config
@@ -421,6 +436,7 @@
               ("n" . aru-narrow-or-widen-dwim)))
 
 (use-package icomplete
+  :disabled t
   :demand t		       ; need this since I am using :bind here
   :config
   (fido-vertical-mode +1)
@@ -454,15 +470,14 @@
 	      ("S-<up>" . windmove-swap-states-up)
 	      ("S-<down>" . windmove-swap-states-down)))
 
-(use-package modus-themes
+(use-package emacs
   :init
-  :disabled t
   (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs t
 	modus-themes-org-blocks 'tinted-background
 	modus-themes-tabs-accented t
 	modus-themes-intense-mouseovers t
-	modus-themes-mode-line '(borderless accented)
+	modus-themes-mode-line '(accented)
 	modus-themes-markup '(intense)
 	modus-themes-syntax '(alt-syntax)
 	modus-themes-hl-line '(intense)
@@ -470,12 +485,7 @@
 	modus-themes-links '(faint)
 	modus-themes-prompts '(intense)
 	modus-themes-lang-checkers '(straight-underline faint)
-	modus-themes-headings
-	(quote ((1 . (light 1.5))
-		(2 . (light 1.4))
-		(3 . (light 1.3))
-		(4 . (light 1.2))
-		(t . (light 1.1))))))
+        modus-themes-fringes nil))
 
 (use-package ef-themes
   :ensure t
@@ -491,25 +501,12 @@
 
 (use-package aru-custom
   :config
-  (aru-load-theme 'ef-day))
+  (add-hook 'ns-system-appearance-change-functions #'aru-load-theme-auto))
 
 (use-package display-line-numbers
   :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l
 
-(use-package term
-  :bind (:map term-mode-map ; rebind windmove since doc-view overrides them
-	      ("<left>" . windmove-left)
-	      ("<right>" . windmove-right)
-	      ("<up>" . windmove-up)
-	      ("<down>" . windmove-down)
-	      ("S-<left>" . windmove-swap-states-left)
-	      ("S-<right>" . windmove-swap-states-right)
-	      ("S-<up>" . windmove-swap-states-up)
-	      ("S-<down>" . windmove-swap-states-down))
-  :hook (term-mode . visual-line-mode))
 
-(use-package shell
-  :hook (shell-mode . visual-line-mode))
 
 (use-package pdf-tools
   :ensure t
