@@ -13,3 +13,5 @@
 (setq use-dialog-box t)
 (setq use-file-dialog nil)
 (setq inhibit-startup-echo-area-message user-login-name)
+
+(add-to-list 'default-frame-alist '(undecorated-round . t)) ; no titlebar
