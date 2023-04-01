@@ -32,6 +32,7 @@
 ;; (translates to ESC M-<k> where k is the key I specify in my config)
 ;; prefix. Someday, I may migrate this to a dedicated keymap.
 
+;;;; packages
 (eval-when-compile
   (add-to-list 'load-path (concat user-emacs-directory "packages/" "use-package/"))
   (require 'use-package))
@@ -40,57 +41,44 @@
 (setq use-package-verbose t)
 
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(use-package package
+(use-package diminish :ensure t)
+(use-package aru-core :demand t)
+(use-package cus-edit
   :demand t
   :config
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
-
-(use-package diminish
-  :ensure t)
-
-(use-package aru-core
-  :demand t)
-
-(use-package eldoc
-  :diminish)
-
-(use-package cus-edit
-  :config
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (load custom-file)
-  :demand t)
+  (load custom-file))
+
+;;;; editing
+(use-package eldoc
+  :diminish t
+  :hook ((after-init . global-eldoc-mode)))
 
 (use-package hl-line
-  :config
-  (global-hl-line-mode +1))
+  :hook ((after-init . global-hl-line-mode)))
 
+(use-package elec-pair
+  :hook ((after-init . electric-pair-mode)))
+
+;;;; buffers
 (use-package autorevert
-  :config
-  (global-auto-revert-mode +1))
+  :hook  ((after-init . global-auto-revert-mode)))
 
 (use-package uniquify
   :config
-  (setq uniquify-buffer-name-style 'forward))
-
-(use-package elec-pair
-  :config
-  (electric-pair-mode +1))
+  ;; (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-buffer-name-style 'reverse)
+  (setq uniquify-separator " • ")
+  (setq uniquify-after-kill-buffer-p t)
+  (setq uniquify-ignore-buffers-re "^\\*"))
 
 (use-package so-long
-  :config
-  (global-so-long-mode 1))
+  :hook ((after-init . global-so-long-mode)))
 
 (use-package ibuffer
   :bind (([remap list-buffers] . ibuffer)))
-
-(use-package savehist
-  :init
-  (savehist-mode +1))
-
-(use-package compile
-  :config
-  (setq compilation-scroll-output t))
 
 (use-package outline
   :diminish outline-minor-mode
@@ -105,7 +93,15 @@
 	      ("C-c C-u" . outline-up-heading))
   :hook (prog-mode . outline-minor-mode))
 
-(use-package foldout :after outline)
+(use-package foldout)
+
+;;;; minibuffer
+(use-package savehist
+  :hook ((after-init . savehist-mode)))
+
+(use-package compile
+  :config
+  (setq-default compilation-scroll-output t))
 
 (use-package flyspell
   :config
@@ -159,7 +155,8 @@
 	 ("s-2" . split-window-below)
 	 ("s-3" . split-window-right)
 	 ("s-w" . delete-window)
-	 ("s-o" . other-window)		; previously ns-open-file-using-panel
+	 ("s-]" . (lambda () (interactive) (other-window +1)))
+         ("s-[" . (lambda () (interactive) (other-window -1)))
          :map ctl-x-5-map
          ("w" . delete-frame))
   :init
@@ -281,10 +278,12 @@
   (setq org-return-follows-link nil)
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
   (setq org-directory "~/org")
-  (defconst aru/org-inbox-file (expand-file-name "aru.org" org-directory)
+  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
     "File to use for capturing org items.")
   (defconst aru/org-block-file (expand-file-name "blocks.org" org-directory)
     "File to use for capturing work blocks.")
+  (defconst aru/org-wiki-file (expand-file-name "wiki.org" org-directory)
+    "File to use for capturing wiki items.")
   (setq org-log-into-drawer t)
   (setq org-default-notes-file aru/org-inbox-file)
   (setq org-goto-interface 'outline-path-completion)
@@ -304,23 +303,27 @@
   ;; babel
   (setq org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages 'org-babel-load-languages
-                               '((emacs-lisp . t)
-				 (python     . t)
-				 (shell      . t)))
+    '((emacs-lisp . t)
+			 (python     . t)
+			 (shell      . t)))
   ;; capture
   (setq org-capture-templates
-	'(("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/paper.txt]" :prepend t)
-          ("c" "Capture" entry (file+headline aru/org-inbox-file "Inbox")
-           "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)
-	  ("b" "Block" entry (file+olp+datetree aru/org-block-file)
-	   ""				; empty template
-	   :prepend t
-	   :immediate-finish t
-	   :clock-in t)))
+	  '(("p" "Paper" entry (file+headline aru/org-inbox-file "Inbox")
+        "%[~/.emacs.d/org-templates/paper.txt]" :prepend t)
+       ("c" "Capture" entry (file+headline aru/org-inbox-file "Inbox")
+         "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)
+       ("n" "Note" entry (file+headline aru/org-inbox-file "Inbox")
+         "%[~/.emacs.d/org-templates/note.txt]" :prepend t)
+       ("w" "Wiki" entry (file aru/org-wiki-file)
+         "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)
+	     ("b" "Block" entry (file+olp+datetree aru/org-block-file)
+	       ""				; empty template
+	       :prepend t
+	       :immediate-finish t
+	       :clock-in t)))
   ;; todo
   (setq org-todo-keywords
-	'((sequence "TODO(t)" "|" "DONE(d!)" "CANCEL(c@)")))
+	  '((sequence "TODO(t)" "|" "DONE(d!)" "CANCEL(c@)")))
 
   ;; archive
   (setq org-archive-location "~/org/archive/%s_archive::")
@@ -349,12 +352,26 @@
 (use-package tex-mode
   :hook (tex-mode . outline-minor-mode))
 
+(use-package tex
+  :disabled t
+  :ensure auctex
+  :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t))
+
+(use-package reftex
+  :disabled t
+  :config
+  (setq reftex-plug-into-AUCTeX t)
+  :hook ((LaTeX-mode . turn-on-reftex))) ; turn on with auctex
+
 (use-package markdown-mode
   :ensure t
   :init (setq markdown-command "multimarkdown")
   :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
+          ("\\.md\\'" . markdown-mode)
+          ("\\.markdown\\'" . markdown-mode)
+          ("README" . gfm-mode)))
 
 (use-package python
   :config
@@ -408,7 +425,9 @@
   (tab-bar-history-mode +1)             ; separate window history per tab
 
   :bind-keymap ("s-t" . tab-prefix-map)
-  :bind (:map tab-prefix-map
+  :bind (("s-}" . tab-next)
+         ("s-{" . tab-previous)
+         :map tab-prefix-map
               ("w" . tab-close)))
 
 (use-package time
@@ -467,19 +486,10 @@
 (use-package emacs
   :init
   (setq modus-themes-italic-constructs t
-	modus-themes-bold-constructs t
-	modus-themes-org-blocks 'tinted-background
-	modus-themes-tabs-accented t
-	modus-themes-intense-mouseovers t
-	modus-themes-mode-line '(accented)
-	modus-themes-markup '(intense)
-	modus-themes-syntax '(alt-syntax)
-	modus-themes-hl-line '(intense)
-	modus-themes-paren-match '(intense)
-	modus-themes-links '(faint)
-	modus-themes-prompts '(intense)
-	modus-themes-lang-checkers '(straight-underline faint)
-        modus-themes-fringes nil))
+	  modus-themes-bold-constructs t
+	  modus-themes-org-blocks 'tinted-background
+    modus-themes-common-palette-overrides
+    '((fringe unspecified))))
 
 (use-package ef-themes
   :ensure t
@@ -694,11 +704,13 @@
   )
 
 (use-package highlight-indent-guides
+  :disabled t
   :ensure t
   :diminish
   :init
   (setq highlight-indent-guides-method 'bitmap)
-  :hook ((prog-mode . highlight-indent-guides-mode)))
+  :hook ((prog-mode . highlight-indent-guides-mode)
+         (text-mode . highlight-indent-guides-mode)))
 
 (use-package corfu
   :ensure t
@@ -708,7 +720,7 @@
   ;; (corfu-auto t)                 ;; Enable auto completion
   ;; (corfu-separator ?\s)          ;; Orderless field separator
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-quit-no-match 'separator)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
   ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
@@ -747,22 +759,22 @@
   :ensure t
   ;; Bind dedicated completion commands
   ;; Alternative prefix keys: C-c p, M-p, M-+, ...
-  ;; :bind (("C-c p p" . completion-at-point) ;; capf
-  ;;        ("C-c p t" . complete-tag)        ;; etags
-  ;;        ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
-  ;;        ("C-c p h" . cape-history)
-  ;;        ("C-c p f" . cape-file)
-  ;;        ("C-c p k" . cape-keyword)
-  ;;        ("C-c p s" . cape-symbol)
-  ;;        ("C-c p a" . cape-abbrev)
-  ;;        ("C-c p i" . cape-ispell)
-  ;;        ("C-c p l" . cape-line)
-  ;;        ("C-c p w" . cape-dict)
-  ;;        ("C-c p \\" . cape-tex)
-  ;;        ("C-c p _" . cape-tex)
-  ;;        ("C-c p ^" . cape-tex)
-  ;;        ("C-c p &" . cape-sgml)
-  ;;        ("C-c p r" . cape-rfc1345))
+  :bind (("C-c p p" . completion-at-point) ;; capf
+         ("C-c p t" . complete-tag)        ;; etags
+         ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
+         ("C-c p h" . cape-history)
+         ("C-c p f" . cape-file)
+         ("C-c p k" . cape-keyword)
+         ("C-c p s" . cape-symbol)
+         ("C-c p a" . cape-abbrev)
+         ("C-c p i" . cape-ispell)
+         ("C-c p l" . cape-line)
+         ("C-c p w" . cape-dict)
+         ("C-c p \\" . cape-tex)
+         ("C-c p _" . cape-tex)
+         ("C-c p ^" . cape-tex)
+         ("C-c p &" . cape-sgml)
+         ("C-c p r" . cape-rfc1345))
   :init
   ;; Add `completion-at-point-functions', used by `completion-at-point'.
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
@@ -776,7 +788,7 @@
   (add-to-list 'completion-at-point-functions #'cape-ispell)
   (add-to-list 'completion-at-point-functions #'cape-dict)
   (add-to-list 'completion-at-point-functions #'cape-symbol)
-  ;; (add-to-list 'completion-at-point-functions #'cape-line)
+  (add-to-list 'completion-at-point-functions #'cape-line)
   )
 
 (use-package kind-icon
@@ -786,5 +798,84 @@
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+(use-package citar
+  :disabled t
+  :ensure t
+  :bind (("C-c b" . citar-insert-citation)
+         :map minibuffer-local-map
+         ("M-b" . citar-insert-preset))
+  :custom
+  (citar-bibliography '("~/org/papers.bib"))
+  (citar-library-paths '("~/Documents/papers")))
+
+(use-package citar-embark
+  :disabled t
+  :diminish
+  :ensure t
+  :after citar embark
+  :no-require
+  :config (citar-embark-mode))
+
+(use-package editorconfig
+  :ensure t
+  :diminish
+  :init
+  (editorconfig-mode 1))
+
+(use-package lsp-mode
+  :disabled t
+  :ensure t
+  ;; :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  ;; (setq lsp-keymap-prefix "C-c l")
+  :hook
+  ((python-mode . lsp)
+    (latex-mode . lsp)
+    (bibtex-mode . lsp)
+    (markdown-mode . lsp))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui
+  :disabled t
+  :ensure t
+  :commands lsp-ui-mode)
+;; if you are helm user
+;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;; optionally if you want to use debugger
+;; (use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+; (use-package tree-sitter
+;   :ensure t
+;   :init
+;   (global-tree-sitter-mode)
+;   :hook
+;   (tree-sitter-after-on . tree-sitter-hl-mode))
+
+; (use-package tree-sitter-langs
+;   :ensure t)
+
+(use-package doom-modeline
+  :disabled t
+  :ensure t
+  :hook ((after-init . doom-modeline-mode)))
+
+(use-package eglot
+  :hook
+  ((python-mode . eglot-ensure)
+    (python-ts-mode . eglot-ensure)
+    (latex-mode . eglot-ensure)
+    (bibtex-mode . eglot-ensure)))
+
+(use-package emacs
+  :config
+  (add-to-list 'treesit-extra-load-path (concat user-emacs-directory "tree-sitter-module/" "dist/"))
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode)))
 
 ;;; init.el ends here

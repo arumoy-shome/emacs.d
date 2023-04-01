@@ -1,13 +1,5 @@
-* %U %(aocp--get-bibkey)
-:PROPERTIES:
-:PDF: file:~/Documents/papers/%(aocp--get-bibkey t).pdf
-:CUSTOM_ID: %(aocp--get-bibkey)
-:AUTHOR: %(aocp--get-author)
-:SOURCE: %(aocp--get-source)
-:YEAR: %(aocp--get-year)
-:PASS: 0
-:END:
-%?
+* %? :paper:
+
 + problem statement ::
 + solution ::
 + results ::
@@ -15,5 +7,5 @@
 + remarks ::
 
 #+begin_src bibtex
-%c
+%x
 #+end_src
