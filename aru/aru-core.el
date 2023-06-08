@@ -22,5 +22,7 @@
 ;;; editor
 (setq sentence-end-double-space nil)
 (setq tab-always-indent 'complete)      ; first indent, then complete
+(add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
+(add-hook 'text-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 (provide 'aru-core)

@@ -7,5 +7,5 @@
 + remarks ::
 
 #+begin_src bibtex
-%x
+%c
 #+end_src

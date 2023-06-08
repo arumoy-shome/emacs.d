@@ -41,7 +41,9 @@
 (setq use-package-verbose t)
 
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(use-package package
+  :config
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
 (use-package diminish :ensure t)
 (use-package aru-core :demand t)
@@ -109,6 +111,7 @@
   (setq flyspell-issue-welcome-flag nil)
   (setq ispell-program-name "/usr/local/bin/aspell")
   (setq ispell-dictionary "en_GB")
+  :hook ((prog-mode . flyspell-prog-mode))
   :bind (("ESC M-s" . flyspell-mode)	; ESC ESC s
 	 :map flyspell-mode-map
 	 ("C-." . nil)))
@@ -129,13 +132,8 @@
   (setq dired-auto-revert-buffer #'dired-directory-changed-p)
   :hook ((dired-mode . dired-hide-details-mode)))
 
-(use-package dirvish
-  :ensure t
-  :disabled t
-  :config
-  (dirvish-override-dired-mode))
-
 (use-package winner
+  :disabled t
   :init
   (winner-mode +1)
   :bind (("s-<left>"  . winner-undo)    ; previously ns-prev-frame
@@ -146,61 +144,22 @@
 
 (use-package window
   :bind-keymap (("s-4" . ctl-x-4-map)
-                ("s-5" . ctl-x-5-map))
+                 ("s-5" . ctl-x-5-map))
   :bind (("s-f" . find-file)
-	 ("s-b" . switch-to-buffer)
-         ("s-1" . delete-other-windows)
-         ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
-         ("s-l" . next-buffer)  ; previously goto-line, use M-g g instead
-	 ("s-2" . split-window-below)
-	 ("s-3" . split-window-right)
-	 ("s-w" . delete-window)
-	 ("s-]" . (lambda () (interactive) (other-window +1)))
-         ("s-[" . (lambda () (interactive) (other-window -1)))
-         :map ctl-x-5-map
-         ("w" . delete-frame))
-  :init
-    (setq display-buffer-alist
-	'(("\\`\\*Warnings\\*"
-	   (display-buffer-no-window))
-	  ("\\*help"
-	   (display-buffer--maybe-same-window
-	    display-buffer-reuse-window
-	    display-buffer-reuse-mode-window
-	    display-buffer-in-side-window)
-	   (side . right)
-	   (window-width . 0.25)
-           (window-parameters (mode-line-format . " %* %b %p")))
-	  ("e?shell"
-	   (display-buffer--maybe-same-window
-	    display-buffer-reuse-window
-	    display-buffer-reuse-mode-window
-	    display-buffer-in-side-window)
-	   (side . bottom)
-	   (slot . -1)
-	   (window-height . 0.25)
-           (window-parameters (mode-line-format . " %* %b %p")))
-	  ("\\*gud"
-	   (display-buffer--maybe-same-window
-	    display-buffer-reuse-window
-	    display-buffer-reuse-mode-window
-	    display-buffer-in-side-window)
-	   (side . bottom)
-	   (slot . -1)
-	   (window-height . 0.25)
-	   (window-parameters (mode-line-format . " %* %b %p")))
-	  ("\\*\\(compilation\\|flymake\\)"
-	   (display-buffer--maybe-same-window
-	    display-buffer-reuse-window
-	    display-buffer-reuse-mode-window
-	    display-buffer-in-side-window)
-	   (side . bottom)
-	   (slot . 0)
-	   (window-height . 0.25)
-           (window-parameters (mode-line-format . " %* %b %p")))))
+	        ("s-b" . switch-to-buffer)
+          ("s-1" . delete-other-windows)
+          ("s-h" . previous-buffer)      ; previously ns-do-hide-emacs
+          ("s-l" . next-buffer)  ; previously goto-line, use M-g g instead
+	        ("s-2" . split-window-below)
+	        ("s-3" . split-window-right)
+	        ("s-w" . delete-window)
+	        ("s-]" . (lambda () (interactive) (other-window +1)))
+          ("s-[" . (lambda () (interactive) (other-window -1)))
+          :map ctl-x-5-map
+          ("w" . delete-frame))
   :hook ((help-mode . visual-line-mode)
-	 (man-mode . visual-line-mode)
-	 (woman-mode . visual-line-mode)))
+	        (man-mode . visual-line-mode)
+	        (woman-mode . visual-line-mode)))
 
 (use-package windmove
   :bind
@@ -218,7 +177,7 @@
   (setq show-paren-delay 0.1)
   (setq show-paren-when-point-inside-paren t)
   (setq show-paren-when-point-in-periphery t)
-  (show-paren-mode +1))
+  :hook ((after-init . show-paren-mode)))
 
 (use-package files
   :config
@@ -232,7 +191,9 @@
 
 (use-package recentf
   :config
-  (recentf-mode +1))
+  (setq-default recentf-max-saved-items 1000)
+  (setq-default recentf-exclude `("/tmp/" "/ssh:" ,(concat package-user-dir "/.*-autoloads\\.el\\'")))
+  :hook ((after-init . recentf-mode)))
 
 (use-package simple                     ; case bindings for active region
   :bind
@@ -249,7 +210,7 @@
   (setq kill-do-not-save-duplicates t)
   (setq async-shell-command-display-buffer nil)
   (setq shell-command-prompt-show-cwd t)
-  (column-number-mode +1))               ; show line and column numbers
+  :hook ((after-init . column-number-mode))) ; show line and column numbers
 
 (use-package magit
   :ensure t
@@ -257,15 +218,15 @@
               ("g" . magit-status)))
 
 (use-package whitespace
-  :bind (("ESC M-w" . whitespace-mode))	; ESC ESC w
-  :init
-  (setq show-trailing-whitespace t))
+  :bind (("ESC M-w" . whitespace-mode)))	; ESC ESC w
 
 (use-package org
   :hook ((org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
 	 (org-capture-mode . org-id-get-create)	; add ID automatically to all captured items
 	 (org-mode . (lambda () (setq-default indent-tabs-mode nil)))) ; do not use tabs for indent
   :config
+  ;; advice
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))) ; save all org agenda buffers after refile, stolen from purcell
   ;; general
   (org-indent-mode -1)                  ; [default] do not indent text based on outline
   (setq org-src-window-setup 'split-window-below)
@@ -298,7 +259,9 @@
   (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
   (setq org-agenda-restore-windows-after-quit t)
   (setq org-agenda-use-tag-inheritance nil)
-  (setq org-agenda-ignore-drawer-properties '(effort appt category stats))
+  (setq org-agenda-ignore-drawer-properties '(effort appt stats))
+  (setq org-agenda-custom-commands
+    '(("g" "GTD" tags-todo "-TODO=\"PROJECT\"-paper")))
 
   ;; babel
   (setq org-confirm-babel-evaluate nil)
@@ -352,19 +315,6 @@
 (use-package tex-mode
   :hook (tex-mode . outline-minor-mode))
 
-(use-package tex
-  :disabled t
-  :ensure auctex
-  :config
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t))
-
-(use-package reftex
-  :disabled t
-  :config
-  (setq reftex-plug-into-AUCTeX t)
-  :hook ((LaTeX-mode . turn-on-reftex))) ; turn on with auctex
-
 (use-package markdown-mode
   :ensure t
   :init (setq markdown-command "multimarkdown")
@@ -390,8 +340,6 @@
 		 (window-height . 0.25)
                  (window-parameters (mode-line-format . " %* %b %p")))))
 
-(use-package pyvenv :ensure t :disabled t :after python)
-
 (use-package imenu
   :config
   (setq imenu-use-markers t)
@@ -401,8 +349,7 @@
   (setq imenu-use-popup-menu nil)
   (setq imenu-eager-completion-buffer t)
   (setq imenu-space-replacement " ")
-  (setq imenu-level-separator "/")
-  :bind (("C-." . imenu)))
+  (setq imenu-level-separator "/"))
 
 (use-package tab-bar
   :config
@@ -420,9 +367,9 @@
           tab-bar-separator
           tab-bar-format-align-right
           tab-bar-format-global))
-
-  (tab-bar-mode +1)
-  (tab-bar-history-mode +1)             ; separate window history per tab
+  :hook
+  ((after-init . tab-bar-mode)
+    (after-init . tab-bar-history-mode)) ; separate window history per tab
 
   :bind-keymap ("s-t" . tab-prefix-map)
   :bind (("s-}" . tab-next)
@@ -431,6 +378,7 @@
               ("w" . tab-close)))
 
 (use-package time
+  :disabled t
   :config
   (setq display-time-24hr-format nil)
   (setq display-time-day-and-date nil)
@@ -491,18 +439,6 @@
     modus-themes-common-palette-overrides
     '((fringe unspecified))))
 
-(use-package ef-themes
-  :ensure t
-  :init
-  :bind (("ESC M-t" . ef-themes-toggle))) ; ESC ESC t
-
-(use-package doom-themes
-  :ensure t
-  :config
-  (setq doom-themes-enable-bold t)
-  (setq doom-themes-enable-italic t)
-  (doom-themes-org-config))
-
 (use-package aru-custom
   :config
   (add-hook 'ns-system-appearance-change-functions #'aru-load-theme-auto))
@@ -514,7 +450,8 @@
   :ensure t
   :init
   (setq pdf-view-use-scaling t)
-  (pdf-loader-install))	; sharper text on retina displays
+  ;; (pdf-loader-install)
+  )	; sharper text on retina displays
 
 (use-package direnv
   :ensure t
@@ -524,8 +461,7 @@
 
 (use-package vertico
   :ensure t
-  :init
-  (vertico-mode)
+  :hook ((after-init . vertico-mode))
   :config
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
@@ -703,24 +639,16 @@
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   )
 
-(use-package highlight-indent-guides
+(use-package corfu
   :disabled t
   :ensure t
-  :diminish
-  :init
-  (setq highlight-indent-guides-method 'bitmap)
-  :hook ((prog-mode . highlight-indent-guides-mode)
-         (text-mode . highlight-indent-guides-mode)))
-
-(use-package corfu
-  :ensure t
   ;; Optional customizations
-  ;; :custom
-  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  ;; (corfu-auto t)                 ;; Enable auto completion
-  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-separator ?\s)          ;; Orderless field separator
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match 'separator)      ;; Never quit, even if there is no match
+  (corfu-quit-no-match 'separator)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
   ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
@@ -734,8 +662,8 @@
   ;; Recommended: Enable Corfu globally.
   ;; This is recommended since Dabbrev can be used globally (M-/).
   ;; See also `corfu-excluded-modes'.
-  :init
-  (global-corfu-mode))
+  :hook ((after-init . global-corfu-mode)
+          (ehsell-mode . (lambda () (setq-local corfu-auto nil)))))
 
 ;; A few more useful configurations...
 (use-package emacs
@@ -745,8 +673,8 @@
 
   ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
   ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p)
 
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
@@ -823,59 +751,21 @@
   :init
   (editorconfig-mode 1))
 
-(use-package lsp-mode
-  :disabled t
-  :ensure t
-  ;; :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  ;; (setq lsp-keymap-prefix "C-c l")
-  :hook
-  ((python-mode . lsp)
-    (latex-mode . lsp)
-    (bibtex-mode . lsp)
-    (markdown-mode . lsp))
-  :commands lsp)
-
-;; optionally
-(use-package lsp-ui
-  :disabled t
-  :ensure t
-  :commands lsp-ui-mode)
-;; if you are helm user
-;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
-;; if you are ivy user
-;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-
-;; optionally if you want to use debugger
-;; (use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
-
-; (use-package tree-sitter
-;   :ensure t
-;   :init
-;   (global-tree-sitter-mode)
-;   :hook
-;   (tree-sitter-after-on . tree-sitter-hl-mode))
-
-; (use-package tree-sitter-langs
-;   :ensure t)
-
-(use-package doom-modeline
-  :disabled t
-  :ensure t
-  :hook ((after-init . doom-modeline-mode)))
-
 (use-package eglot
+  :disabled t
   :hook
   ((python-mode . eglot-ensure)
-    (python-ts-mode . eglot-ensure)
-    (latex-mode . eglot-ensure)
-    (bibtex-mode . eglot-ensure)))
+   (python-ts-mode . eglot-ensure)
+   (latex-mode . eglot-ensure)
+   (bibtex-mode . eglot-ensure)))
 
-(use-package emacs
-  :config
-  (add-to-list 'treesit-extra-load-path (concat user-emacs-directory "tree-sitter-module/" "dist/"))
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode)))
+(use-package desktop
+  :hook ((after-init . desktop-save-mode)))
+
+(use-package quarto-mode
+  :ensure t)
+
+(use-package yaml-mode
+  :ensure t)
 
 ;;; init.el ends here
