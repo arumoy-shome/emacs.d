@@ -7,6 +7,7 @@
 (setq initial-major-mode 'fundamental-mode)
 (setq user-full-name "Arumoy Shome")
 (setq user-mail-address "contact@arumoy.me")
+(setq shell-file-name "/usr/local/bin/bash")
 
 ;;; ui
 (setq ring-bell-function 'ignore) ;; disable bells and confirmation dialog boxes

@@ -29,3 +29,6 @@ history
 .cache/
 .lsp-session*
 multisession/
+tree-sitter/
+.elfeed/
+site/
