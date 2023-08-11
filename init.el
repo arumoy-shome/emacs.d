@@ -398,7 +398,8 @@
 	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
 	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
 	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")
-	  (latex "https://github.com/latex-lsp/tree-sitter-latex")))
+	  (latex "https://github.com/latex-lsp/tree-sitter-latex")
+	  (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")))
   (setq major-mode-remap-alist
 	'((yaml-mode . yaml-ts-mode)
 	  (bash-mode . bash-ts-mode)
@@ -411,7 +412,8 @@
 	  (html-mode . html-ts-mode)))
   :mode (("\\.yaml'" . yaml-ts-mode)
          ("\\.yml'" . yaml-ts-mode)
-	 ("\\.ipynb\\'" . json-ts-mode)))
+	 ("\\.ipynb\\'" . json-ts-mode)
+	 ("Dockerfile" . dockerfile-ts-mode)))
 
 (use-package mct
   :ensure t
