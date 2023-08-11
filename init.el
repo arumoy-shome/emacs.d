@@ -33,13 +33,11 @@
 ;; prefix. Someday, I may migrate this to a dedicated keymap.
 
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
-(add-to-list 'load-path (concat user-emacs-directory "site/" "nano-emacs/"))
 
 (use-package use-package-core
-  :demand t
-  :config
-  (setq use-package-compute-statistics t)
-  (setq use-package-verbose t))
+  :custom
+  (use-package-compute-statistics t)
+  (use-package-verbose t))
 
 (use-package package
   :config
@@ -54,10 +52,11 @@
   (load custom-file))
 
 (use-package eldoc
-  :diminish t
+  :diminish eldoc-mode
   :hook ((after-init . global-eldoc-mode)))
 
 (use-package hl-line
+  :disabled t
   :hook ((after-init . global-hl-line-mode)))
 
 (use-package elec-pair
@@ -67,11 +66,11 @@
   :hook  ((after-init . global-auto-revert-mode)))
 
 (use-package uniquify
-  :config
-  (setq uniquify-buffer-name-style 'reverse)
-  (setq uniquify-separator " • ")
-  (setq uniquify-after-kill-buffer-p t)
-  (setq uniquify-ignore-buffers-re "^\\*"))
+  :custom
+  (uniquify-buffer-name-style 'reverse)
+  (uniquify-separator " • ")
+  (uniquify-after-kill-buffer-p t)
+  (uniquify-ignore-buffers-re "^\\*"))
 
 (use-package so-long
   :hook ((after-init . global-so-long-mode)))
@@ -82,41 +81,45 @@
 (use-package outline
   ;; NOTE additionally set outline-minor-mode-prefix using custom
   :diminish outline-minor-mode
-  :init
-  (setq outline-minor-mode-cycle t)
-  (setq outline-minor-mode-use-buttons nil)
+  :custom
+  (outline-minor-mode-cycle t)
+  (outline-minor-mode-use-buttons nil)
   :hook (prog-mode . outline-minor-mode))
 
 (use-package savehist
   :hook ((after-init . savehist-mode)))
 
 (use-package compile
-  :config
-  (setq-default compilation-scroll-output t))
+  :custom
+  (compilation-scroll-output t))
 
 (use-package flyspell
-  :config
-  (setq flyspell-issue-message-flag nil)
-  (setq flyspell-issue-welcome-flag nil)
-  (setq ispell-program-name "/usr/local/bin/aspell")
-  (setq ispell-dictionary "en_GB")
-  :hook ((prog-mode . flyspell-prog-mode))
+  :custom
+  (flyspell-issue-message-flag nil)
+  (flyspell-issue-welcome-flag nil)
+  (ispell-program-name "/usr/local/bin/aspell")
+  (ispell-dictionary "en_GB")
+  :hook ((prog-mode . flyspell-prog-mode)
+	 (text-mode . flyspell-mode))
   :bind (("ESC M-s" . flyspell-mode)))	; ESC ESC s
 
 (use-package flymake
   :bind (("ESC M-f" . flymake-mode)	; ESC ESC f
+	 :map flymake-mode-map
 	 ("M-n" . flymake-goto-next-error)
-	 ("M-p" . flymake-goto-prev-error)))
+	 ("M-p" . flymake-goto-prev-error))
+  :custom
+  (flymake-show-diagnostics-at-end-of-line t))
 
 (use-package dired
-  :config
-  (setq dired-recursive-copies 'always)
-  (setq dired-recursive-deletes 'always)
-  (setq delete-by-moving-to-trash t)
-  (setq dired-use-ls-dired nil)
-  (setq dired-listing-switches "-FAlrh")
-  (setq dired-dwim-target t)
-  (setq dired-auto-revert-buffer #'dired-directory-changed-p)
+  :custom
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'always)
+  (delete-by-moving-to-trash t)
+  (dired-use-ls-dired nil)
+  (dired-listing-switches "-FAlrh")
+  (dired-dwim-target t)
+  (dired-auto-revert-buffer #'dired-directory-changed-p)
   :hook ((dired-mode . dired-hide-details-mode)))
 
 (use-package frame
@@ -148,26 +151,26 @@
    ("S-<down>" . windmove-swap-states-down)))
 
 (use-package paren
-  :config
-  (setq show-paren-delay 0.1)
-  (setq show-paren-when-point-inside-paren t)
-  (setq show-paren-when-point-in-periphery t)
+  :custom
+  (show-paren-delay 0.1)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t)
   :hook ((after-init . show-paren-mode)))
 
 (use-package files
-  :config
-  (setq confirm-kill-processes nil)
-  (setq auto-save-default nil)
-  (setq make-backup-files nil)
-  (setq find-file-visit-truename t)
-  (setq find-file-suppress-same-file-warnings t)
-  (setq require-final-newline t)
+  :custom
+  (confirm-kill-processes nil)
+  (auto-save-default nil)
+  (make-backup-files nil)
+  (find-file-visit-truename t)
+  (find-file-suppress-same-file-warnings t)
+  (require-final-newline t)
   :bind (("s-q" . nil)))		; I hit this by mistake instead of M-q!
 
 (use-package recentf
-  :config
-  (setq-default recentf-max-saved-items 1000)
-  (setq-default recentf-exclude `("/tmp/" "/ssh:" ,(concat package-user-dir "/.*-autoloads\\.el\\'")))
+  :custom
+  (recentf-max-saved-items 1000)
+  (recentf-exclude `("/tmp/" "/ssh:" ,(concat package-user-dir "/.*-autoloads\\.el\\'")))
   :hook ((after-init . recentf-mode))
   :bind (:map ctl-x-map
 	      ("f" . recentf-open)))	; default: set-fill-column
@@ -177,10 +180,10 @@
   (("M-Q" . delete-indentation)
    ("ESC M-v" . visual-line-mode)	; ESC ESC v
    ("ESC C-M-i" . indent-tab-mode))	; ESC ESC TAB
-  :config
-  (setq kill-do-not-save-duplicates t)
-  (setq async-shell-command-display-buffer nil)
-  (setq shell-command-prompt-show-cwd t))
+  :custom
+  (kill-do-not-save-duplicates t)
+  (async-shell-command-display-buffer nil)
+  (shell-command-prompt-show-cwd t))
 
 (use-package magit
   :ensure t
@@ -191,93 +194,105 @@
   :bind (("ESC M-w" . whitespace-mode)))	; ESC ESC w
 
 (use-package org
-  ;; :hook ((org-mode . (lambda () (electric-indent-local-mode -1))) ; do not auto indent in org buffers
-  ;; 	 (org-capture-mode . org-id-get-create)	; add ID automatically to all captured items
-  ;; 	 (org-mode . (lambda () (setq-default indent-tabs-mode nil)))) ; do not use tabs for indent
-  :config
-  ;; advice
-  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))) ; save all org agenda buffers after refile, stolen from purcell
-  ;; general
-  ;; (org-indent-mode -1)                  ; [default] do not indent text based on outline
-  ;; (setq org-src-window-setup 'split-window-below)
-  (setq org-startup-folded t)
-  (setq org-reverse-note-order t)
-  (setq org-special-ctrl-a/e t)
-  (setq org-special-ctrl-k t)
-  (setq org-goto-auto-isearch nil)
-  (setq org-hide-block-startup t)
-  (setq org-return-follows-link nil)
-  ;; (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
-  (setq org-directory "~/org")
-  (defconst aru/org-inbox-file (expand-file-name "inbox.org" org-directory)
+  :init
+  ;; save all org agenda buffers after refile, stolen from purcell
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+  (defconst aru/org-inbox-file "~/org/inbox.org"
     "File to use for capturing org items.")
-  (defconst aru/org-block-file (expand-file-name "blocks.org" org-directory)
-    "File to use for capturing work blocks.")
-  (defconst aru/org-wiki-file (expand-file-name "wiki.org" org-directory)
-    "File to use for capturing wiki items.")
-  (setq org-log-into-drawer t)
-  (setq org-default-notes-file aru/org-inbox-file)
-  (setq org-goto-interface 'outline-path-completion)
-  (setq org-outline-path-complete-in-steps nil)
-  ;; refile
-  (setq org-refile-use-outline-path 'file) ; allow refiling as top level header
-  (setq org-refile-targets '((nil . (:maxlevel . 2))
-                             (org-agenda-files . (:maxlevel . 2))))
-  ;; agenda
-  (setq org-agenda-dim-blocked-tasks nil)
-  (setq org-agenda-inhibit-startup t)
-  (setq org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
-  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
-  (setq org-agenda-restore-windows-after-quit t)
-  (setq org-agenda-use-tag-inheritance nil)
-  (setq org-agenda-ignore-drawer-properties '(effort appt stats))
-  (setq org-agenda-custom-commands
-	'(("g" "GTD" tags-todo "-TODO=\"PROJECT\"-paper")))
-
-  ;; babel
-  (setq org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages 'org-babel-load-languages
 			       '((emacs-lisp . t)
 				 (python     . t)
 				 (shell      . t)))
-  ;; capture
-  (setq org-capture-templates
-	'(("p" "Paper" entry (file aru/org-inbox-file)
-           "%[~/.emacs.d/org-templates/paper.txt]" :prepend t)
-	  ("c" "Capture" entry (file aru/org-inbox-file)
-           "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)
-	  ;; ("n" "Note" entry (file aru/org-inbox-file)
-	  ;;   "%[~/.emacs.d/org-templates/note.txt]" :prepend t)
-	  ;; ("w" "Wiki" entry (file aru/org-wiki-file)
-	  ;;   "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)
-	  ("b" "Block" entry (file+olp+datetree aru/org-block-file)
-	   "* %?"
-	   :prepend t
-	   :clock-in t)
-	  ))
-  ;; todo
-  (setq org-todo-keywords
-	'((sequence "TODO(t)" "PROJECT(p)" "|" "DONE(d!)" "CANCEL(c@)")))
-
-  ;; archive
-  (setq org-archive-location "~/org/archive/%s_archive::")
-
-  ;; clocking
-  (setq org-clock-persist 'history)
   (org-clock-persistence-insinuate)
-
+  :custom
+  (org-startup-folded t)
+  (org-reverse-note-order t)
+  (org-special-ctrl-a/e t)
+  (org-special-ctrl-k t)
+  (org-goto-auto-isearch nil)
+  (org-hide-block-startup t)
+  (org-return-follows-link nil)
+  (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
+  (org-directory "~/org")
+  (org-log-into-drawer t)
+  (org-default-notes-file aru/org-inbox-file)
+  (org-goto-interface 'outline-path-completion)
+  (org-outline-path-complete-in-steps nil)
+  ;; refile
+  (org-refile-use-outline-path 'file) ; allow refiling as top level header
+  (org-refile-targets '((nil . (:maxlevel . 2))
+                        (org-agenda-files . (:maxlevel . 2))))
+  ;; agenda
+  (org-agenda-dim-blocked-tasks nil)
+  (org-agenda-inhibit-startup t)
+  (org-agenda-files (expand-file-name "org-agenda-files.org" org-directory))
+  (org-agenda-skip-deadline-prewarning-if-scheduled t)
+  (org-agenda-restore-windows-after-quit t)
+  (org-agenda-use-tag-inheritance nil)
+  (org-agenda-ignore-drawer-properties '(effort appt stats))
+  (org-agenda-custom-commands
+   '(("g" "GTD" tags-todo "-TODO=\"PROJECT\"-paper")))
+  ;; babel
+  (org-confirm-babel-evaluate nil)
+  ;; capture
+  (org-capture-templates
+   '(("p" "Paper" entry (file aru/org-inbox-file)
+      "%[~/.emacs.d/org-templates/paper.txt]" :prepend t)
+     ("c" "Capture" entry (file aru/org-inbox-file)
+      "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)))
+  ;; todo
+  (org-todo-keywords
+   '((sequence "TODO(t)" "PROJECT(p)" "|" "DONE(d!)" "CANCEL(c@)")))
+  ;; archive
+  (org-archive-location "~/org/archive/%s_archive::")
+  ;; clocking
+  (org-clock-persist 'history)
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
    ("C-c c" . (lambda () (interactive) (org-capture nil)))))
 
-(use-package ox-html :after org :config (setq org-html-validation-link nil))
+(use-package org-modern
+  :ensure t
+  :after org
+  :custom
+  (org-auto-align-tags nil)
+  (org-tags-column 0)
+  (org-catch-invisible-edits 'show-and-error)
+  (org-insert-heading-respect-content t)
+
+  ;; Org styling, hide markup etc.
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis "…")
+
+  ;; Agenda styling
+  (org-agenda-tags-column 0)
+  (org-agenda-block-separator ?─)
+  (org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+  (org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+  :config
+  (global-org-modern-mode))
+
+(use-package spacious-padding
+  :ensure t
+  :custom
+  (spacious-padding-widths
+   '(:internal-border-width 5 :right-divider-width 5 :scroll-bar-width 0))
+  :config
+  (spacious-padding-mode))
+
+(use-package ox-html :after org :custom (org-html-validation-link nil))
 (use-package ox-md :after org)
 (use-package org-tempo :after org)
-(use-package org-habit :after org)
 (use-package org-id :after org)
 
 (use-package text-mode
+  :after org
   :hook (text-mode . auto-fill-mode)
   :bind (:map text-mode-map
               ("C-c !" . org-time-stamp-inactive)))
@@ -294,15 +309,15 @@
 	 ("\\.qmd\\'" . markdown-mode)))
 
 (use-package python
-  :config
-  (setq python-shell-interpreter "python") ; managed with direnv
-  (setq python-indent-guess-indent-offset t)
-  (setq python-indent-guess-indent-offset-verbose nil)
-  (setq python-shell-completion-native-enable nil))
+  :custom
+  (python-shell-interpreter "python") ; managed with direnv
+  (python-indent-guess-indent-offset t)
+  (python-indent-guess-indent-offset-verbose nil)
+  (python-shell-completion-native-enable nil))
 
 (use-package imenu
-  :config
-  (setq imenu-auto-rescan t))
+  :custom
+  (imenu-auto-rescan t))
 
 (use-package tab-bar
   :hook
@@ -314,8 +329,8 @@
          ("w" . tab-close)))
 
 (use-package calendar
-  :config
-  (setq calendar-week-start-day 1))     ; start on Mondays
+  :custom
+  (calendar-week-start-day 1))     ; start on Mondays
 
 (use-package aru-narrow
   :bind (:map narrow-map
@@ -336,11 +351,9 @@
 (use-package display-line-numbers
   :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l
 
-(use-package pdf-tools
-  :ensure t
-  :init
-  (setq pdf-view-use-scaling t)
-  (pdf-loader-install))	; sharper text on retina displays
+(use-package doc-view
+  :custom
+  (doc-view-resolution 200))
 
 (use-package direnv
   :ensure t
@@ -361,8 +374,8 @@
          ("M-s l" . consult-line)))
 
 (use-package eglot
-  :config
-  (setq eglot-autoshutdown t)
+  :custom
+  (eglot-autoshutdown t)
   :hook
   ((python-mode . eglot-ensure)
    (python-ts-mode . eglot-ensure)
