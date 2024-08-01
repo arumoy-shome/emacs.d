@@ -1,37 +1,5 @@
 ;;; init.el --- personal emacs config -*- lexical-binding: t -*-
 
-;;; Commentary:
-;; This is my personal emacs configuration for Emacs 28 & above. While
-;; many in the emacs community prefer a literate programming style
-;; configuration, I prefer to keep mine in a single init.el file. This
-;; file is loaded by emacs during the initialisation process.
-
-;; Where possible & relevant I provide detailed comments on the
-;; rationale behind a particular configuration/setting. Sometimes I
-;; document my experience with alternative configs and why I chose the
-;; one that is exists in this file. This is primarily to help me
-;; remember if I revisit that particular config (which I often do).
-
-;; I use outline-minor-mode to create an outline of this file.
-;; Comments preceded by 3 semi-colons (;;;) result in an outline
-;; header. Any comments with more than 3 semi-colons result in a
-;; sub-header.
-
-;;; Code:
-;; This section contains the actual configuration. It is divided into
-;; several sub sections. You can navigate this file using
-;; outline-minor-mode bindings. Use C-c @ t to fold everything. With
-;; point on a header, you can hit C-c @ s to show the header. You can
-;; navigate between headers using C-c @ n and C-c @ p. You can see all
-;; outline-minor-mode bindings using C-c @ C-h.
-
-;; Emacs provides several toggle-like functionality. For example,
-;; minor-modes for spell checking, syntax checking, line numbers, etc
-;; can be toggled using the same command. I follow a convension of
-;; assigning such frequently used minor modes to the ESC ESC
-;; (translates to ESC M-<k> where k is the key I specify in my config)
-;; prefix. Someday, I may migrate this to a dedicated keymap.
-
 (add-to-list 'load-path (concat user-emacs-directory "aru/"))
 
 (use-package use-package-core
@@ -39,12 +7,17 @@
   (use-package-compute-statistics t)
   (use-package-verbose t))
 
+(use-package editorconfig
+  :hook ((after-init . editorconfig-mode)))
+
+(use-package which-key
+  :hook ((after-init . which-key-mode)))
+
 (use-package package
   :config
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
 (use-package diminish :ensure t)
-(use-package aru-core :demand t)
 (use-package cus-edit
   :demand t
   :config
@@ -56,7 +29,6 @@
   :hook ((after-init . global-eldoc-mode)))
 
 (use-package hl-line
-  :disabled t
   :hook ((after-init . global-hl-line-mode)))
 
 (use-package elec-pair
@@ -86,6 +58,17 @@
   (outline-minor-mode-use-buttons nil)
   :hook (prog-mode . outline-minor-mode))
 
+(use-package backline
+  :ensure t
+  :after outline
+  :config (advice-add 'outline-flag-region :after 'backline-update))
+
+(use-package outline-minor-faces
+  :disabled t
+  :ensure t
+  :after outline
+  :hook (outline-minor-mode . outline-minor-faces-mode))
+
 (use-package savehist
   :hook ((after-init . savehist-mode)))
 
@@ -98,7 +81,7 @@
   (flyspell-issue-message-flag nil)
   (flyspell-issue-welcome-flag nil)
   (ispell-program-name "/usr/local/bin/aspell")
-  (ispell-dictionary "en_GB")
+  (ispell-dictionary "en")
   :hook ((prog-mode . flyspell-prog-mode)
 	 (text-mode . flyspell-mode))
   :bind (("ESC M-s" . flyspell-mode)))	; ESC ESC s
@@ -117,13 +100,15 @@
   (dired-recursive-deletes 'always)
   (delete-by-moving-to-trash t)
   (dired-use-ls-dired nil)
-  (dired-listing-switches "-FAlrh")
+  (dired-listing-switches "-FAlh")
   (dired-dwim-target t)
   (dired-auto-revert-buffer #'dired-directory-changed-p)
   :hook ((dired-mode . dired-hide-details-mode)))
 
 (use-package frame
-  :bind (("C-z" . nil)))		; use C-x C-z instead
+  :bind (("C-z" . nil))		; use C-x C-z instead
+  :config
+  (blink-cursor-mode -1))
 
 (use-package window
   :bind-keymap (("s-4" . ctl-x-4-map)
@@ -134,7 +119,8 @@
 	 ("s-2" . split-window-below)
 	 ("s-3" . split-window-right)
 	 ("s-]" . (lambda () (interactive) (other-window +1)))
-         ("s-[" . (lambda () (interactive) (other-window -1))))
+         ("s-[" . (lambda () (interactive) (other-window -1)))
+	 ("s-w" . delete-window))	; previously delete-frame
   :hook ((help-mode . visual-line-mode)
 	 (man-mode . visual-line-mode)
 	 (woman-mode . visual-line-mode)))
@@ -179,7 +165,8 @@
   :bind
   (("M-Q" . delete-indentation)
    ("ESC M-v" . visual-line-mode)	; ESC ESC v
-   ("ESC C-M-i" . indent-tab-mode))	; ESC ESC TAB
+   ("ESC C-M-i" . indent-tab-mode)	; ESC ESC TAB
+   ("C-c z" . delete-trailing-whitespace))
   :custom
   (kill-do-not-save-duplicates t)
   (async-shell-command-display-buffer nil)
@@ -198,6 +185,8 @@
   ;; save all org agenda buffers after refile, stolen from purcell
   (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
   (defconst aru/org-inbox-file "~/org/inbox.org"
+    "File to use for capturing org items.")
+  (defconst aru/org-bib-file "~/org/bib.org"
     "File to use for capturing org items.")
   (org-babel-do-load-languages 'org-babel-load-languages
 			       '((emacs-lisp . t)
@@ -236,10 +225,12 @@
   (org-confirm-babel-evaluate nil)
   ;; capture
   (org-capture-templates
-   '(("p" "Paper" entry (file aru/org-inbox-file)
-      "%[~/.emacs.d/org-templates/paper.txt]" :prepend t)
+   '(("p" "Paper" entry (file aru/org-bib-file)
+      "%[~/.emacs.d/org-templates/bib.txt]" :prepend t)
      ("c" "Capture" entry (file aru/org-inbox-file)
-      "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)))
+      "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)
+     ("t" "Today" entry (file aru/org-inbox-file)
+      "%[~/.emacs.d/org-templates/today.txt]" :prepend t)))
   ;; todo
   (org-todo-keywords
    '((sequence "TODO(t)" "PROJECT(p)" "|" "DONE(d!)" "CANCEL(c@)")))
@@ -249,10 +240,12 @@
   (org-clock-persist 'history)
   :bind
   (("C-c l" . org-store-link)
-   ("C-c a" . org-agenda)
-   ("C-c c" . (lambda () (interactive) (org-capture nil)))))
+    ;; ("C-c a" . org-agenda)
+    ;; ("C-c c" . (lambda () (interactive) (org-capture nil)))
+    ))
 
 (use-package org-modern
+  :disabled t
   :ensure t
   :after org
   :custom
@@ -306,9 +299,11 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)
-	 ("\\.qmd\\'" . markdown-mode)))
+	 ("\\.qmd\\'" . markdown-mode)
+	 ("README" . gfm-mode)))
 
 (use-package python
+  :disabled t
   :custom
   (python-shell-interpreter "python") ; managed with direnv
   (python-indent-guess-indent-offset t)
@@ -342,24 +337,28 @@
   (modus-themes-bold-constructs t)
   (modus-themes-org-blocks 'tinted-background)
   (modus-themes-common-palette-overrides
-   '((fringe unspecified))))
+   '((fringe unspecified)))
+  (modus-themes-headings
+   (quote ((0 . (1.5))
+	   (1 . (background overline 1.2))
+	   (2 . (overline rainbow 1.1))
+	   (3 . (overline 1.1))
+	   (t . (monochrome))))))
 
 (use-package aru-custom
   :config
   (add-hook 'ns-system-appearance-change-functions #'aru-load-theme-auto))
 
 (use-package display-line-numbers
-  :bind (("ESC M-l" . display-line-numbers-mode))) ; ESC ESC l
+  :custom
+  (display-line-numbers-type 'relative)
+  :config
+  (display-line-numbers-mode))
 
 (use-package doc-view
   :custom
-  (doc-view-resolution 200))
-
-(use-package direnv
-  :ensure t
-  :diminish
-  :config
-  (direnv-mode))
+  (doc-view-resolution 200)
+  (doc-view-mupdf-use-svg t))
 
 (use-package marginalia
   :ensure t
@@ -374,17 +373,27 @@
          ("M-s l" . consult-line)))
 
 (use-package eglot
+  :disabled t
   :custom
   (eglot-autoshutdown t)
   :hook
   ((python-mode . eglot-ensure)
    (python-ts-mode . eglot-ensure)
-   (latex-mode . eglot-ensure)
-   (bibtex-mode . eglot-ensure)))
+   ; (latex-mode . eglot-ensure)
+   ; (bibtex-mode . eglot-ensure)
+))
+
+(use-package company
+  :disabled t
+  :ensure t
+  :diminish
+  :hook (after-init . global-company-mode))
 
 (use-package treesit
+  :disabled t
   :init
   ;; following taken from <https://www.masteringemacs.org/article/how-to-get-started-tree-sitter>
+  ;; NOTE manually install the following grammars using `tree-sitter-install-language-grammer'
   (setq treesit-language-source-alist
 	'((python "https://github.com/tree-sitter/tree-sitter-python")
 	  (bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -399,31 +408,122 @@
 	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
 	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")
 	  (latex "https://github.com/latex-lsp/tree-sitter-latex")
-	  (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")))
-  (setq major-mode-remap-alist
-	'((yaml-mode . yaml-ts-mode)
-	  (bash-mode . bash-ts-mode)
-	  (js2-mode . js-ts-mode)
-	  (typescript-mode . typescript-ts-mode)
-	  (json-mode . json-ts-mode)
-	  (js-json-mode . json-ts-mode)
-	  (python-mode . python-ts-mode)
-	  (css-mode . css-ts-mode)
-	  (html-mode . html-ts-mode)))
-  :mode (("\\.yaml'" . yaml-ts-mode)
-         ("\\.yml'" . yaml-ts-mode)
-	 ("\\.ipynb\\'" . json-ts-mode)
-	 ("Dockerfile" . dockerfile-ts-mode)))
+	  (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+	  (rust "https://github.com/tree-sitter/tree-sitter-rust.git")))
+  :custom
+  (major-mode-remap-alist
+   '((yaml-mode . yaml-ts-mode)
+     (bash-mode . bash-ts-mode)
+     (js2-mode . js-ts-mode)
+     (typescript-mode . typescript-ts-mode)
+     (json-mode . json-ts-mode)
+     (js-json-mode . json-ts-mode)
+     (python-mode . python-ts-mode)
+     (css-mode . css-ts-mode)
+     (html-mode . html-ts-mode)))
+  :mode (("\\.ipynb\\'" . json-ts-mode)
+	 ("Dockerfile" . dockerfile-ts-mode)
+	 ("\\.ts\\'" . typescript-ts-mode)
+	 ("\\.rs\\'" . rust-ts-mode)))
 
-(use-package mct
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
+
+(use-package corfu
+  :ensure t
+  :custom
+  (tab-always-indent 'complete)
+  :init
+  (global-corfu-mode))
+
+(use-package evil
+  :ensure t
+  :custom
+  (evil-respect-visual-line-mode t)
+  (evil-want-C-i-jump t)
+  (evil-want-C-u-scroll t)
+  (evil-want-C-d-scroll t)
+  (evil-want-Y-yank-to-eol t)
+  (evil-undo-system 'undo-redo)
+  (evil-split-window-below t)
+  (evil-vsplit-window-right t)
+  (evil-want-keybinding nil)
+  ;; with evil keybindings, make more sense to use Command as Meta
+  ;; (mac-command-modifier 'meta)
+  ;; (mac-option-modifier 'super)
+  :init
+  (evil-mode))
+
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :diminish evil-collection-unimpaired-mode
+  :config
+  (evil-collection-init))
+
+(use-package evil-org
+  :ensure t
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(use-package evil-surround
   :ensure t
   :config
-  (mct-minibuffer-mode 1)
-  (mct-region-mode 1))
+  (global-evil-surround-mode))
+
+(use-package evil-commentary
+  :ensure t
+  :config
+  (evil-commentary-mode))
+
+(use-package display-line-numbers
+  :after evil
+  :custom
+  (display-line-numbers-type 'relative)
+  (display-line-numbers-widen t)) ; absolute numbers in narrowed buffers
 
 (use-package orderless
   :ensure t
   :config
   (add-to-list 'completion-styles 'orderless t))
+
+(use-package hl-todo
+  :ensure t
+  :config
+  (global-hl-todo-mode))
+
+(use-package lua-mode :ensure t)
+
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
+
+(use-package gptel
+  :ensure t
+  :bind
+  (("s-<return>" . gptel-send)))
+
+(use-package popper
+  :ensure t
+  :bind
+  (("C-`" . popper-toggle)
+    ("M-`" . popper-cycle)
+    ("C-M-`" . popper-toggle-type))
+  :custom
+  (popper-reference-buffers
+    '("\\*Messages\\*"
+       "Output\\*"
+       "\\*Async Shell Command\\*"
+       help-mode
+       compilation-mode))
+  (popper-group-function #'popper-group-by-project)
+  :init
+  (popper-mode +1)
+  (popper-echo-mode +1))
 
 ;;; init.el ends here
