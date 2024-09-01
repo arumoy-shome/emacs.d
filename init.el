@@ -7,11 +7,9 @@
   (use-package-compute-statistics t)
   (use-package-verbose t))
 
-(use-package editorconfig
-  :hook ((after-init . editorconfig-mode)))
+(use-package editorconfig :hook after-init)
 
-(use-package which-key
-  :hook ((after-init . which-key-mode)))
+(use-package which-key :hook after-init)
 
 (use-package package
   :config
@@ -69,8 +67,7 @@
   :after outline
   :hook (outline-minor-mode . outline-minor-faces-mode))
 
-(use-package savehist
-  :hook ((after-init . savehist-mode)))
+(use-package savehist :hook after-init)
 
 (use-package compile
   :custom
@@ -83,7 +80,7 @@
   (ispell-program-name "/usr/local/bin/aspell")
   (ispell-dictionary "en")
   :hook ((prog-mode . flyspell-prog-mode)
-	 (text-mode . flyspell-mode))
+	        (text-mode . flyspell-mode))
   :bind (("ESC M-s" . flyspell-mode)))	; ESC ESC s
 
 (use-package flymake
@@ -126,6 +123,7 @@
 	 (woman-mode . visual-line-mode)))
 
 (use-package windmove
+  :disabled t
   :bind
   (("<left>"  . windmove-left)
    ("<right>" . windmove-right)
@@ -157,9 +155,9 @@
   :custom
   (recentf-max-saved-items 1000)
   (recentf-exclude `("/tmp/" "/ssh:" ,(concat package-user-dir "/.*-autoloads\\.el\\'")))
-  :hook ((after-init . recentf-mode))
+  :hook after-init
   :bind (:map ctl-x-map
-	      ("f" . recentf-open)))	; default: set-fill-column
+	        ("f" . recentf-open)))        ; default: set-fill-column
 
 (use-package simple                     ; case bindings for active region
   :bind
@@ -186,12 +184,10 @@
   (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
   (defconst aru/org-inbox-file "~/org/inbox.org"
     "File to use for capturing org items.")
-  (defconst aru/org-bib-file "~/org/bib.org"
-    "File to use for capturing org items.")
   (org-babel-do-load-languages 'org-babel-load-languages
-			       '((emacs-lisp . t)
-				 (python     . t)
-				 (shell      . t)))
+		'((emacs-lisp . t)
+			 (python    . t)
+			 (shell     . t)))
   (org-clock-persistence-insinuate)
   :custom
   (org-startup-folded t)
@@ -225,7 +221,7 @@
   (org-confirm-babel-evaluate nil)
   ;; capture
   (org-capture-templates
-   '(("p" "Paper" entry (file aru/org-bib-file)
+    '(("p" "Paper" entry (file aru/org-inbox-file)
       "%[~/.emacs.d/org-templates/bib.txt]" :prepend t)
      ("c" "Capture" entry (file aru/org-inbox-file)
       "%[~/.emacs.d/org-templates/capture.txt]" :prepend t)
@@ -240,9 +236,10 @@
   (org-clock-persist 'history)
   :bind
   (("C-c l" . org-store-link)
-    ;; ("C-c a" . org-agenda)
-    ;; ("C-c c" . (lambda () (interactive) (org-capture nil)))
-    ))
+    ("C-c a" . org-agenda)
+    ("C-c c" . (lambda () (interactive) (org-capture nil))))
+  :hook
+  ((org-mode . auto-fill-mode)))
 
 (use-package org-modern
   :disabled t
@@ -276,8 +273,7 @@
   :custom
   (spacious-padding-widths
    '(:internal-border-width 5 :right-divider-width 5 :scroll-bar-width 0))
-  :config
-  (spacious-padding-mode))
+  :hook after-init)
 
 (use-package ox-html :after org :custom (org-html-validation-link nil))
 (use-package ox-md :after org)
@@ -286,7 +282,6 @@
 
 (use-package text-mode
   :after org
-  :hook (text-mode . auto-fill-mode)
   :bind (:map text-mode-map
               ("C-c !" . org-time-stamp-inactive)))
 
@@ -295,20 +290,19 @@
 
 (use-package markdown-mode
   :ensure t
-  :init (setq markdown-command "multimarkdown")
   :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)
-	 ("\\.qmd\\'" . markdown-mode)
-	 ("README" . gfm-mode)))
+          ("\\.md\\'" . markdown-mode)
+          ("\\.markdown\\'" . markdown-mode)
+	        ("\\.qmd\\'" . markdown-mode)
+	        ("README" . gfm-mode))
+  :hook
+  ((markdown-mode . visual-line-mode)))
 
 (use-package python
-  :disabled t
   :custom
-  (python-shell-interpreter "python") ; managed with direnv
-  (python-indent-guess-indent-offset t)
-  (python-indent-guess-indent-offset-verbose nil)
-  (python-shell-completion-native-enable nil))
+  (python-shell-interpreter "ipython")
+  (python-shell-interpreter-args "-i --simple-prompt")
+  (org-babel-python-command "ipython --simple-prompt"))
 
 (use-package imenu
   :custom
@@ -335,25 +329,11 @@
   :custom
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
-  (modus-themes-org-blocks 'tinted-background)
-  (modus-themes-common-palette-overrides
-   '((fringe unspecified)))
-  (modus-themes-headings
-   (quote ((0 . (1.5))
-	   (1 . (background overline 1.2))
-	   (2 . (overline rainbow 1.1))
-	   (3 . (overline 1.1))
-	   (t . (monochrome))))))
+  (modus-themes-org-blocks 'tinted-background))
 
 (use-package aru-custom
   :config
   (add-hook 'ns-system-appearance-change-functions #'aru-load-theme-auto))
-
-(use-package display-line-numbers
-  :custom
-  (display-line-numbers-type 'relative)
-  :config
-  (display-line-numbers-mode))
 
 (use-package doc-view
   :custom
@@ -362,8 +342,7 @@
 
 (use-package marginalia
   :ensure t
-  :init
-  (marginalia-mode))
+  :hook after-init)
 
 (use-package consult
   :ensure t
@@ -383,53 +362,54 @@
    ; (bibtex-mode . eglot-ensure)
 ))
 
-(use-package company
-  :disabled t
-  :ensure t
-  :diminish
-  :hook (after-init . global-company-mode))
-
 (use-package treesit
-  :disabled t
   :init
-  ;; following taken from <https://www.masteringemacs.org/article/how-to-get-started-tree-sitter>
-  ;; NOTE manually install the following grammars using `tree-sitter-install-language-grammer'
+  ;; Reference URL: <https://www.masteringemacs.org/article/how-to-get-started-tree-sitter>
+  ;; Manually install the following grammars using `treesit-install-language-grammar`
   (setq treesit-language-source-alist
-	'((python "https://github.com/tree-sitter/tree-sitter-python")
-	  (bash "https://github.com/tree-sitter/tree-sitter-bash")
-	  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-	  (html "https://github.com/tree-sitter/tree-sitter-html")
-	  (css "https://github.com/tree-sitter/tree-sitter-css")
-	  (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-	  (json "https://github.com/tree-sitter/tree-sitter-json")
-	  (make "https://github.com/alemuller/tree-sitter-make")
-	  (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")
-	  (latex "https://github.com/latex-lsp/tree-sitter-latex")
-	  (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
-	  (rust "https://github.com/tree-sitter/tree-sitter-rust.git")))
+    '(
+       ;; (python "https://github.com/tree-sitter/tree-sitter-python")
+       ;; (bash "https://github.com/tree-sitter/tree-sitter-bash")
+       ;; (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+       ;; (html "https://github.com/tree-sitter/tree-sitter-html")
+       ;; (css "https://github.com/tree-sitter/tree-sitter-css")
+       ;; (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+       (json "https://github.com/tree-sitter/tree-sitter-json")
+       ;; (make "https://github.com/alemuller/tree-sitter-make")
+       ;; (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+       ;; (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+       ;; (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+       (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+       ;; (latex "https://github.com/latex-lsp/tree-sitter-latex")
+       (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+       ;; (rust "https://github.com/tree-sitter/tree-sitter-rust.git")
+       ))
   :custom
   (major-mode-remap-alist
-   '((yaml-mode . yaml-ts-mode)
-     (bash-mode . bash-ts-mode)
-     (js2-mode . js-ts-mode)
-     (typescript-mode . typescript-ts-mode)
-     (json-mode . json-ts-mode)
-     (js-json-mode . json-ts-mode)
-     (python-mode . python-ts-mode)
-     (css-mode . css-ts-mode)
-     (html-mode . html-ts-mode)))
-  :mode (("\\.ipynb\\'" . json-ts-mode)
-	 ("Dockerfile" . dockerfile-ts-mode)
-	 ("\\.ts\\'" . typescript-ts-mode)
-	 ("\\.rs\\'" . rust-ts-mode)))
+    `(
+       (yaml-mode . yaml-ts-mode)
+       ;; (bash-mode . bash-ts-mode)
+       ;; (js2-mode . js-ts-mode)
+       ;; (typescript-mode . typescript-ts-mode)
+       (json-mode . json-ts-mode)
+       (js-json-mode . json-ts-mode)
+       ;; (python-mode . python-ts-mode)
+       ;; (css-mode . css-ts-mode)
+       ;; (html-mode . html-ts-mode)
+       ))
+  :mode
+  (
+    ("\\.ipynb\\'" . json-ts-mode)
+    ("Dockerfile" . dockerfile-ts-mode)
+    ("\\.yaml\\'" . yaml-ts-mode)
+    ("\\.yml\\'" . yaml-ts-mode)
+    ;; ("\\.ts\\'" . typescript-ts-mode)
+    ;; ("\\.rs\\'" . rust-ts-mode)
+    ))
 
 (use-package vertico
   :ensure t
-  :init
-  (vertico-mode))
+  :hook after-init)
 
 (use-package corfu
   :ensure t
@@ -440,6 +420,8 @@
 
 (use-package evil
   :ensure t
+  :config
+  (evil-set-leader nil (kbd "SPC"))
   :custom
   (evil-respect-visual-line-mode t)
   (evil-want-C-i-jump t)
@@ -450,11 +432,9 @@
   (evil-split-window-below t)
   (evil-vsplit-window-right t)
   (evil-want-keybinding nil)
-  ;; with evil keybindings, make more sense to use Command as Meta
-  ;; (mac-command-modifier 'meta)
-  ;; (mac-option-modifier 'super)
-  :init
-  (evil-mode))
+  :bind (:map evil-normal-state-map
+          ("<leader>o" . consult-outline))
+  :hook after-init)
 
 (use-package evil-collection
   :ensure t
@@ -466,7 +446,7 @@
 (use-package evil-org
   :ensure t
   :after org
-  :hook (org-mode . (lambda () evil-org-mode))
+  :hook org-mode
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
@@ -478,11 +458,11 @@
 
 (use-package evil-commentary
   :ensure t
-  :config
-  (evil-commentary-mode))
+  :hook after-init)
 
 (use-package display-line-numbers
   :after evil
+  :hook after-init
   :custom
   (display-line-numbers-type 'relative)
   (display-line-numbers-widen t)) ; absolute numbers in narrowed buffers
@@ -501,10 +481,12 @@
 
 (use-package doom-modeline
   :ensure t
-  :hook (after-init . doom-modeline-mode))
+  :hook after-init)
 
 (use-package gptel
   :ensure t
+  :custom
+  (gptel-model "gpt-4o-mini")
   :bind
   (("s-<return>" . gptel-send)))
 
@@ -517,13 +499,19 @@
   :custom
   (popper-reference-buffers
     '("\\*Messages\\*"
-       "Output\\*"
-       "\\*Async Shell Command\\*"
-       help-mode
-       compilation-mode))
+       ("Output\\*" . hide)
+       ("\\*Async Shell Command\\*" . hide)
+       (compilation-mode . hide)
+       help-mode))
   (popper-group-function #'popper-group-by-project)
   :init
   (popper-mode +1)
   (popper-echo-mode +1))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 ;;; init.el ends here
